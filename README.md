@@ -1,8 +1,10 @@
 # Plain Language — A Benefits Notice Translator
 
+[![CI](https://github.com/1morepush/WIP-Project/actions/workflows/ci.yml/badge.svg)](https://github.com/1morepush/WIP-Project/actions/workflows/ci.yml)
+
 > A safety-first AI tool that rewrites confusing government benefits notices into clear,
-> plain language — built end-to-end with evaluations, a staff workshop, and a handoff
-> runbook.
+> plain language — built end-to-end with evaluations, automated tests, a staff workshop,
+> and a handoff runbook.
 
 Official benefits notices — SNAP, Medicaid, housing vouchers, unemployment — are often
 written at a college reading level and packed with jargon. People miss deadlines they
@@ -42,9 +44,11 @@ Give it the text of a benefits notice, and it returns a structured result:
   the output is auditable.
 - **A confidence level** and an **escalation flag** — when a notice is high-stakes or
   ambiguous, the tool says "a person should help with this" instead of guessing.
+- **A standing disclaimer** on every result: "this is a plain-language summary, not legal
+  advice" — attached in code so it can never be dropped.
 
-It is powered by the Claude API and is intentionally small (~250 lines of heavily commented
-Python) so that a non-technical person can run it and a successor can maintain it.
+It is powered by the Claude API and is intentionally small and heavily commented, so that a
+non-technical person can run it and a successor can maintain it.
 
 ---
 
@@ -127,14 +131,21 @@ every eval report records which prompt version produced it.
 
 "It worked once when I tried it" is not good enough for a tool that affects people's food
 and housing. The harness (`evals/run_evals.py`) scores every change against fixed
-[golden cases](evals/dataset.jsonl) on four dimensions:
+[golden cases](evals/dataset.jsonl) on six dimensions:
 
 | Metric | What it checks | Needs API? |
 |--------|----------------|------------|
 | **Reading grade** | Flesch-Kincaid grade of the rewrite (target ≤ 8) | No (local) |
 | **Fact coverage** | Did every required deadline / amount / form survive? | No (local) |
+| **Forbidden facts** | Did it invent a plausible-but-wrong fact (e.g. a transposed amount)? | No (local) |
+| **Citation grounding** | Is every source quote really present in the original notice? | No (local) |
 | **Escalation** | Did it flag a human on adverse actions, and stay quiet on routine ones? | No (local) |
 | **Faithfulness** | An independent LLM judge checks for invented or changed facts | Yes |
+
+The five local checks also run as fast **offline unit tests** (`tests/test_judges.py`) in
+**GitHub Actions CI** on every push — no API key required — so a broken change is caught
+before it merges. See the regression evidence in
+[`evals/results/v1-vs-v2.md`](evals/results/v1-vs-v2.md).
 
 **Latest run (real, committed at [`evals/results/sample-report.md`](evals/results/sample-report.md)):**
 
@@ -156,10 +167,13 @@ discipline behind a trustworthy LLM tool. See [`docs/EVALS.md`](docs/EVALS.md).
 ## Safety-first by design
 
 In benefits work, a confident wrong answer is worse than none. The tool therefore:
-1. **Never invents facts** — every date/amount/number must trace to the source.
+1. **Never invents facts** — every date/amount/number must trace to the source (enforced by
+   the forbidden-facts and citation-grounding evals).
 2. **Never gives advice** — it explains the notice; it doesn't predict eligibility.
 3. **Keeps every deadline and action item.**
 4. **Escalates** terminations, overpayments, denials, and ambiguous notices to a human.
+5. **Always carries a disclaimer** — "a plain-language summary, not legal advice" — attached
+   in code so a prompt edit can't remove it.
 
 See [`docs/DESIGN.md`](docs/DESIGN.md) for the reasoning behind these trade-offs.
 
@@ -167,9 +181,13 @@ See [`docs/DESIGN.md`](docs/DESIGN.md) for the reasoning behind these trade-offs
 
 ## How to run it
 
-### Option A — read the results without installing anything
+### Option A — see it without an API key
 Open [`evals/results/sample-report.md`](evals/results/sample-report.md) for a real eval run,
-and the [output examples above](#see-it-in-action-real-output). No setup or API key needed.
+or run the **offline demo** (a saved example, no key, no network):
+```bash
+pip install -r requirements.txt
+python -m src.cli --demo
+```
 
 ### Option B — run it live
 Requires Python 3.10+ and an Anthropic API key (each notice costs a fraction of a cent).
@@ -179,17 +197,20 @@ Requires Python 3.10+ and an Anthropic API key (each notice costs a fraction of 
 pip install -r requirements.txt
 
 # 2. Add your API key (creates a private file that is git-ignored)
-cp .env.example .env          # then paste your key after ANTHROPIC_API_KEY=
+cp .env.example .env          # macOS/Linux  (Windows: copy .env.example .env)
+#   then paste your key after ANTHROPIC_API_KEY=
 
 # 3. Translate one notice
 python -m src.cli sample_docs/snap_recertification.txt
 #   → prints the plain-language rewrite, action list, source quotes,
-#     and the confidence / escalation status
+#     disclaimer, and the confidence / escalation status
 
 # 4. Run the quality checks
 python evals/run_evals.py
-#   → scores all four golden cases and writes a timestamped report
-#     into evals/results/
+#   → scores all golden cases and writes a timestamped report into evals/results/
+
+# (optional) run the offline unit tests
+pip install -r requirements-dev.txt && pytest -q
 ```
 
 > **Never put your API key in a tracked file.** It belongs only in the git-ignored `.env`.
@@ -203,9 +224,12 @@ python evals/run_evals.py
 ```
 src/         translator (prompts.py · translate.py · cli.py)
 sample_docs/ four synthetic (fake-PII) benefits notices
-evals/       golden dataset, judges, runner, and a committed sample report
+evals/       golden dataset, judges, runner, sample report + v1→v2 evidence
+tests/       offline unit tests for the judges (run in CI, no API key)
+examples/    a saved output for the offline `--demo`
 docs/        RUNBOOK (handoff) · EVALS · DESIGN · PORTFOLIO
 workshop/    facilitator guide · slide outline · hands-on exercise
+.github/     CI workflow (ruff + pytest on every push)
 ```
 
 ---
@@ -219,7 +243,7 @@ of that engagement, mapped to the role's own responsibilities:
 | Fellowship responsibility | In this project |
 |---------------------------|-----------------|
 | **Discovery & scoping** | Identified a concrete, high-impact problem (unreadable benefits notices) and scoped a tool with measurable outcomes (reading grade, facts kept). |
-| **Development** | Built a working Claude-powered tool with structured output and an eval harness — "agents, automations, internal tools, evaluation harnesses." |
+| **Development** | Built a working Claude-powered tool with structured output, a six-metric eval harness, offline unit tests, and CI — "agents, automations, internal tools, evaluation harnesses." |
 | **Training & enablement** | A 60-minute workshop ([`workshop/`](workshop/)) for mixed technical / non-technical staff, with a hands-on exercise. |
 | **Handoff & documentation** | A runbook ([`docs/RUNBOOK.md`](docs/RUNBOOK.md)) a successor can operate cold, plus design and eval docs. |
 | **Strategic judgment** | Deliberate safety calls: no invented facts, no legal advice, human escalation on high-stakes notices, and synthetic-only data to protect PII. |
@@ -233,7 +257,7 @@ Honest next steps:
 - **Document upload + OCR** so staff can drop in a PDF or photo instead of pasting text.
 - **Multi-language output** (Spanish, Vietnamese, Haitian Creole, and more).
 - **A caseworker feedback loop** that grows the eval set with real, expert-flagged examples.
-- **A "this is a plain-language summary, not legal advice" disclaimer** on every output.
+- **A larger, more adversarial eval set** (contradictory notices, missing deadlines, advice bait).
 
 Details in [`docs/DESIGN.md`](docs/DESIGN.md).
 

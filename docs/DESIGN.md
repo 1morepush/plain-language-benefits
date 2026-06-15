@@ -31,8 +31,12 @@ So the design makes three deliberate trade-offs:
   lets eval reports track which version produced which result.
 - **The output is structured JSON** (plain text + action items + citations + escalate
   flag) rather than a paragraph, so downstream tools and the eval harness can both use it,
-  and so citations make every claim auditable.
-- **Three of four evals run locally** to keep quality checks fast and nearly free.
+  and so citations make every claim auditable. The `citation_grounding` eval enforces that
+  those quotes are really in the source, so "auditable" is checked, not just claimed.
+- **A safety disclaimer is attached to every result in code** (`DISCLAIMER` in
+  `src/translate.py`), so the reader is never misled — and it can't be dropped by a prompt edit.
+- **Five of six evals run locally** to keep quality checks fast and nearly free, and they
+  double as offline unit tests in CI.
 
 ## Synthetic data, on purpose
 
@@ -51,5 +55,6 @@ recipient data. This is itself a judgment call worth showing.
   grows the golden set continuously, ideally with examples flagged by caseworkers.
 - **No live feedback loop.** The strongest version would let caseworkers mark a rewrite as
   good/bad and feed that back into the eval set.
-- **Not a legal authority.** Output should always carry a "this is a plain-language
-  summary, not legal advice" disclaimer in any real deployment.
+- **Not a legal authority.** Every result carries a "this is a plain-language summary, not
+  legal advice" disclaimer (set in code so it can't be dropped). A real deployment would also
+  show it prominently in any UI.

@@ -4,7 +4,7 @@ run_evals.py — run the translator over every golden case and score it.
 This is what turns "I built a tool" into "I built a tool I can prove works." It:
   1. reads the golden cases from dataset.jsonl,
   2. translates each notice,
-  3. scores it with the four judges in judges.py,
+  3. scores it with the judges in judges.py,
   4. prints a summary table, and
   5. writes a timestamped Markdown report into evals/results/.
 
@@ -20,14 +20,16 @@ import sys
 from anthropic import Anthropic
 from dotenv import load_dotenv
 
-# Make `import src...` work whether you run from the root or the evals folder.
+# Make `import src...` / `import evals...` work no matter where it is run from.
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from evals.judges import (  # noqa: E402
     MAX_GRADE_LEVEL,
+    citation_grounding,
     escalation_correct,
     fact_coverage,
     faithfulness_judge,
+    forbidden_facts,
     reading_grade,
 )
 from src.translate import translate  # noqa: E402
@@ -46,7 +48,7 @@ def load_cases() -> list[dict]:
 
 
 def score_case(case: dict, client: Anthropic) -> dict:
-    """Translate one notice and run all four judges on the result."""
+    """Translate one notice and run every judge on the result."""
     with open(os.path.join(ROOT, case["doc"]), "r", encoding="utf-8") as fh:
         source = fh.read()
 
@@ -54,12 +56,16 @@ def score_case(case: dict, client: Anthropic) -> dict:
 
     grade = reading_grade(result.get("plain_text", ""))
     coverage = fact_coverage(result, case["must_include_facts"])
+    forbidden = forbidden_facts(result, case.get("forbidden_facts", []))
+    citations = citation_grounding(result, source)
     escalation = escalation_correct(result, case["expected_escalate"])
     faithfulness = faithfulness_judge(source, result, client=client)
 
     passed = (
         grade <= MAX_GRADE_LEVEL
         and coverage["passed"]
+        and forbidden["passed"]
+        and citations["passed"]
         and escalation["passed"]
         and faithfulness["passed"]
     )
@@ -68,6 +74,8 @@ def score_case(case: dict, client: Anthropic) -> dict:
         "prompt_version": result.get("prompt_version", "?"),
         "reading_grade": grade,
         "coverage": coverage,
+        "forbidden": forbidden,
+        "citations": citations,
         "escalation": escalation,
         "faithfulness": faithfulness,
         "passed": passed,
@@ -89,17 +97,20 @@ def render_report(scores: list[dict]) -> str:
         f"- **Target reading grade:** ≤ {MAX_GRADE_LEVEL}",
         f"- **Overall:** {passed}/{total} cases passed",
         "",
-        "| Case | Pass | Reading grade | Facts kept | Escalation | Faithfulness |",
-        "|------|------|---------------|------------|------------|--------------|",
+        "| Case | Pass | Reading grade | Facts kept | No bad facts | Citations | "
+        "Escalation | Faithfulness |",
+        "|------|------|---------------|------------|--------------|-----------|"
+        "------------|--------------|",
     ]
     for s in scores:
-        cov = s["coverage"]
-        esc = s["escalation"]
-        faith = s["faithfulness"]
+        cov, esc, faith = s["coverage"], s["escalation"], s["faithfulness"]
+        cit = s["citations"]
         lines.append(
             f"| {s['id']} | {'✅' if s['passed'] else '❌'} "
             f"| {s['reading_grade']} "
             f"| {cov['covered']}/{cov['total']} "
+            f"| {'✅' if s['forbidden']['passed'] else '❌'} "
+            f"| {cit['total'] - len(cit['ungrounded'])}/{cit['total']} "
             f"| exp {esc['expected']} / got {esc['actual']} "
             f"| {faith.get('score', '?')}/5 |"
         )
@@ -114,6 +125,10 @@ def render_report(scores: list[dict]) -> str:
                 lines.append(f"- Reading grade {s['reading_grade']} is above target.")
             if not s["coverage"]["passed"]:
                 lines.append(f"- Missing required facts: {s['coverage']['missing']}")
+            if not s["forbidden"]["passed"]:
+                lines.append(f"- Invented (forbidden) facts appeared: {s['forbidden']['found']}")
+            if not s["citations"]["passed"]:
+                lines.append(f"- Citations not found in source: {s['citations']['ungrounded']}")
             if not s["escalation"]["passed"]:
                 lines.append(
                     f"- Escalation wrong: expected {s['escalation']['expected']}, "
@@ -129,7 +144,8 @@ def main() -> int:
     if not os.getenv("ANTHROPIC_API_KEY"):
         print(
             "ANTHROPIC_API_KEY is not set. Copy .env.example to .env and add your key.\n"
-            "(You can still read a saved example at evals/results/sample-report.md.)"
+            "(You can still read a saved example at evals/results/sample-report.md,\n"
+            " or run the offline demo: python -m src.cli --demo)"
         )
         return 1
 

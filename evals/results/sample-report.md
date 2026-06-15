@@ -21,6 +21,10 @@ required deadline and dollar amount, correctly flagged the two adverse-action no
 (housing termination, unemployment overpayment) for human escalation, and stayed faithful
 to the source._
 
+> Note: two more local checks were added after this run — a **forbidden-facts hallucination
+> guard** and a **citation-grounding** check (see `docs/EVALS.md`). They run with no API key
+> and are verified offline by the test suite; they appear as extra columns in future reports.
+
 ## What this run taught us (the eval loop in action)
 
 An earlier `v1` run surfaced two real issues that the eval caught:

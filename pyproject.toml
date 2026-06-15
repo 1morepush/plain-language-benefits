@@ -1,0 +1,13 @@
+# Minimal project config: lint (ruff) and test (pytest) settings.
+# Runtime dependencies live in requirements.txt; dev tools in requirements-dev.txt.
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]  # pycodestyle, pyflakes, warnings, import-sorting
+
+[tool.pytest.ini_options]
+# Let tests `import evals...` / `import src...` from the repo root without installing.
+pythonpath = ["."]

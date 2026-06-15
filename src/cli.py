@@ -2,12 +2,15 @@
 cli.py — run the translator from the command line on a single notice.
 
 Usage:
-    python -m src.cli sample_docs/snap_recertification.txt
+    python -m src.cli sample_docs/snap_recertification.txt   # translate a notice (needs API key)
+    python -m src.cli --demo                                 # show a saved example (no API key)
 
 It prints the plain-language version, the action items, the source citations, and
 whether a human should get involved. This is the "see it work" entry point.
 """
 
+import json
+import os
 import sys
 
 from dotenv import load_dotenv
@@ -16,6 +19,9 @@ from .translate import translate
 
 # Load ANTHROPIC_API_KEY from a local .env file if present (handy for non-coders).
 load_dotenv()
+
+# A committed example output so anyone can see the tool's shape without an API key.
+DEMO_FILE = os.path.join(os.path.dirname(__file__), "..", "examples", "snap_demo.json")
 
 
 def _print_result(result: dict) -> None:
@@ -38,12 +44,27 @@ def _print_result(result: dict) -> None:
         print(f"    Reason: {result.get('escalation_reason', '(not given)')}")
     else:
         print("  No escalation flagged.")
+
+    if result.get("disclaimer"):
+        print("\n=== PLEASE NOTE " + "=" * 51)
+        print(f"  {result['disclaimer']}")
     print(f"\n(prompt version: {result.get('prompt_version', '?')})\n")
 
 
+def _run_demo() -> int:
+    """Print a saved example output — no API key, no network. Great for reviewers."""
+    with open(DEMO_FILE, "r", encoding="utf-8") as fh:
+        result = json.load(fh)
+    print("(demo mode — showing a saved example output; no API call was made)")
+    _print_result(result)
+    return 0
+
+
 def main(argv: list[str]) -> int:
+    if len(argv) == 1 and argv[0] == "--demo":
+        return _run_demo()
     if len(argv) != 1:
-        print("Usage: python -m src.cli <path-to-notice.txt>")
+        print("Usage: python -m src.cli <path-to-notice.txt>   (or: --demo)")
         return 2
 
     path = argv[0]

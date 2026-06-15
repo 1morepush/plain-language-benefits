@@ -22,6 +22,14 @@ from .prompts import PROMPT_VERSION, SYSTEM_PROMPT, build_user_message
 TRANSLATOR_MODEL = "claude-sonnet-4-6"
 MAX_TOKENS = 1500
 
+# Attached to every result so the reader is never misled about what this is. We set it
+# in code (not via the model) so it is always present and always worded the same way.
+DISCLAIMER = (
+    "This is a plain-language summary to help you understand your notice. "
+    "It is not legal advice and does not change the official notice. "
+    "When in doubt, contact your caseworker or a local legal aid office."
+)
+
 
 def _strip_json_fences(text: str) -> str:
     """Be forgiving if the model wraps its JSON in ```json ... ``` fences."""
@@ -67,6 +75,8 @@ def translate(notice_text: str, client: Anthropic | None = None) -> dict:
             f"edited in a way that broke the output format. Raw response:\n{raw}"
         ) from err
 
-    # Record which prompt version produced this so eval reports are comparable.
+    # Record which prompt version produced this so eval reports are comparable, and
+    # always attach the safety disclaimer.
     result["prompt_version"] = PROMPT_VERSION
+    result["disclaimer"] = DISCLAIMER
     return result

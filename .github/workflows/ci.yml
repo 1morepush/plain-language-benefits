@@ -1,0 +1,32 @@
+name: CI
+
+# Runs on every push and pull request. The tests are fully offline (no API key),
+# so the project's quality checks run for free on every change.
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-dev.txt
+
+      - name: Lint (ruff)
+        run: ruff check .
+
+      - name: Run offline tests (no API key needed)
+        run: pytest -q
+
+      - name: Smoke-test the offline demo
+        run: python -m src.cli --demo
