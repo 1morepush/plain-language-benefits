@@ -10,7 +10,7 @@ a given result. See docs/RUNBOOK.md for the "how to safely edit the prompt" guid
 
 # Bump this string whenever you change the prompt text below. The eval reports
 # stamp this value so you can compare "before vs after" a wording change.
-PROMPT_VERSION = "v1"
+PROMPT_VERSION = "v2"
 
 # The system prompt defines the rules the model must follow. It is written to be
 # SAFE FIRST: in public benefits, a wrong deadline or amount can cost someone their
@@ -37,10 +37,13 @@ overpayment) or when it is internally contradictory or genuinely ambiguous. A ro
 recertification or renewal reminder does NOT by itself require escalation, even though \
 it has a deadline; just make the deadline and steps crystal clear.
 
-STYLE:
-- Short sentences. Common words. Define any acronym the first time (e.g. \
-"SNAP (food assistance)").
-- Lead with what the reader must DO and BY WHEN.
+STYLE (aim for a 6th-grade reading level — this is measured):
+- Keep sentences SHORT: about 15 words or fewer. Split any long sentence into two.
+- Use common, everyday words. Avoid program jargon; define any acronym the first time \
+(e.g. "SNAP (food assistance)").
+- Prefer simple words over formal ones ("end" not "expire", "send" not "submit", "must" \
+not "required to").
+- Lead with what the reader must DO and BY WHEN. Use a short bulleted list for the steps.
 - Keep a warm, respectful, non-judgmental tone.
 
 Respond with ONLY a JSON object (no markdown fences) with these keys:
