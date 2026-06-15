@@ -62,6 +62,22 @@ much help.
 
 #AIforGood #CivicTech #PublicBenefits
 
+## Cover-letter paragraph (drop into your application)
+
+> I'm drawn to Claude Corps because I want to put AI to work where it's needed most and
+> least available — public-benefits and civic services — and because the role values the
+> whole lifecycle, not just a demo. To show what that looks like, I built **Plain Language**,
+> a tool that rewrites confusing government benefits notices (SNAP, Medicaid, housing,
+> unemployment) into clear, 6th-grade language, with source citations and a human-escalation
+> safeguard for high-stakes notices like terminations and overpayments. I treated it like a
+> real deployment: I wrote an evaluation harness scoring reading level, fact retention,
+> escalation accuracy, and faithfulness, then used it to catch a reading-level problem and
+> tune the tool from a grade 8–10 reading level down to grade 5–6 with all checks passing. I
+> also wrote a staff workshop and a handoff runbook, because a tool nobody can run or maintain
+> doesn't help anyone. That instinct — build it, prove it works, teach it, and make it
+> outlast me — is exactly the kind of utility-player work I want to do for a host organization
+> as a Fellow.
+
 ## Likely interview questions (be ready)
 
 - *"How do you stop it from hallucinating a deadline?"* → Prompt forbids unsupported facts;

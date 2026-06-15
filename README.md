@@ -245,3 +245,9 @@ Every sample notice here is **fabricated** — realistic in structure and jargon
 invented names, case numbers, and amounts. Benefits notices contain sensitive personal
 information; this project never uses real recipient data, and the runbook reminds operators
 not to paste real personal data without their organization's approval.
+
+---
+
+## License
+
+Released under the [MIT License](LICENSE).
