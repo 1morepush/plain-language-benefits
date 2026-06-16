@@ -147,7 +147,10 @@ The five local checks also run as fast **offline unit tests** (`tests/test_judge
 before it merges. See the regression evidence in
 [`evals/results/v1-vs-v2.md`](evals/results/v1-vs-v2.md).
 
-**Latest run (real, committed at [`evals/results/sample-report.md`](evals/results/sample-report.md)):**
+**Latest committed run (real — at [`evals/results/sample-report.md`](evals/results/sample-report.md)):**
+_The suite has since grown to **7 golden cases**, including three adversarial ones (a
+self-contradicting reduction, eligibility-advice bait, and an on-hold notice with no
+deadline); this committed report shows the original four._
 
 | Case | Pass | Reading grade | Facts kept | Escalation | Faithfulness |
 |------|------|---------------|------------|------------|--------------|

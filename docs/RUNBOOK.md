@@ -50,9 +50,9 @@ Before trusting the tool after any change, run:
 ```
 python evals/run_evals.py
 ```
-It scores the tool on four real-style notices and writes a report into `evals/results/`.
-You want **4/4 passed**. If something fails, the report lists exactly what to look at.
-See `docs/EVALS.md` for what each score means.
+It scores the tool on seven real-style notices (including adversarial ones) and writes a
+report into `evals/results/`. You want **all cases passed**. If something fails, the report
+lists exactly what to look at. See `docs/EVALS.md` for what each score means.
 
 ## 5. How to safely change how it writes
 

@@ -59,6 +59,13 @@ deployment."
 ## Extending the dataset
 
 To add a case, append one line to `evals/dataset.jsonl` with: a new `id`, the `doc` path,
-the `must_include_facts`, and the `expected_escalate` label. The more varied (and tricky)
-the notices, the more trustworthy the tool. Good additions: a notice with a typo'd date, a
-bilingual notice, or one that is internally contradictory (which should escalate).
+the `must_include_facts`, `forbidden_facts`, and the `expected_escalate` label. The more
+varied (and tricky) the notices, the more trustworthy the tool.
+
+The set already includes **adversarial** cases: a benefit reduction with two contradicting
+effective dates (must escalate), an outreach notice that tempts an eligibility claim (must
+*not* assert "you qualify"), and a claim "under review" with no deadline (must escalate and
+must not invent one). An offline integrity test (`tests/test_dataset.py`) checks that every
+`must_include_fact` really appears in its source and every `forbidden_fact` is genuinely
+absent — so a malformed case is caught immediately. Good further additions: a notice with a
+typo'd date, or a bilingual notice.
