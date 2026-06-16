@@ -1,0 +1,32 @@
+=== PLAIN-LANGUAGE VERSION ========================================
+You need to keep your food assistance (SNAP). Your benefits end on 06/30/2026. To keep them, you must act by 06/20/2026.
+
+Do these things:
+- Send in Form FA-100. This is the recertification form.
+- Do your phone interview on 06/16/2026, from 9:00 AM to 11:00 AM.
+- If you miss it, call (555) 014-2200 to reschedule before 06/20/2026.
+- Send proof of your income from the last 30 days.
+
+If they do not get everything by 06/20/2026, your benefits stop on 06/30/2026. Then you must apply again.
+
+=== WHAT YOU NEED TO DO ===========================================
+  • Send completed Form FA-100 on or before 06/20/2026
+  • Do your phone interview on 06/16/2026 between 9:00 AM and 11:00 AM
+  • If you miss the interview, call (555) 014-2200 to reschedule before 06/20/2026
+  • Send proof of household income from the last 30 days
+
+=== WHERE THIS COMES FROM (source quotes) =========================
+  “Your household's certification period for SNAP benefits will end on 06/30/2026.”
+  “Submit a completed Form FA-100 (Application/Recertification for Assistance) on or before 06/20/2026.”
+  “Your interview is scheduled for 06/16/2026 between 9:00 AM and 11:00 AM.”
+  “If you miss this interview, you must call (555) 014-2200 to reschedule before the deadline above.”
+  “If the Division does not receive your completed recertification and required verifications by 06/20/2026, your SNAP benefits will stop on 06/30/2026 and you will need to file a new application to receive benefits again.”
+
+=== CONFIDENCE & SAFETY ===========================================
+  Confidence: high
+  No escalation flagged.
+
+=== PLEASE NOTE ===================================================
+  This is a plain-language summary to help you understand your notice. It is not legal advice and does not change the official notice. When in doubt, contact your caseworker or a local legal aid office.
+
+(prompt version: v2)
