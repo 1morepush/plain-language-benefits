@@ -3,8 +3,8 @@
 [![CI](https://github.com/1morepush/WIP-Project/actions/workflows/ci.yml/badge.svg)](https://github.com/1morepush/WIP-Project/actions/workflows/ci.yml)
 
 > A safety-first AI tool that rewrites confusing government benefits notices into clear,
-> plain language — built end-to-end with evaluations, automated tests, a staff workshop,
-> and a handoff runbook.
+> plain language — with a drag-and-drop app, an evaluation harness, automated tests + CI,
+> a staff workshop, and a handoff runbook.
 
 Official benefits notices — SNAP, Medicaid, housing vouchers, unemployment — are often
 written at a college reading level and packed with jargon. People miss deadlines they
@@ -20,6 +20,7 @@ It is built across the four things a real public-interest AI project needs:
 ---
 
 ## Table of contents
+- [In plain words (easy-reading summary)](#in-plain-words)
 - [What it does](#what-it-does)
 - [See it in action (real output)](#see-it-in-action-real-output)
 - [How it works](#how-it-works)
@@ -30,6 +31,36 @@ It is built across the four things a real public-interest AI project needs:
 - [How this maps to the Claude Corps Fellow role](#how-this-maps-to-the-claude-corps-fellow-role)
 - [Limitations & next steps](#limitations--next-steps)
 - [A note on data & privacy](#a-note-on-data--privacy)
+
+---
+
+## In plain words
+
+*(The whole project, explained simply — at about a 6th-grade reading level or below. We
+checked it with the same reading-grade tool the app runs on every notice; it scores around
+grade 2 on the Flesch-Kincaid scale.)*
+
+**The problem.** The government sends letters about help like food, health care, and
+housing. These letters are hard to read. People miss a date or a step. Then they lose help
+they should get.
+
+**What this does.** This tool takes one of those letters. It writes it again in clear,
+simple words. It tells you what to do and by when. It shows the exact lines from your
+letter, so you can check it. If the letter is serious or confusing, it tells you to ask a
+real person. It never makes up a date or an amount.
+
+**How you use it.** You can drag your letter into a simple app and download an easy version.
+Or you can run it with one command if you like computers.
+
+**How we know it works.** We made test letters with known answers. A checker grades each new
+version. Is it easy to read? Did it keep every date? Did it make up anything? Did it know
+when to ask for help? The tests run on their own each time we change the code.
+
+**Why it is safe.** It does not give legal advice. It does not guess. Every fact comes from
+your letter. Your letter and your key stay on your computer.
+
+**What is in here.** The tool, the test letters and the checker, a short class to teach
+staff, a guide so a new person can run it, and notes on how it was built.
 
 ---
 
@@ -49,6 +80,12 @@ Give it the text of a benefits notice, and it returns a structured result:
 
 It is powered by the Claude API and is intentionally small and heavily commented, so that a
 non-technical person can run it and a successor can maintain it.
+
+**Two ways to use it:**
+- a **command-line tool** (`python -m src.cli …`) for technical users and automation, and
+- an **experimental drag-and-drop web app** (`run_gui.sh` / `run_gui.bat`) for non-technical
+  users — drag in a PDF/DOCX/TXT notice, download a plain-language file. See
+  [Option C](#how-to-run-it) and [`docs/GUI.md`](docs/GUI.md).
 
 ---
 
@@ -109,21 +146,23 @@ action — is the core judgment built into the tool.
 ## How it works
 
 ```
-benefits notice (text)
-        │
+  a notice file (.pdf / .docx / .txt)
+        │  src/extract.py  (pull out the text)
         ▼
   src/translate.py  ──uses──▶  src/prompts.py   (the versioned, safety-first instructions)
         │                        Claude API
         ▼
-  structured result:  plain_text · action_items · citations · confidence · escalate
+  structured result:  plain_text · action_items · citations · confidence · escalate · disclaimer
         │
-        ├──▶  src/cli.py        prints it for a human to read
-        └──▶  evals/run_evals.py  scores it against golden test cases
+        ├──▶  src/cli.py            prints it / saves a .txt (--out)
+        ├──▶  src/gui.py + output.py drag-drop app → download TXT/DOCX/PDF  (experimental)
+        └──▶  evals/run_evals.py     scores it against the golden test cases
 ```
 
-The instructions that govern the model live in one place (`src/prompts.py`) and are
-**versioned**, so a non-technical successor can tune the wording without touching code, and
-every eval report records which prompt version produced it.
+Everything funnels through one `translate()` call, so the CLI, the GUI, and the eval harness
+share identical behavior. The instructions that govern the model live in one place
+(`src/prompts.py`) and are **versioned**, so a non-technical successor can tune the wording
+without touching code, and every eval report records which prompt version produced it.
 
 ---
 
@@ -142,9 +181,11 @@ and housing. The harness (`evals/run_evals.py`) scores every change against fixe
 | **Escalation** | Did it flag a human on adverse actions, and stay quiet on routine ones? | No (local) |
 | **Faithfulness** | An independent LLM judge checks for invented or changed facts | Yes |
 
-The five local checks also run as fast **offline unit tests** (`tests/test_judges.py`) in
-**GitHub Actions CI** on every push — no API key required — so a broken change is caught
-before it merges. See the regression evidence in
+The five local checks also run as fast **offline tests** in **GitHub Actions CI** on every
+push — no API key required — so a broken change is caught before it merges. The suite (in
+[`tests/`](tests/)) covers the judges, dataset integrity (every required fact is really in
+its source, every "forbidden" fact really absent), and the GUI's file extraction and output
+writers. See the regression evidence in
 [`evals/results/v1-vs-v2.md`](evals/results/v1-vs-v2.md).
 
 **Latest committed run (real — at [`evals/results/sample-report.md`](evals/results/sample-report.md)):**
@@ -223,26 +264,31 @@ pip install -r requirements-dev.txt && pytest -q
 > Full setup, costs, troubleshooting, and how to safely edit the prompt are in
 > [`docs/RUNBOOK.md`](docs/RUNBOOK.md).
 
-### Option C — the drag-and-drop app (experimental, no terminal)
+### Option C — the drag-and-drop app (no terminal)
 For non-technical users: double-click **`run_gui.sh`** (macOS/Linux) or **`run_gui.bat`**
 (Windows) to launch a browser app — paste your key once, drag in a `.pdf`/`.docx`/`.txt`
 notice, and download a plain-language **TXT / DOCX / PDF**. See [`docs/GUI.md`](docs/GUI.md).
-(Lives on the `claude/gui-experimental` branch; needs `requirements-gui.txt`.)
+The first launch installs the extra deps in `requirements-gui.txt` (kept separate so the
+core stays lean). The web UI is a thin layer over the same `translate()` — still a prototype
+(not yet packaged as a double-click executable).
 
 ---
 
 ## Project layout
 
 ```
-src/         translator (prompts.py · translate.py · cli.py)
-sample_docs/ synthetic (fake-PII) benefits notices — the inputs
-outputs/     committed plain-language outputs (e.g. snap_recertification.plain.txt)
-evals/       golden dataset, judges, runner, sample report + v1→v2 evidence
-tests/       offline unit tests for the judges (run in CI, no API key)
-examples/    a saved output for the offline `--demo`
-docs/        RUNBOOK (handoff) · EVALS · DESIGN · PORTFOLIO
-workshop/    facilitator guide · slide outline · hands-on exercise
-.github/     CI workflow (ruff + pytest on every push)
+src/             core: prompts.py · translate.py · cli.py
+                 GUI layer: extract.py (read PDF/DOCX/TXT) · output.py (write TXT/DOCX/PDF) · gui.py
+sample_docs/     synthetic (fake-PII) benefits notices — the inputs (7, incl. adversarial)
+outputs/         committed plain-language outputs (e.g. snap_recertification.plain.txt)
+evals/           golden dataset, judges, runner, sample report + v1→v2 evidence
+tests/           offline tests: judges, dataset integrity, extraction, output (run in CI)
+examples/        a saved output for the offline `--demo`
+docs/            RUNBOOK (handoff) · EVALS · DESIGN · PORTFOLIO · GUI
+workshop/        facilitator guide · slide outline · hands-on exercise
+run_gui.sh/.bat  one-click launchers for the drag-and-drop app
+requirements*.txt core · -dev (tests/lint) · -gui (app only)
+.github/         CI workflow (ruff + pytest on every push)
 ```
 
 ---
@@ -256,7 +302,8 @@ of that engagement, mapped to the role's own responsibilities:
 | Fellowship responsibility | In this project |
 |---------------------------|-----------------|
 | **Discovery & scoping** | Identified a concrete, high-impact problem (unreadable benefits notices) and scoped a tool with measurable outcomes (reading grade, facts kept). |
-| **Development** | Built a working Claude-powered tool with structured output, a six-metric eval harness, offline unit tests, and CI — "agents, automations, internal tools, evaluation harnesses." |
+| **Development** | Built a working Claude-powered tool with structured output, a six-metric eval harness, offline tests, and CI — "agents, automations, internal tools, evaluation harnesses." |
+| **Accessibility** | A drag-and-drop web app ([`docs/GUI.md`](docs/GUI.md)) so non-technical staff and recipients can use it with no terminal — meeting people where they are. |
 | **Training & enablement** | A 60-minute workshop ([`workshop/`](workshop/)) for mixed technical / non-technical staff, with a hands-on exercise. |
 | **Handoff & documentation** | A runbook ([`docs/RUNBOOK.md`](docs/RUNBOOK.md)) a successor can operate cold, plus design and eval docs. |
 | **Strategic judgment** | Deliberate safety calls: no invented facts, no legal advice, human escalation on high-stakes notices, and synthetic-only data to protect PII. |
@@ -266,11 +313,13 @@ of that engagement, mapped to the role's own responsibilities:
 ## Limitations & next steps
 
 This is a **working prototype on synthetic data**, not a deployed system serving real people.
-Honest next steps:
-- **Document upload + OCR** so staff can drop in a PDF or photo instead of pasting text.
+What's done so far: a CLI, a 7-case six-metric eval harness with CI, and a drag-and-drop GUI
+that reads PDF/DOCX/TXT and writes TXT/DOCX/PDF. Honest next steps:
+- **OCR for scanned notices** — the GUI reads digital PDFs/DOCX today, but a photo or scan of
+  a letter has no selectable text yet.
 - **Multi-language output** (Spanish, Vietnamese, Haitian Creole, and more).
 - **A caseworker feedback loop** that grows the eval set with real, expert-flagged examples.
-- **A larger, more adversarial eval set** (contradictory notices, missing deadlines, advice bait).
+- **Package the GUI** as a true double-click app (PyInstaller) and prettify the PDF layout.
 
 Details in [`docs/DESIGN.md`](docs/DESIGN.md).
 
