@@ -51,8 +51,10 @@ recipient data. This is itself a judgment call worth showing.
   deployment would add document upload + OCR.
 - **English only.** Many recipients need Spanish, Vietnamese, Haitian Creole, etc.
   Multi-language output is the highest-value next feature.
-- **Small eval set.** Four notices is a starting point, not a guarantee. A real deployment
-  grows the golden set continuously, ideally with examples flagged by caseworkers.
+- **Still a modest eval set.** Seven notices — including adversarial cases (an internal
+  contradiction, eligibility-advice bait, and an on-hold notice with no deadline) — is a
+  solid start, not a guarantee. A real deployment grows the golden set continuously, ideally
+  with examples flagged by caseworkers.
 - **No live feedback loop.** The strongest version would let caseworkers mark a rewrite as
   good/bad and feed that back into the eval set.
 - **Not a legal authority.** Every result carries a "this is a plain-language summary, not

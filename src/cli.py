@@ -2,11 +2,13 @@
 cli.py — run the translator from the command line on a single notice.
 
 Usage:
-    python -m src.cli sample_docs/snap_recertification.txt   # translate a notice (needs API key)
-    python -m src.cli --demo                                 # show a saved example (no API key)
+    python -m src.cli sample_docs/snap_recertification.txt          # translate (needs API key)
+    python -m src.cli sample_docs/snap_recertification.txt --out out.txt   # also save to a file
+    python -m src.cli --demo                                        # show a saved example (no key)
+    python -m src.cli --demo --out out.txt                          # save the example to a file
 
 It prints the plain-language version, the action items, the source citations, and
-whether a human should get involved. This is the "see it work" entry point.
+whether a human should get involved. With --out it also saves that readable text to a file.
 """
 
 import json
@@ -24,55 +26,84 @@ load_dotenv()
 DEMO_FILE = os.path.join(os.path.dirname(__file__), "..", "examples", "snap_demo.json")
 
 
-def _print_result(result: dict) -> None:
-    """Pretty-print the translation result for a human reading the terminal."""
-    print("\n=== PLAIN-LANGUAGE VERSION " + "=" * 40)
-    print(result.get("plain_text", "(none returned)"))
+def render_text(result: dict) -> str:
+    """Build the human-readable plain-language output as a single string.
 
-    print("\n=== WHAT YOU NEED TO DO " + "=" * 43)
+    Used both to print to the screen and (with --out) to save a readable .txt file.
+    """
+    lines = ["=== PLAIN-LANGUAGE VERSION " + "=" * 40, result.get("plain_text", "(none returned)")]
+
+    lines.append("\n=== WHAT YOU NEED TO DO " + "=" * 43)
     for item in result.get("action_items", []) or ["(none listed)"]:
-        print(f"  • {item}")
+        lines.append(f"  • {item}")
 
-    print("\n=== WHERE THIS COMES FROM (source quotes) " + "=" * 25)
+    lines.append("\n=== WHERE THIS COMES FROM (source quotes) " + "=" * 25)
     for quote in result.get("citations", []) or ["(none provided)"]:
-        print(f"  “{quote}”")
+        lines.append(f"  “{quote}”")
 
-    print("\n=== CONFIDENCE & SAFETY " + "=" * 43)
-    print(f"  Confidence: {result.get('confidence', 'unknown')}")
+    lines.append("\n=== CONFIDENCE & SAFETY " + "=" * 43)
+    lines.append(f"  Confidence: {result.get('confidence', 'unknown')}")
     if result.get("escalate"):
-        print("  ⚠ ESCALATE: A person should review this notice with you.")
-        print(f"    Reason: {result.get('escalation_reason', '(not given)')}")
+        lines.append("  ⚠ ESCALATE: A person should review this notice with you.")
+        lines.append(f"    Reason: {result.get('escalation_reason', '(not given)')}")
     else:
-        print("  No escalation flagged.")
+        lines.append("  No escalation flagged.")
 
     if result.get("disclaimer"):
-        print("\n=== PLEASE NOTE " + "=" * 51)
-        print(f"  {result['disclaimer']}")
-    print(f"\n(prompt version: {result.get('prompt_version', '?')})\n")
+        lines.append("\n=== PLEASE NOTE " + "=" * 51)
+        lines.append(f"  {result['disclaimer']}")
+
+    lines.append(f"\n(prompt version: {result.get('prompt_version', '?')})")
+    return "\n".join(lines)
 
 
-def _run_demo() -> int:
-    """Print a saved example output — no API key, no network. Great for reviewers."""
-    with open(DEMO_FILE, "r", encoding="utf-8") as fh:
-        result = json.load(fh)
-    print("(demo mode — showing a saved example output; no API call was made)")
-    _print_result(result)
-    return 0
+def _emit(result: dict, out_path: str | None) -> None:
+    """Print the result, and also write it to out_path if one was given."""
+    text = render_text(result)
+    print("\n" + text + "\n")
+    if out_path:
+        with open(out_path, "w", encoding="utf-8") as fh:
+            fh.write(text + "\n")
+        print(f"Saved readable output to: {out_path}\n")
+
+
+def _parse_args(argv: list[str]) -> tuple[str | None, str | None]:
+    """Return (source, out_path). source is the input path or '--demo'."""
+    out_path = None
+    positional = []
+    i = 0
+    while i < len(argv):
+        if argv[i] == "--out":
+            if i + 1 >= len(argv):
+                return None, None  # --out with no path -> usage error
+            out_path = argv[i + 1]
+            i += 2
+        else:
+            positional.append(argv[i])
+            i += 1
+    if len(positional) != 1:
+        return None, out_path
+    return positional[0], out_path
 
 
 def main(argv: list[str]) -> int:
-    if len(argv) == 1 and argv[0] == "--demo":
-        return _run_demo()
-    if len(argv) != 1:
-        print("Usage: python -m src.cli <path-to-notice.txt>   (or: --demo)")
+    source, out_path = _parse_args(argv)
+    if source is None:
+        print("Usage: python -m src.cli <path-to-notice.txt> [--out file.txt]   (or: --demo)")
         return 2
 
-    path = argv[0]
+    if source == "--demo":
+        with open(DEMO_FILE, "r", encoding="utf-8") as fh:
+            result = json.load(fh)
+        print("(demo mode — showing a saved example output; no API call was made)")
+        _emit(result, out_path)
+        return 0
+
     try:
-        with open(path, "r", encoding="utf-8") as fh:
+        with open(source, "r", encoding="utf-8") as fh:
             notice_text = fh.read()
     except FileNotFoundError:
-        print(f"Could not find file: {path}")
+        print(f"Could not find file: {source}")
         return 1
 
     try:
@@ -83,7 +114,7 @@ def main(argv: list[str]) -> int:
         print(f"\n{err}")
         return 1
 
-    _print_result(result)
+    _emit(result, out_path)
     return 0
 
 

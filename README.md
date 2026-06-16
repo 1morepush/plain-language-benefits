@@ -147,7 +147,10 @@ The five local checks also run as fast **offline unit tests** (`tests/test_judge
 before it merges. See the regression evidence in
 [`evals/results/v1-vs-v2.md`](evals/results/v1-vs-v2.md).
 
-**Latest run (real, committed at [`evals/results/sample-report.md`](evals/results/sample-report.md)):**
+**Latest committed run (real — at [`evals/results/sample-report.md`](evals/results/sample-report.md)):**
+_The suite has since grown to **7 golden cases**, including three adversarial ones (a
+self-contradicting reduction, eligibility-advice bait, and an on-hold notice with no
+deadline); this committed report shows the original four._
 
 | Case | Pass | Reading grade | Facts kept | Escalation | Faithfulness |
 |------|------|---------------|------------|------------|--------------|
@@ -182,8 +185,10 @@ See [`docs/DESIGN.md`](docs/DESIGN.md) for the reasoning behind these trade-offs
 ## How to run it
 
 ### Option A — see it without an API key
-Open [`evals/results/sample-report.md`](evals/results/sample-report.md) for a real eval run,
-or run the **offline demo** (a saved example, no key, no network):
+- See a **committed before→after**: input [`sample_docs/snap_recertification.txt`](sample_docs/snap_recertification.txt)
+  → output [`outputs/snap_recertification.plain.txt`](outputs/snap_recertification.plain.txt).
+- Open [`evals/results/sample-report.md`](evals/results/sample-report.md) for a real eval run.
+- Or run the **offline demo** (a saved example, no key, no network):
 ```bash
 pip install -r requirements.txt
 python -m src.cli --demo
@@ -200,8 +205,9 @@ pip install -r requirements.txt
 cp .env.example .env          # macOS/Linux  (Windows: copy .env.example .env)
 #   then paste your key after ANTHROPIC_API_KEY=
 
-# 3. Translate one notice
+# 3. Translate one notice (add --out to also save a readable .txt)
 python -m src.cli sample_docs/snap_recertification.txt
+python -m src.cli sample_docs/medicaid_renewal.txt --out outputs/medicaid_renewal.plain.txt
 #   → prints the plain-language rewrite, action list, source quotes,
 #     disclaimer, and the confidence / escalation status
 
@@ -223,7 +229,8 @@ pip install -r requirements-dev.txt && pytest -q
 
 ```
 src/         translator (prompts.py · translate.py · cli.py)
-sample_docs/ four synthetic (fake-PII) benefits notices
+sample_docs/ synthetic (fake-PII) benefits notices — the inputs
+outputs/     committed plain-language outputs (e.g. snap_recertification.plain.txt)
 evals/       golden dataset, judges, runner, sample report + v1→v2 evidence
 tests/       offline unit tests for the judges (run in CI, no API key)
 examples/    a saved output for the offline `--demo`
