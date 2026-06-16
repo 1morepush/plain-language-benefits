@@ -20,6 +20,7 @@ It is built across the four things a real public-interest AI project needs:
 ---
 
 ## Table of contents
+- [In plain words (easy-reading summary)](#in-plain-words)
 - [What it does](#what-it-does)
 - [See it in action (real output)](#see-it-in-action-real-output)
 - [How it works](#how-it-works)
@@ -30,6 +31,36 @@ It is built across the four things a real public-interest AI project needs:
 - [How this maps to the Claude Corps Fellow role](#how-this-maps-to-the-claude-corps-fellow-role)
 - [Limitations & next steps](#limitations--next-steps)
 - [A note on data & privacy](#a-note-on-data--privacy)
+
+---
+
+## In plain words
+
+*(The whole project, explained simply — at about a 6th-grade reading level or below. We
+checked it with the same reading-grade tool the app runs on every notice; it scores around
+grade 2 on the Flesch-Kincaid scale.)*
+
+**The problem.** The government sends letters about help like food, health care, and
+housing. These letters are hard to read. People miss a date or a step. Then they lose help
+they should get.
+
+**What this does.** This tool takes one of those letters. It writes it again in clear,
+simple words. It tells you what to do and by when. It shows the exact lines from your
+letter, so you can check it. If the letter is serious or confusing, it tells you to ask a
+real person. It never makes up a date or an amount.
+
+**How you use it.** You can drag your letter into a simple app and download an easy version.
+Or you can run it with one command if you like computers.
+
+**How we know it works.** We made test letters with known answers. A checker grades each new
+version. Is it easy to read? Did it keep every date? Did it make up anything? Did it know
+when to ask for help? The tests run on their own each time we change the code.
+
+**Why it is safe.** It does not give legal advice. It does not guess. Every fact comes from
+your letter. Your letter and your key stay on your computer.
+
+**What is in here.** The tool, the test letters and the checker, a short class to teach
+staff, a guide so a new person can run it, and notes on how it was built.
 
 ---
 
