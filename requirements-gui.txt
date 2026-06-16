@@ -1,0 +1,7 @@
+# Extra dependencies for the drag-and-drop GUI (experimental).
+# The core tool does NOT need these — they're only for `python -m src.gui`.
+-r requirements.txt
+gradio>=4.0
+pypdf>=4.0
+python-docx>=1.1
+reportlab>=4.0
