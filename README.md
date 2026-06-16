@@ -223,6 +223,12 @@ pip install -r requirements-dev.txt && pytest -q
 > Full setup, costs, troubleshooting, and how to safely edit the prompt are in
 > [`docs/RUNBOOK.md`](docs/RUNBOOK.md).
 
+### Option C — the drag-and-drop app (experimental, no terminal)
+For non-technical users: double-click **`run_gui.sh`** (macOS/Linux) or **`run_gui.bat`**
+(Windows) to launch a browser app — paste your key once, drag in a `.pdf`/`.docx`/`.txt`
+notice, and download a plain-language **TXT / DOCX / PDF**. See [`docs/GUI.md`](docs/GUI.md).
+(Lives on the `claude/gui-experimental` branch; needs `requirements-gui.txt`.)
+
 ---
 
 ## Project layout
