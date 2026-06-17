@@ -36,9 +36,9 @@ It is built across the four things a real public-interest AI project needs:
 
 ## In plain words
 
-*(The whole project, explained simply — at about a 6th-grade reading level or below. We
-checked it with the same reading-grade tool the app runs on every notice; it scores around
-grade 2 on the Flesch-Kincaid scale.)*
+*(The whole project, explained simply. This section is written to be very easy to read — it
+scores about **grade 2** on the same Flesch-Kincaid check the app runs on every notice, well
+below the 6th-grade target.)*
 
 **The problem.** The government sends letters about help like food, health care, and
 housing. These letters are hard to read. People miss a date or a step. Then they lose help
@@ -83,8 +83,8 @@ non-technical person can run it and a successor can maintain it.
 
 **Two ways to use it:**
 - a **command-line tool** (`python -m src.cli …`) for technical users and automation, and
-- an **experimental drag-and-drop web app** (`run_gui.sh` / `run_gui.bat`) for non-technical
-  users — drag in a PDF/DOCX/TXT notice, download a plain-language file. See
+- a **drag-and-drop web app** (`run_gui.sh` / `run_gui.bat`) for non-technical users — drag
+  in a PDF/DOCX/TXT notice, download a plain-language file. See
   [Option C](#how-to-run-it) and [`docs/GUI.md`](docs/GUI.md).
 
 ---
