@@ -92,6 +92,13 @@ def test_citation_grounding_fails_for_invented_quote():
     assert not verdict["passed"] and verdict["ungrounded"]
 
 
+def test_citation_grounding_handles_slash_joined_fragments():
+    # Models sometimes join two real source lines with " / "; each fragment is still real.
+    source = "New monthly amount: $182\n  Effective date: 07/15/2026"
+    result = {"citations": ["New monthly amount: $182 / Effective date: 07/15/2026"]}
+    assert citation_grounding(result, source)["passed"]
+
+
 # --- escalation_correct -------------------------------------------------------
 
 def test_escalation_correct_matches_label():

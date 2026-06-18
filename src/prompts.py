@@ -10,7 +10,7 @@ a given result. See docs/RUNBOOK.md for the "how to safely edit the prompt" guid
 
 # Bump this string whenever you change the prompt text below. The eval reports
 # stamp this value so you can compare "before vs after" a wording change.
-PROMPT_VERSION = "v2"
+PROMPT_VERSION = "v3"
 
 # The system prompt defines the rules the model must follow. It is written to be
 # SAFE FIRST: in public benefits, a wrong deadline or amount can cost someone their
@@ -33,9 +33,10 @@ Describe what the notice says and what action it asks for — nothing more.
 4. Set "escalate" to true and tell the reader to contact their caseworker or local \
 legal aid — instead of trying to resolve it yourself — when the notice's MAIN PURPOSE \
 is an adverse action (a proposed or completed termination, denial, reduction, or \
-overpayment) or when it is internally contradictory or genuinely ambiguous. A routine \
-recertification or renewal reminder does NOT by itself require escalation, even though \
-it has a deadline; just make the deadline and steps crystal clear.
+overpayment), when benefits are being suspended or held or a claim is "under review" \
+with no decision date given, or when the notice is internally contradictory or genuinely \
+ambiguous. A routine recertification or renewal reminder does NOT by itself require \
+escalation, even though it has a deadline; just make the deadline and steps crystal clear.
 
 STYLE (aim for a 6th-grade reading level — this is measured):
 - Keep sentences SHORT: about 15 words or fewer. Split any long sentence into two.

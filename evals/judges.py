@@ -115,7 +115,14 @@ def citation_grounding(result: dict, source_text: str) -> dict:
     ungrounded = []
     for raw in citations:
         quote = _normalize(raw).strip('"').strip()
-        segments = [s.strip() for s in re.split(r"\.\.\.|…", quote) if len(s.strip()) >= 12]
+        # Split on ellipsis and on spaced separators (" / ", " | ") that models use to join
+        # two real source fragments into one quote. (Spaced, so dates like 08/01/2026 stay
+        # intact.) Each non-trivial fragment must still appear in the source.
+        segments = [
+            s.strip()
+            for s in re.split(r"\.\.\.|…|\s+/\s+|\s+\|\s+", quote)
+            if len(s.strip()) >= 12
+        ]
         segments = segments or [quote]  # short quote: check it whole
         if not all(seg in source_norm for seg in segments):
             ungrounded.append(raw)
@@ -144,6 +151,12 @@ def faithfulness_judge(
 notice for FAITHFULNESS. Compare the rewrite to the source. Did the rewrite state any \
 fact (especially a date, dollar amount, phone number, or deadline) that is NOT supported \
 by the source, or change the meaning of any requirement?
+
+IMPORTANT: the rewrite intentionally includes two safety additions — a recommendation to \
+contact a caseworker or local legal aid, and a "this is not legal advice" disclaimer. These \
+are deliberate and are NOT claims about the notice; do NOT count them as unfaithful. Judge \
+ONLY whether the facts about the notice (dates, amounts, names, deadlines, and what it \
+requires) are accurate and unchanged.
 
 SOURCE NOTICE:
 {source_text}

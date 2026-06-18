@@ -31,15 +31,27 @@ DISCLAIMER = (
 )
 
 
-def _strip_json_fences(text: str) -> str:
-    """Be forgiving if the model wraps its JSON in ```json ... ``` fences."""
+def _extract_json(text: str) -> str:
+    """Pull the JSON object out of a model response.
+
+    The prompt asks for bare JSON, but models sometimes wrap it in a ```json fence or add a
+    sentence of preamble ("Escalation is required.") before it. Rather than crash the whole
+    batch on one chatty reply, we strip fences and, if needed, slice from the first '{' to
+    the last '}'. Defense in depth around an instruction the model usually — but not always —
+    follows.
+    """
     text = text.strip()
     if text.startswith("```"):
-        # drop the first line (``` or ```json) and any trailing fence
-        text = text.split("\n", 1)[1] if "\n" in text else text
+        text = text.split("\n", 1)[1] if "\n" in text else text  # drop ``` / ```json line
         if text.rstrip().endswith("```"):
             text = text.rstrip()[: -len("```")]
-    return text.strip()
+        text = text.strip()
+    try:
+        json.loads(text)
+        return text
+    except json.JSONDecodeError:
+        start, end = text.find("{"), text.rfind("}")
+        return text[start : end + 1] if start != -1 and end > start else text
 
 
 def translate(notice_text: str, client: Anthropic | None = None) -> dict:
@@ -66,7 +78,7 @@ def translate(notice_text: str, client: Anthropic | None = None) -> dict:
         messages=[{"role": "user", "content": build_user_message(notice_text)}],
     )
 
-    raw = _strip_json_fences(response.content[0].text)
+    raw = _extract_json(response.content[0].text)
     try:
         result = json.loads(raw)
     except json.JSONDecodeError as err:
