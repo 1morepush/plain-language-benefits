@@ -60,7 +60,7 @@ The wording rules live in **`src/prompts.py`** — that is the only file most pe
 ever need to touch. To change behavior (e.g. "always explain acronyms"):
 
 1. Edit the text inside `SYSTEM_PROMPT` in `src/prompts.py`.
-2. Bump `PROMPT_VERSION` (e.g. `"v2"` → `"v3"`) so reports track your change.
+2. Bump `PROMPT_VERSION` (e.g. `"v3"` → `"v4"`) so reports track your change.
 3. Run `python evals/run_evals.py` and confirm you still get a clean pass.
 4. If a score dropped, your wording change caused a regression — adjust and re-run.
 

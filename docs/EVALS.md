@@ -40,7 +40,9 @@ the golden label. It measures the tool's *judgment*, not just its writing.
 ### 6. Faithfulness (LLM-as-judge)
 A separate, independent model reads the source and the rewrite and scores 1–5 on whether
 the rewrite invented or changed any fact. We require **≥ 4/5**. Using a different model to
-grade is deliberate: the model being tested should never grade its own work.
+grade is deliberate: the model being tested should never grade its own work. The judge is
+told to ignore the tool's intentional safety additions (the "see a caseworker" recommendation
+and the "not legal advice" disclaimer) and to score only the *facts* about the notice.
 
 ## Why five of six checks use no API
 
