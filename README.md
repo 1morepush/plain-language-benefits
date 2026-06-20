@@ -1,6 +1,6 @@
 # Plain Language — A Benefits Notice Translator
 
-[![CI](https://github.com/1morepush/WIP-Project/actions/workflows/ci.yml/badge.svg)](https://github.com/1morepush/WIP-Project/actions/workflows/ci.yml)
+[![CI](https://github.com/1morepush/plain-language-benefits/actions/workflows/ci.yml/badge.svg)](https://github.com/1morepush/plain-language-benefits/actions/workflows/ci.yml)
 
 > A safety-first AI tool that rewrites confusing government benefits notices into clear,
 > plain language — with a drag-and-drop app, an evaluation harness, automated tests + CI,
