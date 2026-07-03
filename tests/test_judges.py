@@ -148,3 +148,14 @@ def test_demo_example_is_grounded_and_clean():
     assert reading_grade(example["plain_text"]) <= 8.0
     # The safety disclaimer is attached.
     assert example.get("disclaimer")
+
+
+def test_demo_example_provenance_tracks_current_prompt():
+    # The committed demo must not silently advertise a superseded prompt version
+    # (the review found it still saying v2 after the prompt moved to v3).
+    from src.prompts import PROMPT_VERSION
+    from src.translate import DISCLAIMER
+
+    example = json.loads((ROOT / "examples" / "snap_demo.json").read_text(encoding="utf-8"))
+    assert example["prompt_version"] == PROMPT_VERSION
+    assert example["disclaimer"] == DISCLAIMER

@@ -1,10 +1,8 @@
-# Plain Language — the drag-and-drop app (experimental)
+# Plain Language — the drag-and-drop app
 
 A friendly window for people who don't use a terminal. Drag in a benefits letter, and
-download an easy-to-read version. No coding needed.
-
-> **Experimental.** This GUI lives on the `claude/gui-experimental` branch. The core
-> command-line tool and evals on `main` are unaffected.
+download an easy-to-read version. No coding needed. It uses the exact same translator
+(and safety rules) as the command-line tool.
 
 ## Start it (one time setup)
 
@@ -18,7 +16,8 @@ download an easy-to-read version. No coding needed.
 1. **Paste your Anthropic API key** in the box at the top (get one at
    [console.anthropic.com](https://console.anthropic.com)). Tick "Remember on this
    computer" if you don't want to paste it again — it's saved only on your machine, in a
-   file that is never shared or uploaded.
+   private file (readable only by your user account) that is never shared or uploaded,
+   and it's loaded back automatically the next time you start the app.
 2. **Drag your notice** into the box (a `.pdf`, `.docx`, or `.txt` file).
 3. **Pick an output format** — "Same as input", or TXT / DOCX / PDF.
 4. Click **Translate my notice**.
