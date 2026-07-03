@@ -16,6 +16,7 @@ import datetime as dt
 import json
 import os
 import sys
+import uuid
 
 from anthropic import Anthropic
 from dotenv import load_dotenv
@@ -191,8 +192,11 @@ def main() -> int:
         if scores:
             report = render_report(scores)
             os.makedirs(RESULTS_DIR, exist_ok=True)
+            # UTC + a random suffix: comparable across timezones, and two runs can
+            # never silently overwrite each other's report.
+            stamp = dt.datetime.now(dt.timezone.utc).strftime("%Y%m%d-%H%M%SZ")
             out_path = os.path.join(
-                RESULTS_DIR, dt.datetime.now().strftime("report-%Y%m%d-%H%M%S.md")
+                RESULTS_DIR, f"report-{stamp}-{uuid.uuid4().hex[:6]}.md"
             )
             with open(out_path, "w", encoding="utf-8") as fh:
                 fh.write(report)

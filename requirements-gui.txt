@@ -1,7 +1,8 @@
-# Extra dependencies for the drag-and-drop GUI (experimental).
+# Extra dependencies for the drag-and-drop GUI.
 # The core tool does NOT need these — they're only for `python -m src.gui`.
+# Caps keep installs reproducible (gradio majors have broken APIs before).
 -r requirements.txt
-gradio>=4.0
-pypdf>=4.0
-python-docx>=1.1
-reportlab>=4.0
+gradio>=4.44,<6
+pypdf>=4,<7
+python-docx>=1.1,<2
+reportlab>=4,<5

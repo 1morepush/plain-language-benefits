@@ -6,6 +6,8 @@ __pycache__/
 *.pyc
 .venv/
 venv/
+.pytest_cache/
+.ruff_cache/
 
 # Generated eval reports (keep the committed sample-report.md, ignore fresh runs)
 evals/results/report-*.md

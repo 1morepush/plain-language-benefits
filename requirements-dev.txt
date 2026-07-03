@@ -1,4 +1,4 @@
 # Developer tools (not needed to run the app — only to lint and test it).
 -r requirements.txt
-pytest>=8.0
-ruff>=0.6
+pytest>=8,<9
+ruff>=0.6,<1

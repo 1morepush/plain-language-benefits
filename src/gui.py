@@ -9,8 +9,11 @@ The heavy lifting is unchanged — this only wires the existing translate()/extr
 pieces to a UI. Built with Gradio so drag-drop upload and file download come for free.
 """
 
+import atexit
 import os
+import shutil
 import tempfile
+import uuid
 
 from dotenv import load_dotenv
 
@@ -20,6 +23,11 @@ from .translate import translate
 
 OUTPUT_CHOICES = ["Same as input", "TXT", "DOCX", "PDF"]
 ENV_PATH = os.path.join(os.path.dirname(__file__), "..", ".env")
+
+# One temp root for the whole session, removed on exit. (A fresh mkdtemp per translation
+# used to accumulate notice-derived files on disk for the life of the machine.)
+_OUTPUT_ROOT = tempfile.mkdtemp(prefix="plain-language-")
+atexit.register(shutil.rmtree, _OUTPUT_ROOT, ignore_errors=True)
 
 # Load a previously remembered key at startup — without this, "Remember on this
 # computer" would store the key but never read it back, and the user would have to
@@ -86,7 +94,11 @@ def process(file_path, output_choice, api_key, remember):
 
     fmt = resolve_format(output_choice, file_path)
     base = os.path.splitext(os.path.basename(file_path))[0]
-    out_path = os.path.join(tempfile.mkdtemp(), f"{base}.plain.{fmt}")
+    # A unique subfolder per translation (same session root) so a repeated filename
+    # can't clobber an earlier download link.
+    out_dir = os.path.join(_OUTPUT_ROOT, uuid.uuid4().hex[:8])
+    os.makedirs(out_dir, exist_ok=True)
+    out_path = os.path.join(out_dir, f"{base}.plain.{fmt}")
     try:
         write_output(result, fmt, out_path)
     except Exception as err:

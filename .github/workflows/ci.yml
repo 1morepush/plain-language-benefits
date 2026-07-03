@@ -1,10 +1,17 @@
 name: CI
 
-# Runs on every push and pull request. The tests are fully offline (no API key),
-# so the project's quality checks run for free on every change.
+# Runs on pushes to main and on every pull request — unscoped push+PR used to fire the
+# suite twice per PR commit. Tests are fully offline (no API key), so quality checks run
+# for free on every change.
 on:
   push:
+    branches: [main]
   pull_request:
+
+# A newer push to the same branch supersedes any still-running build.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   test:
