@@ -12,6 +12,8 @@ pieces to a UI. Built with Gradio so drag-drop upload and file download come for
 import os
 import tempfile
 
+from dotenv import load_dotenv
+
 from .extract import extract_text
 from .output import resolve_format, write_output
 from .translate import translate
@@ -19,11 +21,29 @@ from .translate import translate
 OUTPUT_CHOICES = ["Same as input", "TXT", "DOCX", "PDF"]
 ENV_PATH = os.path.join(os.path.dirname(__file__), "..", ".env")
 
+# Load a previously remembered key at startup — without this, "Remember on this
+# computer" would store the key but never read it back, and the user would have to
+# re-paste it on every launch.
+load_dotenv(ENV_PATH)
+
 
 def _remember_key(api_key: str) -> None:
-    """Save the key to the git-ignored .env so the user doesn't re-paste it next time."""
+    """Save the key to the git-ignored .env so the user doesn't re-paste it next time.
+
+    Preserves any other variables already in .env (a plain overwrite would destroy
+    them), and restricts the file to the current user (0600) since it holds a secret.
+    """
+    line = f"ANTHROPIC_API_KEY={api_key.strip()}"
+    others = []
+    if os.path.exists(ENV_PATH):
+        with open(ENV_PATH, "r", encoding="utf-8") as fh:
+            others = [
+                ln.rstrip("\n") for ln in fh
+                if ln.strip() and not ln.startswith("ANTHROPIC_API_KEY=")
+            ]
     with open(ENV_PATH, "w", encoding="utf-8") as fh:
-        fh.write(f"ANTHROPIC_API_KEY={api_key.strip()}\n")
+        fh.write("\n".join([*others, line]) + "\n")
+    os.chmod(ENV_PATH, 0o600)  # owner-only; a no-op on Windows, which is fine
 
 
 def _preview(result: dict) -> str:
@@ -59,13 +79,25 @@ def process(file_path, output_choice, api_key, remember):
 
     try:
         result = translate(notice_text)
-    except (RuntimeError, ValueError) as err:
+    except Exception as err:
+        # User-facing boundary: whatever failed (key, model output, network), the
+        # non-technical user gets a sentence, never a stack trace.
         return f"Something went wrong: {err}", "", None
 
     fmt = resolve_format(output_choice, file_path)
     base = os.path.splitext(os.path.basename(file_path))[0]
     out_path = os.path.join(tempfile.mkdtemp(), f"{base}.plain.{fmt}")
-    write_output(result, fmt, out_path)
+    try:
+        write_output(result, fmt, out_path)
+    except Exception as err:
+        # e.g. an optional writer library missing, or a disk problem — still show the
+        # preview so the translation itself isn't lost.
+        return (
+            f"I translated your notice but couldn't create the {fmt.upper()} file "
+            f"({err}). The text is in the preview below — try a different output format.",
+            _preview(result),
+            None,
+        )
 
     flag = "⚠ This notice should be reviewed by a person." if result.get("escalate") else "✓ Done."
     return f"{flag} Your {fmt.upper()} is ready to download below.", _preview(result), out_path
@@ -86,8 +118,12 @@ def build_app():
             api_key = gr.Textbox(
                 label="Your Anthropic API key", type="password",
                 placeholder="sk-ant-...  (get one at console.anthropic.com)",
+                info="Already saved a key on this computer? You can leave this blank.",
             )
-            remember = gr.Checkbox(label="Remember on this computer", value=False)
+            remember = gr.Checkbox(
+                label="Remember on this computer", value=False,
+                info="Stores the key in a private file on this machine only (.env).",
+            )
         with gr.Row():
             file_in = gr.File(label="Drag your notice here (.pdf, .docx, .txt)",
                               file_types=[".pdf", ".docx", ".txt"], type="filepath")
