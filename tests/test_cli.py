@@ -106,3 +106,21 @@ def test_demo_out_writes_readable_file(tmp_path):
     assert main(["--demo", "--out", str(dest)]) == 0
     body = dest.read_text(encoding="utf-8")
     assert "PLAIN-LANGUAGE VERSION" in body and "not legal advice" in body
+
+
+# --- renderer unification -----------------------------------------------------------
+
+def test_render_text_carries_every_sections_fact():
+    # The CLI view is built FROM the shared sections() builder, so every line the file
+    # writers would emit must also appear in the terminal rendering — no drift possible.
+    from src.cli import render_text
+    from src.output import sections
+
+    result = dict(CANNED, escalate=True, escalation_reason="Adverse action.")
+    rendered = render_text(result)
+    for heading, body in sections(result):
+        assert heading.upper() in rendered
+        for line in body:
+            if line:
+                assert line in rendered
+    assert "(prompt version: test)" in rendered

@@ -18,6 +18,7 @@ import sys
 from dotenv import load_dotenv
 
 from .extract import extract_text
+from .output import sections
 from .translate import translate
 
 # Load ANTHROPIC_API_KEY from a local .env file if present (handy for non-coders).
@@ -27,34 +28,28 @@ load_dotenv()
 DEMO_FILE = os.path.join(os.path.dirname(__file__), "..", "examples", "snap_demo.json")
 
 
+# Headings whose lines render as bullet items in the terminal view.
+_BULLET_HEADINGS = ("What you need to do", "Where this comes from")
+
+
 def render_text(result: dict) -> str:
     """Build the human-readable plain-language output as a single string.
 
     Used both to print to the screen and (with --out) to save a readable .txt file.
+    The content comes from the same sections() builder the TXT/DOCX/PDF writers use, so
+    the terminal view and the downloadable files can never drift apart — only the ===
+    banner styling and the prompt-version footer are CLI-specific.
     """
-    lines = ["=== PLAIN-LANGUAGE VERSION " + "=" * 40, result.get("plain_text", "(none returned)")]
-
-    lines.append("\n=== WHAT YOU NEED TO DO " + "=" * 43)
-    for item in result.get("action_items", []) or ["(none listed)"]:
-        lines.append(f"  • {item}")
-
-    lines.append("\n=== WHERE THIS COMES FROM (source quotes) " + "=" * 25)
-    for quote in result.get("citations", []) or ["(none provided)"]:
-        lines.append(f"  “{quote}”")
-
-    lines.append("\n=== CONFIDENCE & SAFETY " + "=" * 43)
-    lines.append(f"  Confidence: {result.get('confidence', 'unknown')}")
-    if result.get("escalate"):
-        lines.append("  ⚠ ESCALATE: A person should review this notice with you.")
-        lines.append(f"    Reason: {result.get('escalation_reason', '(not given)')}")
-    else:
-        lines.append("  No escalation flagged.")
-
-    if result.get("disclaimer"):
-        lines.append("\n=== PLEASE NOTE " + "=" * 51)
-        lines.append(f"  {result['disclaimer']}")
-
-    lines.append(f"\n(prompt version: {result.get('prompt_version', '?')})")
+    lines = []
+    for heading, body in sections(result):
+        lines.append(f"=== {heading.upper()} " + "=" * max(3, 60 - len(heading)))
+        bullet = heading.startswith(_BULLET_HEADINGS)
+        for item in body:
+            if not item:
+                continue
+            lines.append(f"  • {item}" if bullet else item)
+        lines.append("")
+    lines.append(f"(prompt version: {result.get('prompt_version', '?')})")
     return "\n".join(lines)
 
 
