@@ -19,7 +19,7 @@ from dotenv import load_dotenv
 
 from .extract import extract_text
 from .output import resolve_format, write_output
-from .translate import translate
+from .translate import DISCLAIMER, translate
 
 OUTPUT_CHOICES = ["Same as input", "TXT", "DOCX", "PDF"]
 ENV_PATH = os.path.join(os.path.dirname(__file__), "..", ".env")
@@ -124,7 +124,7 @@ def build_app():
             "# Plain Language\n"
             "Turn a confusing benefits notice into clear, plain language. "
             "Drag in your letter, and download an easy-to-read version.\n\n"
-            "*This is a plain-language summary, not legal advice.*"
+            f"*{DISCLAIMER}*"  # single source of truth — same text every result carries
         )
         with gr.Row():
             api_key = gr.Textbox(

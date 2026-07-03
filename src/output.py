@@ -22,8 +22,10 @@ def resolve_format(choice: str, input_path: str) -> str:
     return "txt"
 
 
-def _sections(result: dict) -> list[tuple[str, list[str]]]:
-    """The document as (heading, lines) pairs — shared by all three writers."""
+def sections(result: dict) -> list[tuple[str, list[str]]]:
+    """The document as (heading, lines) pairs — the single source of truth for every
+    rendering of a result: the TXT/DOCX/PDF writers here and the CLI's terminal view.
+    Add a new result field once, and every output picks it up."""
     conf = result.get("confidence", "unknown")
     if result.get("escalate"):
         safety = [
@@ -46,7 +48,7 @@ def _sections(result: dict) -> list[tuple[str, list[str]]]:
 
 def _write_txt(result: dict, path: str) -> None:
     blocks = []
-    for heading, lines in _sections(result):
+    for heading, lines in sections(result):
         blocks.append(heading.upper())
         blocks.append("-" * len(heading))
         blocks.extend(lines)
@@ -60,7 +62,7 @@ def _write_docx(result: dict, path: str) -> None:
 
     document = Document()
     document.add_heading("Your notice, in plain language", level=0)
-    for heading, lines in _sections(result):
+    for heading, lines in sections(result):
         document.add_heading(heading, level=1)
         is_list = heading.startswith(("What you need", "Where this"))
         for line in lines:
@@ -79,7 +81,7 @@ def _write_pdf(result: dict, path: str) -> None:
 
     styles = getSampleStyleSheet()
     story = [Paragraph("Your notice, in plain language", styles["Title"]), Spacer(1, 12)]
-    for heading, lines in _sections(result):
+    for heading, lines in sections(result):
         story.append(Paragraph(heading, styles["Heading2"]))
         clean = [ln for ln in lines if ln]
         if heading.startswith(("What you need", "Where this")):
