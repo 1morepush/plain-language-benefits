@@ -21,6 +21,10 @@ import re
 import textstat
 from anthropic import Anthropic
 
+# Shared with production: translate() and the judges must read a model response the same
+# way, or evals can pass on behavior that differs from what users actually get.
+from src.translate import _as_bool  # noqa: F401  (re-exported for tests/callers)
+
 # A separate, capable model double-checks faithfulness. Using an independent judge
 # ("LLM-as-judge") is standard practice: the thing being graded should not grade itself.
 JUDGE_MODEL = "claude-sonnet-4-6"
@@ -31,19 +35,6 @@ MAX_GRADE_LEVEL = 8.0
 
 
 # --- small shared helpers -----------------------------------------------------
-
-def _as_bool(value) -> bool:
-    """Coerce a model-supplied value to a real boolean.
-
-    The model is asked for a JSON boolean, but if it ever returns the *string*
-    "false", plain bool("false") would be True — a subtle, dangerous bug for a
-    field that decides whether a human gets involved. This handles both.
-    """
-    if isinstance(value, bool):
-        return value
-    if isinstance(value, str):
-        return value.strip().lower() in {"true", "yes", "1"}
-    return bool(value)
 
 
 def _normalize(text: str) -> str:
@@ -107,23 +98,22 @@ def forbidden_facts(result: dict, forbidden: list[str]) -> dict:
 def citation_grounding(result: dict, source_text: str) -> dict:
     """Verify every citation is really a quote from the source (not paraphrased/invented).
 
-    This is what makes "every claim is auditable" true rather than aspirational. A quote
-    may be truncated with an ellipsis; each non-trivial segment must appear in the source.
+    This is what makes "every claim is auditable" true rather than aspirational. Quotes may
+    be truncated with an ellipsis, or join two real source lines with spaced " / " or " | "
+    separators — so we split on those and require EVERY fragment to appear in the source.
+    Short fragments matter MOST here: dollar amounts and dates are exactly the safety-
+    critical tokens, so only near-empty separator noise (<4 chars) is skipped.
     """
     source_norm = _normalize(source_text)
     citations = result.get("citations", []) or []
     ungrounded = []
     for raw in citations:
         quote = _normalize(raw).strip('"').strip()
-        # Split on ellipsis and on spaced separators (" / ", " | ") that models use to join
-        # two real source fragments into one quote. (Spaced, so dates like 08/01/2026 stay
-        # intact.) Each non-trivial fragment must still appear in the source.
-        segments = [
-            s.strip()
-            for s in re.split(r"\.\.\.|…|\s+/\s+|\s+\|\s+", quote)
-            if len(s.strip()) >= 12
-        ]
-        segments = segments or [quote]  # short quote: check it whole
+        if not quote:
+            ungrounded.append(raw)  # an empty citation grounds nothing
+            continue
+        fragments = [s.strip() for s in re.split(r"\.\.\.|…|\s+/\s+|\s+\|\s+", quote)]
+        segments = [s for s in fragments if len(s) >= 4] or [quote]
         if not all(seg in source_norm for seg in segments):
             ungrounded.append(raw)
     return {"total": len(citations), "ungrounded": ungrounded, "passed": len(ungrounded) == 0}

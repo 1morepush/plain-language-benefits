@@ -99,6 +99,27 @@ def test_citation_grounding_handles_slash_joined_fragments():
     assert citation_grounding(result, source)["passed"]
 
 
+def test_citation_grounding_catches_short_invented_fragment():
+    # The review's false-ACCEPT: short fragments (dollar amounts!) used to be skipped.
+    # A real long quote joined to an invented short amount must FAIL grounding.
+    source = "Your interview is scheduled for 06/16/2026 between 9:00 AM and 11:00 AM."
+    result = {"citations": ["Your interview is scheduled for 06/16/2026 / $1,840"]}
+    verdict = citation_grounding(result, source)
+    assert not verdict["passed"] and verdict["ungrounded"]
+
+
+def test_citation_grounding_accepts_valid_short_fragments():
+    # The review's false-REJECT: two real SHORT fragments joined with " / " used to be
+    # re-checked as one joined string (absent from source) and wrongly rejected.
+    source = "New monthly amount: $182\n  Effective date: 07/15/26"
+    result = {"citations": ["$182 / 07/15/26"]}
+    assert citation_grounding(result, source)["passed"]
+
+
+def test_citation_grounding_rejects_empty_citation():
+    assert not citation_grounding({"citations": ['""']}, "some source text")["passed"]
+
+
 # --- escalation_correct -------------------------------------------------------
 
 def test_escalation_correct_matches_label():

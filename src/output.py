@@ -71,6 +71,8 @@ def _write_docx(result: dict, path: str) -> None:
 
 
 def _write_pdf(result: dict, path: str) -> None:
+    from xml.sax.saxutils import escape
+
     from reportlab.lib.pagesizes import letter
     from reportlab.lib.styles import getSampleStyleSheet
     from reportlab.platypus import ListFlowable, ListItem, Paragraph, SimpleDocTemplate, Spacer
@@ -81,11 +83,16 @@ def _write_pdf(result: dict, path: str) -> None:
         story.append(Paragraph(heading, styles["Heading2"]))
         clean = [ln for ln in lines if ln]
         if heading.startswith(("What you need", "Where this")):
-            items = [ListItem(Paragraph(ln, styles["BodyText"])) for ln in clean]
+            # escape() before Paragraph: reportlab parses its text as XML-ish markup, so
+            # notice text containing & / < / > (or a crafted <img> tag) must be neutralized
+            # — otherwise PDF export crashes on legitimate notices and a malicious one
+            # could make reportlab fetch URLs or open local files during build().
+            items = [ListItem(Paragraph(escape(ln), styles["BodyText"])) for ln in clean]
             story.append(ListFlowable(items, bulletType="bullet"))
         else:
             for ln in clean:
-                story.append(Paragraph(ln.replace("\n", "<br/>"), styles["BodyText"]))
+                # Escape first, then insert our own <br/> so it survives as real markup.
+                story.append(Paragraph(escape(ln).replace("\n", "<br/>"), styles["BodyText"]))
         story.append(Spacer(1, 10))
     SimpleDocTemplate(path, pagesize=letter).build(story)
 

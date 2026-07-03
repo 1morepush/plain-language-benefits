@@ -82,11 +82,33 @@ def score_case(case: dict, client: Anthropic) -> dict:
     }
 
 
+def run_cases(cases: list[dict], client: Anthropic, scores: list[dict]) -> list[dict]:
+    """Score every case, appending into `scores` as we go.
+
+    One case hitting a transient API error (rate limit, overload) must not lose the whole
+    batch: the failure is recorded as a stub row and the run continues. Appending into the
+    caller's list means even a hard interrupt keeps the completed results.
+    """
+    for case in cases:
+        print(f"  • {case['id']} ...", end=" ", flush=True)
+        try:
+            scores.append(score_case(case, client))
+            print("done")
+        except Exception as err:
+            scores.append(
+                {"id": case["id"], "error": f"{type(err).__name__}: {err}", "passed": False}
+            )
+            print(f"FAILED to run ({type(err).__name__}) — continuing with the next case")
+    return scores
+
+
 def render_report(scores: list[dict]) -> str:
     """Build a human-readable Markdown report from the scored cases."""
     total = len(scores)
     passed = sum(1 for s in scores if s["passed"])
-    version = scores[0]["prompt_version"] if scores else "?"
+    version = next(
+        (s["prompt_version"] for s in scores if "prompt_version" in s), "?"
+    )
     stamp = dt.datetime.now().strftime("%Y-%m-%d %H:%M")
 
     lines = [
@@ -103,6 +125,9 @@ def render_report(scores: list[dict]) -> str:
         "------------|--------------|",
     ]
     for s in scores:
+        if s.get("error"):
+            lines.append(f"| {s['id']} | ❌ | — | — | — | — | — | — |")
+            continue
         cov, esc, faith = s["coverage"], s["escalation"], s["faithfulness"]
         cit = s["citations"]
         lines.append(
@@ -121,6 +146,10 @@ def render_report(scores: list[dict]) -> str:
         lines += ["", "## Failures — what to look at", ""]
         for s in failures:
             lines.append(f"### {s['id']}")
+            if s.get("error"):
+                lines.append(f"- Case did not complete (API/runtime error): {s['error']}")
+                lines.append("")
+                continue
             if s["reading_grade"] > MAX_GRADE_LEVEL:
                 lines.append(f"- Reading grade {s['reading_grade']} is above target.")
             if not s["coverage"]["passed"]:
@@ -153,24 +182,25 @@ def main() -> int:
     cases = load_cases()
     print(f"Running {len(cases)} golden cases...\n")
 
-    scores = []
-    for case in cases:
-        print(f"  • {case['id']} ...", end=" ", flush=True)
-        scores.append(score_case(case, client))
-        print("done")
+    scores: list[dict] = []
+    try:
+        run_cases(cases, client, scores)
+    finally:
+        # Even if the run is interrupted, completed results are money already spent —
+        # write whatever we have so it is never lost.
+        if scores:
+            report = render_report(scores)
+            os.makedirs(RESULTS_DIR, exist_ok=True)
+            out_path = os.path.join(
+                RESULTS_DIR, dt.datetime.now().strftime("report-%Y%m%d-%H%M%S.md")
+            )
+            with open(out_path, "w", encoding="utf-8") as fh:
+                fh.write(report)
+            passed = sum(1 for s in scores if s["passed"])
+            print(f"\n{passed}/{len(scores)} passed. Report written to {out_path}\n")
+            print(report)
 
-    report = render_report(scores)
-    os.makedirs(RESULTS_DIR, exist_ok=True)
-    out_path = os.path.join(
-        RESULTS_DIR, dt.datetime.now().strftime("report-%Y%m%d-%H%M%S.md")
-    )
-    with open(out_path, "w", encoding="utf-8") as fh:
-        fh.write(report)
-
-    passed = sum(1 for s in scores if s["passed"])
-    print(f"\n{passed}/{len(scores)} passed. Report written to {out_path}\n")
-    print(report)
-    return 0 if passed == len(scores) else 1
+    return 0 if scores and all(s["passed"] for s in scores) else 1
 
 
 if __name__ == "__main__":

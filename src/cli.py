@@ -2,10 +2,10 @@
 cli.py — run the translator from the command line on a single notice.
 
 Usage:
-    python -m src.cli sample_docs/snap_recertification.txt          # translate (needs API key)
-    python -m src.cli sample_docs/snap_recertification.txt --out out.txt   # also save to a file
-    python -m src.cli --demo                                        # show a saved example (no key)
-    python -m src.cli --demo --out out.txt                          # save the example to a file
+    python -m src.cli notice.txt                    # translate a .txt/.pdf/.docx (needs API key)
+    python -m src.cli notice.pdf --out out.txt      # also save the readable text to a file
+    python -m src.cli --demo                        # show a saved example (no key)
+    python -m src.cli --demo --out out.txt          # save the example to a file
 
 It prints the plain-language version, the action items, the source citations, and
 whether a human should get involved. With --out it also saves that readable text to a file.
@@ -17,6 +17,7 @@ import sys
 
 from dotenv import load_dotenv
 
+from .extract import extract_text
 from .translate import translate
 
 # Load ANTHROPIC_API_KEY from a local .env file if present (handy for non-coders).
@@ -89,28 +90,36 @@ def _parse_args(argv: list[str]) -> tuple[str | None, str | None]:
 def main(argv: list[str]) -> int:
     source, out_path = _parse_args(argv)
     if source is None:
-        print("Usage: python -m src.cli <path-to-notice.txt> [--out file.txt]   (or: --demo)")
+        print(
+            "Usage: python -m src.cli <notice.txt|.pdf|.docx> [--out file.txt]   (or: --demo)"
+        )
         return 2
 
     if source == "--demo":
-        with open(DEMO_FILE, "r", encoding="utf-8") as fh:
-            result = json.load(fh)
+        try:
+            with open(DEMO_FILE, "r", encoding="utf-8") as fh:
+                result = json.load(fh)
+        except (OSError, json.JSONDecodeError) as err:
+            print(f"The saved demo example could not be read: {err}")
+            return 1
         print("(demo mode — showing a saved example output; no API call was made)")
         _emit(result, out_path)
         return 0
 
     try:
-        with open(source, "r", encoding="utf-8") as fh:
-            notice_text = fh.read()
+        notice_text = extract_text(source)
     except FileNotFoundError:
         print(f"Could not find file: {source}")
+        return 1
+    except ValueError as err:
+        print(f"\n{err}")
         return 1
 
     try:
         result = translate(notice_text)
-    except (RuntimeError, ValueError) as err:
-        # Expected, explainable problems (no key, bad JSON) — show the message, not a
-        # scary Python traceback, since this tool is meant for non-coders.
+    except Exception as err:
+        # This is the user-facing boundary for non-coders: whatever went wrong (no key,
+        # bad model output, a network/API error), show the message — never a traceback.
         print(f"\n{err}")
         return 1
 
