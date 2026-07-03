@@ -31,6 +31,21 @@ DISCLAIMER = (
 )
 
 
+def _as_bool(value) -> bool:
+    """Coerce a model-supplied value to a real boolean.
+
+    The model is asked for a JSON boolean, but if it ever returns the *string* "false",
+    plain bool("false") would be True — a dangerous mistake for the escalate flag, which
+    decides whether a human gets involved. Shared with the eval judges so production and
+    evals read the same response the same way.
+    """
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, str):
+        return value.strip().lower() in {"true", "yes", "1"}
+    return bool(value)
+
+
 def _extract_json(text: str) -> str:
     """Pull the JSON object out of a model response.
 
@@ -78,7 +93,13 @@ def translate(notice_text: str, client: Anthropic | None = None) -> dict:
         messages=[{"role": "user", "content": build_user_message(notice_text)}],
     )
 
-    raw = _extract_json(response.content[0].text)
+    # The API returns content blocks; only text blocks carry our JSON. An empty or
+    # non-text response must become a clear error, not an IndexError.
+    text_blocks = [b for b in response.content if getattr(b, "type", None) == "text"]
+    if not text_blocks:
+        raise ValueError("Claude returned an empty response. Please try again.")
+
+    raw = _extract_json(text_blocks[0].text)
     try:
         result = json.loads(raw)
     except json.JSONDecodeError as err:
@@ -86,6 +107,12 @@ def translate(notice_text: str, client: Anthropic | None = None) -> dict:
             "Claude did not return valid JSON. This usually means the prompt was "
             f"edited in a way that broke the output format. Raw response:\n{raw}"
         ) from err
+    if not isinstance(result, dict):
+        # Valid JSON but not an object (e.g. a bare list) would otherwise TypeError below.
+        raise ValueError("Claude returned JSON that was not a result object. Please try again.")
+
+    # Normalize the safety-critical flag: a string "false" must never read as True.
+    result["escalate"] = _as_bool(result.get("escalate", False))
 
     # Record which prompt version produced this so eval reports are comparable, and
     # always attach the safety disclaimer.

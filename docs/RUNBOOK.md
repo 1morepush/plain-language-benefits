@@ -36,8 +36,13 @@ Translate one notice and print the result:
 ```
 python -m src.cli sample_docs/snap_recertification.txt
 ```
-Swap in any `.txt` file path to translate a different notice. (To translate a PDF, first
-copy its text into a `.txt` file — PDF reading is intentionally out of scope, see DESIGN.md.)
+Swap in any `.txt`, `.pdf`, or `.docx` file path to translate a different notice. (Scanned
+images or photos of letters have no selectable text and need OCR, which is still out of
+scope — see DESIGN.md. For those, type or paste the text into a `.txt` file.)
+
+Prefer no terminal at all? There is also a drag-and-drop app: double-click `run_gui.sh`
+(macOS/Linux) or `run_gui.bat` (Windows). See `docs/GUI.md` for the full guide — it uses
+the exact same translator, so everything else in this runbook still applies.
 
 No API key handy? See a saved example output with no key and no network:
 ```
@@ -89,7 +94,7 @@ confirm quality holds. The eval run makes a few extra calls for the faithfulness
 
 | Symptom | Likely cause | Fix |
 |---------|--------------|-----|
-| "ANTHROPIC_API_KEY is not set" | No `.env` or empty key | Redo step 2.4–2.5 |
+| "ANTHROPIC_API_KEY is not set" | No `.env` or empty key | Redo steps 4–5 of section 2 |
 | "Claude did not return valid JSON" | A prompt edit broke the output format | Revert your last edit to `src/prompts.py`; keep the JSON instructions intact |
 | `ModuleNotFoundError` | Libraries not installed | Re-run `pip install -r requirements.txt` |
 | Eval case fails on facts | A deadline/amount got dropped | Read the failure detail in the report; usually a prompt wording fix |

@@ -17,6 +17,15 @@ to review.
 It is built across the four things a real public-interest AI project needs:
 **Build → Evaluate → Teach → Hand off.**
 
+<!-- Replace the placeholder below with a real screenshot: save it as
+     docs/images/gui-screenshot.png (see docs/images/README.md for how to capture it). -->
+![The Plain Language drag-and-drop app: a box to paste your API key, a drag-and-drop area for
+a PDF/DOCX/TXT notice, an output-format picker, and a button to download the plain-language
+version.](docs/images/gui-screenshot.png)
+
+*The drag-and-drop app a non-technical user sees — drop a confusing notice, download a clear,
+plain-language version. (Placeholder image; see [`docs/images/`](docs/images/) to add your own.)*
+
 ---
 
 ## Table of contents

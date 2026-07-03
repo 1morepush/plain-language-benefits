@@ -29,4 +29,4 @@ If they do not get everything by 06/20/2026, your benefits stop on 06/30/2026. T
 === PLEASE NOTE ===================================================
   This is a plain-language summary to help you understand your notice. It is not legal advice and does not change the official notice. When in doubt, contact your caseworker or a local legal aid office.
 
-(prompt version: v2)
+(prompt version: v3)

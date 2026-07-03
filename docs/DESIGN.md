@@ -47,8 +47,9 @@ recipient data. This is itself a judgment call worth showing.
 
 ## Known limitations (and honest next steps)
 
-- **Text in, text out.** No PDF/image parsing yet; paste text into a `.txt` file. A real
-  deployment would add document upload + OCR.
+- **Digital documents only.** PDF, DOCX, and TXT files are parsed (CLI and GUI), but a
+  scanned image or photo of a letter has no selectable text — that still needs OCR, which
+  a real deployment would add.
 - **English only.** Many recipients need Spanish, Vietnamese, Haitian Creole, etc.
   Multi-language output is the highest-value next feature.
 - **Still a modest eval set.** Seven notices — including adversarial cases (an internal

@@ -1,3 +1,5 @@
-anthropic>=0.40
-textstat>=0.7
-python-dotenv>=1.0
+# Upper caps keep CI reproducible: a new breaking major of a dependency should be a
+# deliberate upgrade, not a surprise red build with zero code change.
+anthropic>=0.40,<1
+textstat>=0.7,<1
+python-dotenv>=1.0,<2

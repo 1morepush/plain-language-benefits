@@ -11,10 +11,11 @@ build → evaluate → teach → hand-off lifecycle. Don't claim usage numbers o
 - Built a safety-first AI tool (Python, Claude API) that rewrites dense public-benefits
   notices — SNAP, Medicaid, housing vouchers, unemployment — into 6th-grade plain language,
   with source citations and an automatic human-escalation flag for high-stakes notices.
-- Designed a four-metric evaluation harness (reading level, fact coverage, escalation
-  accuracy, and an LLM-as-judge faithfulness check) with prompt-version regression tracking;
-  used it to catch a reading-level regression and cut output from ~grade 8–10 to grade 5–6
-  while passing 4/4 test cases.
+- Designed a six-metric evaluation harness (reading level, fact coverage, a forbidden-facts
+  hallucination guard, citation grounding, escalation accuracy, and an LLM-as-judge
+  faithfulness check) with prompt-version regression tracking; used it across two real
+  improvement rounds — cutting output from ~grade 8–10 to grade 5–6, then catching a missed
+  escalation and a parsing bug in a live run — to reach 7/7 passing golden cases.
 - Wrote a runbook, design docs, and a 60-minute hands-on workshop so non-technical staff
   could operate and maintain the tool — demonstrating the full delivery-and-handoff lifecycle.
 - Made deliberate safety/judgment calls: forbade the model from inventing deadlines or
@@ -33,10 +34,12 @@ reading level and easy to skim past a deadline. I built **Plain Language**, a to
 rewrites SNAP, Medicaid, housing, and unemployment notices into clear 6th-grade language
 a stressed reader can act on. It's safety-first: it never invents facts, won't give legal
 advice, cites the source for every claim, and flags high-stakes notices (terminations,
-overpayments) for a human. I didn't stop at building it — I wrote an evaluation harness
-that scores reading level, fact retention, escalation accuracy, and faithfulness, then used
-it to tune the prompt from grade 8–10 down to grade 5–6. I also wrote a staff workshop and
-a runbook so the work outlives me.
+overpayments) for a human. I didn't stop at building it — I wrote a six-metric evaluation
+harness (reading level, fact retention, hallucination and citation checks, escalation,
+faithfulness) and used it through two real improvement rounds: tuning the prompt from grade
+8–10 down to grade 5–6, then catching a missed escalation and a parsing bug in a live run,
+ending at 7/7 passing cases. I also wrote a staff workshop and a runbook so the work
+outlives me.
 
 ## LinkedIn / blog post (first person)
 
@@ -52,10 +55,12 @@ to give legal advice, cites the original notice for every claim, and flags high-
 notices for a caseworker instead of guessing.
 
 To prove it actually works, I built an evaluation harness that scores reading level, whether
-every deadline survived, whether it escalated the right cases, and whether it stayed faithful
-to the source. The first run flagged that my output was reading at a grade 8–10 level — too
-hard. I tightened the prompt and got it down to grade 5–6, with all checks passing. That
-loop — measure, find the weak spot, fix it, prove it — is the whole game with AI tools.
+every deadline survived, whether it invented any fact, whether its citations are real quotes,
+whether it escalated the right cases, and whether it stayed faithful to the source. The first
+run flagged output reading at a grade 8–10 level — too hard; a later live run caught a missed
+escalation on a benefits-hold notice and a parsing bug. Each fix was proven by re-running the
+suite to 7/7. That loop — measure, find the weak spot, fix it, prove it — is the whole game
+with AI tools.
 
 I also wrote a staff workshop and a runbook, because a tool nobody can run or maintain isn't
 much help.
@@ -70,9 +75,10 @@ much help.
 > a tool that rewrites confusing government benefits notices (SNAP, Medicaid, housing,
 > unemployment) into clear, 6th-grade language, with source citations and a human-escalation
 > safeguard for high-stakes notices like terminations and overpayments. I treated it like a
-> real deployment: I wrote an evaluation harness scoring reading level, fact retention,
-> escalation accuracy, and faithfulness, then used it to catch a reading-level problem and
-> tune the tool from a grade 8–10 reading level down to grade 5–6 with all checks passing. I
+> real deployment: I wrote a six-metric evaluation harness (reading level, fact retention,
+> hallucination and citation checks, escalation accuracy, faithfulness) and used it through
+> two real improvement rounds — tuning grade 8–10 output down to grade 5–6, then catching a
+> missed escalation in a live run — to reach 7/7 passing cases. I
 > also wrote a staff workshop and a handoff runbook, because a tool nobody can run or maintain
 > doesn't help anyone. That instinct — build it, prove it works, teach it, and make it
 > outlast me — is exactly the kind of utility-player work I want to do for a host organization
