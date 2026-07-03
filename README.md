@@ -164,7 +164,7 @@ action — is the core judgment built into the tool.
   structured result:  plain_text · action_items · citations · confidence · escalate · disclaimer
         │
         ├──▶  src/cli.py            prints it / saves a .txt (--out)
-        ├──▶  src/gui.py + output.py drag-drop app → download TXT/DOCX/PDF  (experimental)
+        ├──▶  src/gui.py + output.py drag-drop app → download TXT/DOCX/PDF
         └──▶  evals/run_evals.py     scores it against the golden test cases
 ```
 
@@ -191,10 +191,12 @@ and housing. The harness (`evals/run_evals.py`) scores every change against fixe
 | **Faithfulness** | An independent LLM judge checks for invented or changed facts | Yes |
 
 The five local checks also run as fast **offline tests** in **GitHub Actions CI** on every
-push — no API key required — so a broken change is caught before it merges. The suite (in
-[`tests/`](tests/)) covers the judges, dataset integrity (every required fact is really in
-its source, every "forbidden" fact really absent), and the GUI's file extraction and output
-writers. See the regression evidence in
+pull request (and pushes to `main`) — no API key required — so a broken change is caught
+before it merges. The suite (in [`tests/`](tests/)) covers the judges, dataset integrity
+(every required fact is really in its source, every "forbidden" fact really absent), file
+extraction and the output writers, the CLI and GUI logic, the API-response guards, and the
+LLM judge's own failure modes — using generated PDF fixtures and fake API clients, so none
+of it needs a key. See the regression evidence in
 [`evals/results/v1-vs-v2.md`](evals/results/v1-vs-v2.md).
 
 **Latest committed run (real, all 7 cases — at [`evals/results/sample-report.md`](evals/results/sample-report.md)):**
@@ -260,9 +262,10 @@ pip install -r requirements.txt
 cp .env.example .env          # macOS/Linux  (Windows: copy .env.example .env)
 #   then paste your key after ANTHROPIC_API_KEY=
 
-# 3. Translate one notice (add --out to also save a readable .txt)
+# 3. Translate one notice — .txt, .pdf, or .docx all work
+#    (add --out to also save a readable .txt)
 python -m src.cli sample_docs/snap_recertification.txt
-python -m src.cli sample_docs/medicaid_renewal.txt --out outputs/medicaid_renewal.plain.txt
+python -m src.cli my_notice.pdf --out outputs/my_notice.plain.txt
 #   → prints the plain-language rewrite, action list, source quotes,
 #     disclaimer, and the confidence / escalation status
 
@@ -296,13 +299,14 @@ src/             core: prompts.py · translate.py · cli.py
 sample_docs/     synthetic (fake-PII) benefits notices — the inputs (7, incl. adversarial)
 outputs/         committed plain-language outputs (e.g. snap_recertification.plain.txt)
 evals/           golden dataset, judges, runner, sample report + v1→v2 evidence
-tests/           offline tests: judges, dataset integrity, extraction, output (run in CI)
+tests/           offline tests: judges · dataset integrity · extract/output · CLI · GUI
+                 logic · API-response guards (all run in CI, no key needed)
 examples/        a saved output for the offline `--demo`
 docs/            RUNBOOK (handoff) · EVALS · DESIGN · PORTFOLIO · GUI
 workshop/        facilitator guide · slide outline · hands-on exercise
 run_gui.sh/.bat  one-click launchers for the drag-and-drop app
 requirements*.txt core · -dev (tests/lint) · -gui (app only)
-.github/         CI workflow (ruff + pytest on every push)
+.github/         CI workflow (ruff + pytest on every PR and push to main)
 ```
 
 ---
