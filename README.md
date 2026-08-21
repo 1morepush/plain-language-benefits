@@ -17,14 +17,13 @@ to review.
 It is built across the four things a real public-interest AI project needs:
 **Build → Evaluate → Teach → Hand off.**
 
-<!-- Replace the placeholder below with a real screenshot: save it as
-     docs/images/gui-screenshot.png (see docs/images/README.md for how to capture it). -->
-![The Plain Language drag-and-drop app: a box to paste your API key, a drag-and-drop area for
-a PDF/DOCX/TXT notice, an output-format picker, and a button to download the plain-language
-version.](docs/images/gui-screenshot.png)
+![The Plain Language drag-and-drop app, with a benefits notice loaded: a box to paste your
+Anthropic API key and a "Remember on this computer" tick-box, a drop zone holding the file
+snap_recertification.txt, an output-format picker set to "Same as input", and a large
+"Translate my notice" button.](docs/images/gui-screenshot.png)
 
 *The drag-and-drop app a non-technical user sees — drop a confusing notice, download a clear,
-plain-language version. (Placeholder image; see [`docs/images/`](docs/images/) to add your own.)*
+plain-language version.*
 
 ---
 
@@ -34,6 +33,7 @@ plain-language version. (Placeholder image; see [`docs/images/`](docs/images/) t
 - [See it in action (real output)](#see-it-in-action-real-output)
 - [How it works](#how-it-works)
 - [Proven with evaluations](#proven-with-evaluations)
+- [Built like production code](#built-like-production-code)
 - [Safety-first by design](#safety-first-by-design)
 - [How to run it](#how-to-run-it)
 - [Project layout](#project-layout)
@@ -224,6 +224,28 @@ of it needs a key. See the regression evidence in
 
 ---
 
+## Built like production code
+
+Evals prove the *model* behaves. They say nothing about whether the *program* around it
+holds up. So the codebase also went through a production-readiness review — architecture,
+static analysis, security, performance, tests — and the findings were fixed at the root:
+
+- **Untrusted documents are treated as untrusted.** A notice is an arbitrary file from the
+  outside world. Its text is escaped before it reaches the PDF renderer (unescaped markup
+  could crash the export — or make the renderer fetch a URL or open a local file), and the
+  LLM judge now receives the notice inside labelled delimiters, so a notice can't talk its
+  way past its own safety check. Uploads are capped at 20 MB / 200 pages.
+- **Secrets get handled like secrets.** A remembered API key is written to a private,
+  owner-only file, and updating it no longer clobbers anything else in `.env`.
+- **Failures explain themselves.** A corrupt, password-protected, or scanned file produces
+  a plain sentence a non-technical user can act on — never a Python traceback.
+- **One bad case can't sink a batch.** An eval run isolates per-case errors and still
+  writes its report, so a transient API hiccup doesn't discard results you paid for.
+- **The build stays reproducible.** Dependencies are pinned with upper bounds, and CI
+  cancels superseded runs instead of racing them.
+
+---
+
 ## Safety-first by design
 
 In benefits work, a confident wrong answer is worse than none. The tool therefore:
@@ -302,7 +324,7 @@ evals/           golden dataset, judges, runner, sample report + v1→v2 evidenc
 tests/           offline tests: judges · dataset integrity · extract/output · CLI · GUI
                  logic · API-response guards (all run in CI, no key needed)
 examples/        a saved output for the offline `--demo`
-docs/            RUNBOOK (handoff) · EVALS · DESIGN · PORTFOLIO · GUI
+docs/            RUNBOOK (handoff) · EVALS · DESIGN · PORTFOLIO · GUI · images/
 workshop/        facilitator guide · slide outline · hands-on exercise
 run_gui.sh/.bat  one-click launchers for the drag-and-drop app
 requirements*.txt core · -dev (tests/lint) · -gui (app only)
