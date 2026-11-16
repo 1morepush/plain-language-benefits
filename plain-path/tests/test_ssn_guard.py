@@ -66,5 +66,6 @@ def test_server_blocks_ssn_in_the_address_bar():
 
 def test_server_lets_ordinary_requests_through():
     client = app.test_client()
-    assert client.post("/api/ask", json={"message": "what is severance?"}).status_code == 501
+    reply = client.post("/api/ask", json={"message": "what is severance?", "question_id": "x"})
+    assert reply.status_code == 200
     assert client.get("/api/content").status_code == 200

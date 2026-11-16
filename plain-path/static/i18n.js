@@ -64,6 +64,21 @@ const STRINGS = {
     nextSection: "Next section",
     finish: "Finish",
 
+    askTitle: "Ask about this question",
+    askHint:
+      "Ask what this question means, one question at a time. Plain Path does not remember earlier messages. Do not type your name, Social Security number, or other personal details.",
+    askLabel: "Your question",
+    askSend: "Ask",
+    askEmpty: "Please type a question first.",
+    askWaiting: "Plain Path is writing a reply…",
+    askYou: "You asked:",
+    askReplyLabel: "Plain Path:",
+    askAiNote: "This reply was written by AI and was not checked by a person. It may be wrong.",
+    askHelp: "Need a person? They can help for free:",
+    askError: "Your question could not be sent. Please try again, or use the official instructions.",
+    ssnWarning:
+      "That looks like a Social Security number or another ID number. Your message was not sent. Please do not share personal information here.",
+
     doneTitle: "You reached the end",
     doneIntro:
       "You have read through every section. Plain Path did not fill out or send anything. To apply, use the official Arizona DES website.",
@@ -132,6 +147,21 @@ const STRINGS = {
     prevSection: "Sección anterior",
     nextSection: "Sección siguiente",
     finish: "Terminar",
+
+    askTitle: "Pregunte sobre esta pregunta",
+    askHint:
+      "Pregunte qué significa esta pregunta, una pregunta a la vez. Plain Path no recuerda los mensajes anteriores. No escriba su nombre, su número de Seguro Social ni otros datos personales.",
+    askLabel: "Su pregunta",
+    askSend: "Preguntar",
+    askEmpty: "Por favor, escriba primero una pregunta.",
+    askWaiting: "Plain Path está escribiendo una respuesta…",
+    askYou: "Usted preguntó:",
+    askReplyLabel: "Plain Path:",
+    askAiNote: "Esta respuesta fue escrita por IA y no fue revisada por una persona. Puede tener errores.",
+    askHelp: "¿Necesita hablar con una persona? Pueden ayudarle gratis:",
+    askError: "No se pudo enviar su pregunta. Inténtelo de nuevo o use las instrucciones oficiales.",
+    ssnWarning:
+      "Eso parece un número de Seguro Social u otro número de identificación. Su mensaje no se envió. Por favor, no comparta información personal aquí.",
 
     doneTitle: "Llegó al final",
     doneIntro:

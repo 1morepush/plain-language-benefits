@@ -124,6 +124,22 @@ legend { font-weight: 700; padding: 0; float: left; width: 100%; }
 .choice, .tick { display: flex; align-items: center; gap: 0.6rem; min-height: 2.75rem; cursor: pointer; }
 .choice input, .tick input { width: 1.4rem; height: 1.4rem; flex: none; accent-color: var(--accent); }
 
+/* ---------- "Ask about this question" ---------- */
+.ask { border-top: 1px solid var(--line); margin-top: 1.25rem; padding-top: 1rem; }
+.ask label { display: block; }
+.ask textarea {
+  font: inherit; width: 100%; padding: 0.6rem 0.75rem;
+  border: 2px solid var(--muted); border-radius: 0.4rem; background: var(--card); color: var(--text);
+}
+.ask textarea:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.ask .btn-row { margin-top: 0.75rem; }
+.ask .btn:disabled { opacity: 0.6; cursor: wait; }
+.thread { margin-top: 1rem; }
+.asked { margin-bottom: 0.5rem; overflow-wrap: anywhere; }
+.reply { background: var(--accent-soft); border-radius: 0.5rem; padding: 0.8rem 1rem; margin-bottom: 1rem; }
+.reply p { white-space: pre-line; }
+.reply ul { margin-bottom: 0; }
+
 /* ---------- checklists ---------- */
 .ticks { list-style: none; padding: 0; }
 .ticks li { background: var(--card); border: 1px solid var(--line); border-radius: 0.5rem; padding: 0.3rem 0.9rem; margin-bottom: 0.6rem; }

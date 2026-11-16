@@ -42,8 +42,8 @@ function pick(item, field) {
 function el(tag, attrs, ...children) {
   const node = document.createElement(tag);
   for (const name in attrs || {}) {
-    if (name === "onclick") node.addEventListener("click", attrs[name]);
-    else if (name === "onchange") node.addEventListener("change", attrs[name]);
+    // onclick, onchange, onsubmit ... become event listeners.
+    if (name.startsWith("on")) node.addEventListener(name.slice(2), attrs[name]);
     else if (attrs[name] !== false && attrs[name] != null) node.setAttribute(name, attrs[name]);
   }
   for (const child of children.flat(Infinity)) {
@@ -255,19 +255,86 @@ function questionCard(q, number) {
   if (q.high_risk) parts.push(checkWithPerson(explanation));
 
   parts.push(el("p", { class: "source" }, t("sourceLabel"), ": ", q.source));
+
+  // The chat box only appears when the server has an API key to answer with.
+  if (content.chat_enabled) parts.push(askBox(q));
   return el("article", { class: "card" }, parts);
 }
 
-function checkWithPerson(explanation) {
+// The DES help line and the legal aid links, as a list.
+function helpLinks() {
   const agency = content.help.agency;
+  return el("ul", {},
+    el("li", {},
+      externalLink(pick(agency, "name"), agency.url), ". ", t("callLabel"), " ",
+      el("a", { href: "tel:" + agency.phone.replace(/[^0-9+]/g, "") }, agency.phone)),
+    content.help.legal_aid.map((org) => el("li", {}, externalLink(pick(org, "name"), org.url))));
+}
+
+/*
+ * "Ask about this question": one message in, one reply out, about this question only.
+ * Nothing typed here is saved. Each message is sent on its own, with no history.
+ */
+function askBox(q) {
+  const inputId = "ask-" + q.id;
+  const input = el("textarea", { id: inputId, rows: "3", maxlength: "500" });
+  const warning = el("p", { class: "error", role: "alert" });
+  const thread = el("div", { class: "thread", "aria-live": "polite" });
+  const send = el("button", { type: "submit", class: "btn" }, t("askSend"));
+
+  const onsubmit = async (event) => {
+    event.preventDefault();
+    const message = input.value.trim();
+    warning.textContent = "";
+    if (!message) { warning.textContent = t("askEmpty"); return; }
+
+    // SSN check in the browser: stop here, so the message never leaves this device.
+    // (The server checks again in case this check is bypassed.)
+    if (looksLikeSsn(message)) { warning.textContent = t("ssnWarning"); return; }
+
+    const waiting = el("p", { class: "note" }, t("askWaiting"));
+    thread.append(el("p", { class: "asked" }, el("strong", {}, t("askYou")), " ", message), waiting);
+    input.value = "";
+    send.disabled = true;
+
+    let reply = t("askError");
+    let writtenByAi = false;
+    try {
+      const response = await fetch("/api/ask", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question_id: q.id, message, lang: state.lang }),
+      });
+      const data = await response.json();
+      // A normal reply is in "reply". Problems come back as "message" (or message_en/_es).
+      reply = data.reply || data["message_" + state.lang] || data.message || reply;
+      writtenByAi = data.source === "ai";
+    } catch (e) { /* network trouble: keep the "could not send" text */ }
+
+    waiting.remove();
+    thread.append(el("div", { class: "reply" },
+      el("p", {}, el("strong", {}, t("askReplyLabel")), " ", reply),
+      writtenByAi && el("p", { class: "note" }, t("askAiNote")),
+      el("p", { class: "note" }, t("askHelp")),
+      helpLinks()));
+    send.disabled = false;
+  };
+
+  return el("form", { class: "ask", onsubmit, novalidate: "" },
+    el("h3", {}, t("askTitle")),
+    el("p", { class: "note" }, t("askHint")),
+    el("label", { for: inputId, class: "label" }, t("askLabel")),
+    input,
+    warning,
+    el("div", { class: "btn-row" }, send),
+    thread);
+}
+
+function checkWithPerson(explanation) {
   return el("div", { class: "check" },
     el("h3", {}, t("checkTitle")),
     el("p", {}, (explanation && explanation.check_reason) || t("checkDefault")),
-    el("ul", {},
-      el("li", {},
-        externalLink(pick(agency, "name"), agency.url), ". ", t("callLabel"), " ",
-        el("a", { href: "tel:" + agency.phone.replace(/[^0-9+]/g, "") }, agency.phone)),
-      content.help.legal_aid.map((org) => el("li", {}, externalLink(pick(org, "name"), org.url)))));
+    helpLinks());
 }
 
 function done() {

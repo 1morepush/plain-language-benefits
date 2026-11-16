@@ -13,7 +13,7 @@ in plain English and Spanish. **It is a reading aid only.**
 |-------|----------------|--------|
 | 1 | Project setup, data files, walkthrough, intake, checklist, language toggle, SSN blocker | **Built** |
 | 2 | System prompt, explanation generator script, review gating | **Built** |
-| 3 | "Ask about this question" chat | Not built yet |
+| 3 | "Ask about this question" chat | **Built** |
 | 4 | Test harness and RACCCA scoring CSV | Not built yet |
 
 Everything in `data/` is currently **fake placeholder content**, labelled `PLACEHOLDER`.
@@ -61,13 +61,16 @@ pip install -r requirements.txt
 python app.py
 ```
 
-Then open <http://127.0.0.1:5000> in a browser. The website itself needs no API key.
-The key is only needed to draft explanations (see below).
+Then open <http://127.0.0.1:5000> in a browser. The walkthrough needs no API key. A key
+is needed to draft explanations and to switch on the "Ask about this question" box (see
+below).
 
 ## What each file does
 
 ```
-app.py               the Flask server: serves the page and /api/content, blocks SSNs
+app.py               the Flask server: serves the page, /api/content and /api/ask, blocks SSNs
+ask.py               the "Ask about this question" chat: builds the request, checks the reply
+safety_check.py      keyword check for eligibility predictions and suggested answers
 content.py           loads the data files; hides explanations that are not reviewed
 ssn_guard.py         the SSN pattern and the warning text (server side)
 data/
@@ -85,9 +88,10 @@ static/
   style.css          the look of the site
 prompts/
   system.md          the system prompt: every hard rule, in one file you can cite
+  ask.md             extra rules added for the "Ask about this question" box
 scripts/
   generate_explanations.py   asks Claude to draft explanations (never marks them reviewed)
-tests/               automated tests (SSN blocker, review gating, generator, data files)
+tests/               automated tests (SSN blocker, review gating, generator, chat, safety check)
 ```
 
 ## How to add questions
@@ -188,6 +192,34 @@ English and Spanish are approved separately. Until a language is marked `true`, 
 shows "Explanation coming soon. See official instructions." for it. The unreviewed text
 never leaves the server.
 
+## The "Ask about this question" box
+
+Each question card can show a box where a person types one short follow-up message. It
+is optional: the box only appears when the server was started with `ANTHROPIC_API_KEY`
+set. Without a key, the rest of the site works as before.
+
+What happens to a message:
+
+1. **Browser SSN check.** If it looks like an SSN, a warning shows and nothing is sent.
+2. **Server SSN check.** The same check runs again before anything else.
+3. **Question check.** If the question is not in `data/questions.json`, a fixed reply
+   says Plain Path can't help with it. The AI is not called.
+4. **One call to Claude** (`claude-sonnet-5-5`) with `prompts/system.md` plus
+   `prompts/ask.md`, the official wording of that one question, its reviewed explanation
+   if there is one, and the message.
+5. **Reply check.** `safety_check.py` looks for eligibility predictions and suggested
+   answers. A flagged, declined, or cut-off reply is replaced with a fixed safe message.
+
+Things to know:
+
+- These replies are written live and **are not reviewed by a person**. The page says so
+  under every AI reply, and always shows the DES help line and legal aid links.
+- Each message is answered on its own. Nothing is remembered, stored, or logged.
+- Messages are limited to 500 characters.
+- `safety_check.py` is a keyword match. It can miss a badly worded reply and it can flag
+  a harmless one. The system prompt is the main protection; this is a backup.
+- Each message costs a small amount on your API key.
+
 ## How to run the tests
 
 ```bash
@@ -199,7 +231,8 @@ pytest -q
 ```
 
 The tests cover the SSN blocker (including the server block and that the browser copy
-matches), review gating, the explanation generator, and that the data files fit together.
+matches), review gating, the explanation generator, the chat, the safety check, and that
+the data files fit together.
 They use a fake Claude, so they need no API key and cost nothing.
 
 ## Privacy
@@ -208,6 +241,8 @@ They use a fake Claude, so they need no API key and cost nothing.
   deleted when the tab is closed. They are never sent to the server.
 - Only the language choice is remembered between visits.
 - The server stores and logs nothing a user types.
+- A message typed into the "Ask about this question" box is sent to the Anthropic API to
+  get a reply. That is the only time anything a user types leaves this computer.
 
 ## Before a demo: things to verify
 
@@ -223,4 +258,5 @@ This project was built with help from Claude Code (Anthropic). Claude Code wrote
 first version of the code, tests, and this README from my project proposal, and I
 reviewed each stage. Plain-language explanations are drafted by the Claude API
 (`claude-sonnet-5-5`) using the system prompt in `prompts/system.md`, and are shown only
-after a person has reviewed them.
+after a person has reviewed them. Replies in the "Ask about this question" box are also
+written by the Claude API, live, and are labelled as not reviewed.
