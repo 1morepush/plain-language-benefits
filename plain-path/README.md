@@ -14,7 +14,7 @@ in plain English and Spanish. **It is a reading aid only.**
 | 1 | Project setup, data files, walkthrough, intake, checklist, language toggle, SSN blocker | **Built** |
 | 2 | System prompt, explanation generator script, review gating | **Built** |
 | 3 | "Ask about this question" chat | **Built** |
-| 4 | Test harness and RACCCA scoring CSV | Not built yet |
+| 4 | Test harness and RACCCA scoring CSV | **Built** |
 
 Everything in `data/` is currently **fake placeholder content**, labelled `PLACEHOLDER`.
 
@@ -91,7 +91,11 @@ prompts/
   ask.md             extra rules added for the "Ask about this question" box
 scripts/
   generate_explanations.py   asks Claude to draft explanations (never marks them reviewed)
-tests/               automated tests (SSN blocker, review gating, generator, chat, safety check)
+  run_tests.py               sends the test questions to Claude, saves a CSV to score
+tests/
+  test_questions.csv the 20 test questions for the findings report (edit these)
+  results/           where run_tests.py saves its CSV files
+  test_*.py          automated tests (SSN blocker, review gating, generator, chat, checks)
 ```
 
 ## How to add questions
@@ -220,7 +224,56 @@ Things to know:
   a harmless one. The system prompt is the main protection; this is a backup.
 - Each message costs a small amount on your API key.
 
-## How to run the tests
+## How to test the AI for the findings report (RACCCA)
+
+`tests/test_questions.csv` holds 20 test questions. Each row has:
+
+| Column | Meaning |
+|--------|---------|
+| `id` | a short label, like `T07` |
+| `category` | `separation`, `answer_request`, `eligibility`, `terms`, `personal_data`, `not_in_file` |
+| `expected` | what a good result looks like: `explain`, `refuse_answer`, `refuse_eligibility`, `block_ssn`, `not_in_file` |
+| `lang` | `en` or `es` |
+| `question_id` | which form question the person is "looking at" (an `id` from `data/questions.json`) |
+| `test_question` | what the person types |
+
+The template has 6 job-separation questions and 7 "tell me what to answer" prompts the
+tool must refuse, plus eligibility questions, an SSN, and a question that is not in the
+data file. Edit the wording freely.
+
+**Before your first real run:** the `question_id` column points at the fake placeholder
+questions. Once you add real questions to `data/questions.json`, change `question_id` in
+each row to a real id (for example, your job-separation question). The script stops and
+reminds you if any row still points at a `PLACEHOLDER` question.
+
+Run it from the `plain-path` folder, with `ANTHROPIC_API_KEY` set:
+
+```bash
+python -m scripts.run_tests --dry-run
+```
+
+```bash
+python -m scripts.run_tests
+```
+
+It saves `tests/results/results-<date>-<time>.csv`. Each row has:
+
+- `raw_response`: exactly what Claude wrote.
+- `shown_to_user`: what the website would have shown. This differs from `raw_response`
+  when the safety check replaced the reply.
+- `auto_check`: `ok`, `FLAGGED`, `blocked_ssn`, `not_in_file`, or `error`.
+- `auto_flags`: what the keyword check found (an eligibility prediction or a suggested
+  answer).
+- `model`: the model that wrote the reply.
+- `relevance`, `accuracy`, `completeness`, `clarity`, `coherence`, `appropriateness`:
+  **empty, for you to score 1 to 3.**
+- `notes`: empty, for your comments.
+
+Open the file in Excel or Google Sheets to score it. `auto_check` is only a keyword match:
+`ok` does not mean the reply is good, and `FLAGGED` does not always mean it is bad. Read
+every reply.
+
+## How to run the automated tests
 
 ```bash
 pip install pytest
@@ -230,9 +283,9 @@ pip install pytest
 pytest -q
 ```
 
-The tests cover the SSN blocker (including the server block and that the browser copy
-matches), review gating, the explanation generator, the chat, the safety check, and that
-the data files fit together.
+These check the code, not the AI. They cover the SSN blocker (including the server block
+and that the browser copy matches), review gating, the explanation generator, the chat,
+the safety check, the test harness, and that the data files fit together.
 They use a fake Claude, so they need no API key and cost nothing.
 
 ## Privacy

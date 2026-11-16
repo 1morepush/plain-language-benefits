@@ -80,8 +80,12 @@ def build_request(question: dict, message: str, lang: str) -> str:
 Reply in {LANGUAGE_NAMES[lang]}."""
 
 
-def answer(client, question: dict, message: str, lang: str) -> dict:
-    """Ask Claude, then check the reply. Returns {"reply": text, "source": "ai" or "fixed"}."""
+def ask_claude(client, question: dict, message: str, lang: str) -> dict:
+    """Call Claude once and return its reply exactly as written, before any checking.
+
+    Returns {"text": ..., "stop_reason": ..., "model": ...}. The test harness uses this
+    directly so the findings report can show what the model really said.
+    """
     response = client.beta.messages.create(
         model=MODEL,
         max_tokens=4000,
@@ -93,8 +97,24 @@ def answer(client, question: dict, message: str, lang: str) -> dict:
     )
 
     text = "".join(block.text for block in response.content if block.type == "text").strip()
+    return {
+        "text": text,
+        "stop_reason": response.stop_reason,
+        "model": getattr(response, "model", MODEL),
+    }
 
-    # Anything other than a normal, complete, unflagged reply becomes the safe message.
-    if response.stop_reason != "end_turn" or not text or find_flags(text):
+
+def checked_reply(raw: dict, lang: str) -> dict:
+    """Decide what the user is allowed to see.
+
+    Anything other than a normal, complete, unflagged reply becomes the safe message.
+    Returns {"reply": text, "source": "ai" or "fixed"}.
+    """
+    if raw["stop_reason"] != "end_turn" or not raw["text"] or find_flags(raw["text"]):
         return {"reply": SAFE_REPLY[lang], "source": "fixed"}
-    return {"reply": text, "source": "ai"}
+    return {"reply": raw["text"], "source": "ai"}
+
+
+def answer(client, question: dict, message: str, lang: str) -> dict:
+    """Ask Claude, then check the reply. This is what the website uses."""
+    return checked_reply(ask_claude(client, question, message, lang), lang)
