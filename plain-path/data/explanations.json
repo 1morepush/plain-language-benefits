@@ -1,0 +1,32 @@
+{
+  "placeholder_1": {
+    "explanation_en": "PLACEHOLDER explanation. This is where the plain-language explanation will go.",
+    "explanation_es": "Explicación PLACEHOLDER. Aquí irá la explicación en lenguaje sencillo.",
+    "you_will_need_en": ["PLACEHOLDER item you would need"],
+    "you_will_need_es": ["Cosa que necesitaría (PLACEHOLDER)"],
+    "check_with_person_reason_en": "",
+    "check_with_person_reason_es": "",
+    "reviewed_en": true,
+    "reviewed_es": true
+  },
+  "placeholder_2": {
+    "explanation_en": "PLACEHOLDER explanation for a high-risk question. Only the English is reviewed.",
+    "explanation_es": "Borrador sin revisar. La aplicación no debe mostrar este texto.",
+    "you_will_need_en": ["PLACEHOLDER item you would need"],
+    "you_will_need_es": ["Borrador sin revisar"],
+    "check_with_person_reason_en": "PLACEHOLDER reason why a person should help with this question.",
+    "check_with_person_reason_es": "Borrador sin revisar",
+    "reviewed_en": true,
+    "reviewed_es": false
+  },
+  "placeholder_3": {
+    "explanation_en": "Unreviewed draft. The app must not show this text.",
+    "explanation_es": "Borrador sin revisar. La aplicación no debe mostrar este texto.",
+    "you_will_need_en": ["Unreviewed draft"],
+    "you_will_need_es": ["Borrador sin revisar"],
+    "check_with_person_reason_en": "",
+    "check_with_person_reason_es": "",
+    "reviewed_en": false,
+    "reviewed_es": false
+  }
+}

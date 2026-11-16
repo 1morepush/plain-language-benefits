@@ -4,6 +4,8 @@
 [tool.ruff]
 line-length = 100
 target-version = "py310"
+# plain-path/ is a separate small app; listing it here lets ruff recognise its own modules.
+src = [".", "plain-path"]
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I"]  # pycodestyle, pyflakes, warnings, import-sorting
