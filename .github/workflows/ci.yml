@@ -32,6 +32,8 @@ jobs:
           # (Gradio is intentionally NOT installed in CI — it's heavy and only needed to
           #  launch the app; the GUI tests import-skip it.)
           pip install pypdf python-docx reportlab
+          # Plain Path (plain-path/) is a small Flask app with its own tests.
+          pip install -r plain-path/requirements.txt
 
       - name: Lint (ruff)
         run: ruff check .

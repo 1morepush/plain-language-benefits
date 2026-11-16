@@ -1,0 +1,2 @@
+# Plain Path needs only Flask to run the site (stages 2-4 will add the Anthropic SDK).
+flask>=3,<4

@@ -1,0 +1,37 @@
+[
+  {
+    "id": "placeholder_everyone",
+    "text_en": "PLACEHOLDER: a document everyone needs",
+    "text_es": "PLACEHOLDER: un documento que todos necesitan"
+  },
+  {
+    "id": "placeholder_multiple_employers",
+    "text_en": "PLACEHOLDER: a document for people with more than one employer",
+    "text_es": "PLACEHOLDER: un documento para personas con más de un empleador",
+    "show_if": "multiple_employers"
+  },
+  {
+    "id": "placeholder_other_state",
+    "text_en": "PLACEHOLDER: a document for people who worked in another state",
+    "text_es": "PLACEHOLDER: un documento para personas que trabajaron en otro estado",
+    "show_if": "other_state"
+  },
+  {
+    "id": "placeholder_military_federal",
+    "text_en": "PLACEHOLDER: a document for military or federal workers",
+    "text_es": "PLACEHOLDER: un documento para trabajadores militares o federales",
+    "show_if": "military_federal"
+  },
+  {
+    "id": "placeholder_severance_vacation",
+    "text_en": "PLACEHOLDER: a document about severance or vacation pay",
+    "text_es": "PLACEHOLDER: un documento sobre pago por despido o vacaciones",
+    "show_if": "severance_vacation"
+  },
+  {
+    "id": "placeholder_pension_retirement",
+    "text_en": "PLACEHOLDER: a document about pension or retirement pay",
+    "text_es": "PLACEHOLDER: un documento sobre pensión o jubilación",
+    "show_if": "pension_retirement"
+  }
+]

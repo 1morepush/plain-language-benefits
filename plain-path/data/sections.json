@@ -1,0 +1,13 @@
+[
+  {
+    "id": "placeholder_a",
+    "title_en": "PLACEHOLDER Section A",
+    "title_es": "Sección A (PLACEHOLDER)"
+  },
+  {
+    "id": "placeholder_b",
+    "title_en": "PLACEHOLDER Section B (only if you worked in another state)",
+    "title_es": "Sección B (PLACEHOLDER, solo si trabajó en otro estado)",
+    "show_if": "other_state"
+  }
+]
