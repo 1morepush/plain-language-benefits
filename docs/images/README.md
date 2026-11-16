@@ -1,6 +1,6 @@
-# Images for the README
+# Images for NOTICE_TRANSLATOR.md
 
-`gui-screenshot.png` — the shot used at the top of the README. It shows the real app with
+`gui-screenshot.png` — the shot used at the top of `NOTICE_TRANSLATOR.md`. It shows the real app with
 `sample_docs/snap_recertification.txt` loaded, just before the Translate button is pressed.
 
 ## Replacing it
