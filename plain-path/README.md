@@ -1,33 +1,85 @@
-# Plain Path: An AI Helper for Understanding Unemployment Forms
+# Plain Path
 
-A class prototype for CRD 494 (AI Literacy) at ASU.
+**An AI helper for understanding unemployment forms.** A class prototype for CRD 494
+(AI Literacy) at ASU.
 
 Plain Path explains the questions on the Arizona unemployment insurance (UI) application
-in plain English and Spanish. **It is a reading aid only.**
+in plain English and Spanish. It is a reading aid only: it never fills out the form, never
+says whether someone will get benefits, and never tells anyone what to answer.
 
 > Plain Path is a student prototype, not legal advice and not affiliated with Arizona DES.
 
-## Build status
+| Welcome | Intake | A question |
+|---------|--------|------------|
+| <img src="docs/images/welcome.png" alt="The Plain Path welcome screen on a phone, with an English and Español toggle and a list of what the tool does." width="230"> | <img src="docs/images/intake.png" alt="Five yes or no intake questions on a phone, such as whether you worked for more than one employer in the last 18 months." width="230"> | <img src="docs/images/question.png" alt="A question card showing the official wording, a plain-language explanation, a Check with a person box with help links, and an Ask about this question box." width="230"> |
 
-| Stage | What it covers | Status |
-|-------|----------------|--------|
-| 1 | Project setup, data files, walkthrough, intake, checklist, language toggle, SSN blocker | **Built** |
-| 2 | System prompt, explanation generator script, review gating | **Built** |
-| 3 | "Ask about this question" chat | **Built** |
-| 4 | Test harness and RACCCA scoring CSV | **Built** |
+*The screenshots show the fake placeholder content the project ships with.*
 
-Everything in `data/` is currently **fake placeholder content**, labelled `PLACEHOLDER`.
+## Contents
+
+- [What it does](#what-it-does)
+- [Hard rules](#hard-rules)
+- [Current status](#current-status)
+- [Quick start](#quick-start)
+- [Open it on your phone](#open-it-on-your-phone)
+- [Adding your API key](#adding-your-api-key)
+- [Adding questions](#adding-questions)
+- [Drafting explanations with Claude](#drafting-explanations-with-claude)
+- [Reviewing explanations](#reviewing-explanations)
+- [The "Ask about this question" box](#the-ask-about-this-question-box)
+- [Testing the AI for the findings report](#testing-the-ai-for-the-findings-report)
+- [Automated tests](#automated-tests)
+- [How the files fit together](#how-the-files-fit-together)
+- [Privacy](#privacy)
+- [AI Use](#ai-use)
+
+## What it does
+
+A person walks through the application one section at a time:
+
+1. **Intake.** Five yes/no questions (for example, "Did you work in another state?").
+   The answers only decide which sections and checklist items appear.
+2. **Pause and gather documents.** A checklist built from the intake answers.
+3. **The form, section by section**, with a progress list. For each question it shows:
+   - the **official wording**, always visible and never changed;
+   - a **plain-language explanation** at about an 8th-grade reading level;
+   - **what you'll need** to answer it;
+   - a **"Check with a person"** box on high-risk questions, with the Arizona DES UI help
+     line and two legal aid links.
+4. **Optional: "Ask about this question."** A box for one short follow-up about the
+   question on screen.
+
+Everything is available in English and Spanish. Where there is no official Spanish
+wording, the English wording is shown with a Spanish explanation.
 
 ## Hard rules
 
-1. Never fill out, submit, or connect to the real application.
-2. Never decide or predict eligibility.
-3. Never suggest, rank, or reword an answer for the user.
-4. No personal data. SSN-shaped text is blocked before it can reach the AI.
-5. Never make up form content. Official wording comes only from `data/questions.json`.
-6. The disclaimer above appears on every page.
+These matter more than features. All six are written into the system prompt
+([`prompts/system.md`](prompts/system.md)), and several are also enforced in code.
 
-## Setup
+| Rule | How it is enforced |
+|------|--------------------|
+| Never fill out, submit, or connect to the real application | The app has no connection to it. System prompt. |
+| Never decide or predict eligibility | System prompt, plus a keyword check on every chat reply (`safety_check.py`). |
+| Never suggest, rank, or reword an answer | System prompt, plus the same keyword check. |
+| No personal data | SSN-shaped text is blocked in the browser and again on the server, before it can reach the AI. Nothing a user types is stored. |
+| Never make up form content | Official wording comes only from `data/questions.json`. A question that is not in the file gets a fixed "can't help with that" reply and the AI is not called. |
+| Disclaimer on every page | It is in the page footer, so it is on every screen. |
+
+## Current status
+
+All four build stages are done, and 104 automated tests pass. Before this is ready to show:
+
+- [ ] **Replace the placeholder content.** Everything in `data/` is fake and labelled
+      `PLACEHOLDER`.
+- [ ] **Do a first live run.** The code that calls Claude has only been tested with a
+      fake Claude so far.
+- [ ] **Verify the help contacts.** The phone number and links in `data/help_links.json`
+      were written from memory and have not been checked against the live websites.
+- [ ] **Have a fluent Spanish speaker read the Spanish** in `static/i18n.js` and
+      `data/intake.json`.
+
+## Quick start
 
 You need Python 3.10 or newer.
 
@@ -39,13 +91,13 @@ cd plain-path
 python -m venv .venv
 ```
 
-Turn the virtual environment on. On Windows:
+Turn the virtual environment on. Windows:
 
 ```bash
 .venv\Scripts\activate
 ```
 
-On macOS or Linux:
+macOS or Linux:
 
 ```bash
 source .venv/bin/activate
@@ -61,44 +113,40 @@ pip install -r requirements.txt
 python app.py
 ```
 
-Then open <http://127.0.0.1:5000> in a browser. The walkthrough needs no API key. A key
-is needed to draft explanations and to switch on the "Ask about this question" box (see
-below).
+Open <http://127.0.0.1:5000>. The walkthrough works without an API key.
 
-## What each file does
+## Open it on your phone
 
-```
-app.py               the Flask server: serves the page, /api/content and /api/ask, blocks SSNs
-ask.py               the "Ask about this question" chat: builds the request, checks the reply
-safety_check.py      keyword check for eligibility predictions and suggested answers
-content.py           loads the data files; hides explanations that are not reviewed
-ssn_guard.py         the SSN pattern and the warning text (server side)
-data/
-  questions.json     official question wording (you fill this in)
-  explanations.json  plain-language explanations + "reviewed" flags
-  sections.json      the sections of the form, in order
-  intake.json        the five yes/no intake questions
-  checklist.json     the document checklist
-  help_links.json    DES help line and legal aid links
-static/
-  index.html         the one web page (header, footer, disclaimer)
-  app.js             draws each screen: welcome, intake, documents, walkthrough, done
-  i18n.js            all website text in English and Spanish
-  ssn_guard.js       the browser copy of the SSN check
-  style.css          the look of the site
-prompts/
-  system.md          the system prompt: every hard rule, in one file you can cite
-  ask.md             extra rules added for the "Ask about this question" box
-scripts/
-  generate_explanations.py   asks Claude to draft explanations (never marks them reviewed)
-  run_tests.py               sends the test questions to Claude, saves a CSV to score
-tests/
-  test_questions.csv the 20 test questions for the findings report (edit these)
-  results/           where run_tests.py saves its CSV files
-  test_*.py          automated tests (SSN blocker, review gating, generator, chat, checks)
+The site is built for phones: large text, big tap targets, and no sideways scrolling down
+to a 320-pixel-wide screen. To open it on a real phone, put the phone on the same Wi-Fi
+as your computer and start the site with `--phone`:
+
+```bash
+python app.py --phone
 ```
 
-## How to add questions
+It prints an address like `http://192.168.1.20:5000`. Type that into the phone's browser.
+
+- If the page does not load, your computer's firewall is probably blocking it. On Windows,
+  allow Python on **private** networks when asked.
+- While it runs this way, anyone on the same Wi-Fi can open the site, so use it on a
+  network you trust. Without `--phone`, only your own computer can reach it.
+
+## Adding your API key
+
+The key is only needed to draft explanations, to switch on the "Ask about this question"
+box, and to run the AI tests. It is read from an environment variable named
+`ANTHROPIC_API_KEY`. **Never put it in a file in this repository.**
+
+| Where you run things | Where the key goes |
+|----------------------|--------------------|
+| Your own computer (PowerShell) | `$env:ANTHROPIC_API_KEY = "paste-your-key-here"` in the same window, before running a command |
+| Your own computer (macOS/Linux) | `export ANTHROPIC_API_KEY="paste-your-key-here"` |
+| GitHub Actions | A repository secret named `ANTHROPIC_API_KEY` (Settings → Secrets and variables → Actions). Used by the [live tests workflow](#run-it-on-github). |
+
+Keys come from the Claude Console (console.anthropic.com), under API keys.
+
+## Adding questions
 
 Add one entry per form question to `data/questions.json`:
 
@@ -114,61 +162,43 @@ Add one entry per form question to `data/questions.json`:
 ```
 
 - `id` must be unique. `section` must match an `id` in `data/sections.json`.
-- `official_text_es` is optional. Without it, the Spanish view shows the English wording
-  with a note that the official text is only available in English.
+- `official_text_es` is optional.
 - `high_risk: true` adds the "Check with a person" box.
 
-To make a section or checklist item appear only for some people, add
-`"show_if": "<intake key>"` to it in `sections.json` or `checklist.json`. It then shows
-only when that intake question was answered Yes. The intake keys are in `intake.json`.
+To show a section or checklist item only to some people, add `"show_if": "<intake key>"`
+to it in `sections.json` or `checklist.json`. It then appears only when that intake
+question was answered Yes. The intake keys are in `intake.json`.
 
-## How to draft explanations with Claude
+## Drafting explanations with Claude
 
-The drafts are written ahead of time, not live for each visitor. That way you can read
-every one before anyone else sees it.
+Explanations are written ahead of time, not live for each visitor, so you can read every
+one before anyone else sees it.
 
-1. Get an API key from the Anthropic Console and set it as an environment variable. The
-   key is never written in the code. On Windows (PowerShell):
+See what would be drafted, without calling Claude:
 
-   ```bash
-   $env:ANTHROPIC_API_KEY = "paste-your-key-here"
-   ```
+```bash
+python -m scripts.generate_explanations --dry-run
+```
 
-   On macOS or Linux:
+Draft them:
 
-   ```bash
-   export ANTHROPIC_API_KEY="paste-your-key-here"
-   ```
+```bash
+python -m scripts.generate_explanations
+```
 
-2. From the `plain-path` folder, see what would be drafted, without calling Claude:
+The script:
 
-   ```bash
-   python -m scripts.generate_explanations --dry-run
-   ```
+- makes one call per question to `claude-sonnet-5-5`, with `prompts/system.md` as the
+  system prompt, and sends only the official question text;
+- saves each draft to `data/explanations.json` with `reviewed_en` and `reviewed_es` set
+  to `false`;
+- skips `PLACEHOLDER` questions, drafts waiting for review, and anything you have already
+  reviewed. `--redo` re-drafts unreviewed drafts, and `--id <id>` drafts one question;
+- records `written_for` (the wording the draft explains) and `drafted_by` (the model that
+  wrote it). If Claude declines a request, the API may pass it to another Claude model,
+  and `drafted_by` shows when that happened.
 
-3. Draft them:
-
-   ```bash
-   python -m scripts.generate_explanations
-   ```
-
-What the script does:
-
-- Makes one call per question to `claude-sonnet-5-5`, using `prompts/system.md` as the
-  system prompt. It sends only the official question text.
-- Saves each draft to `data/explanations.json` with `reviewed_en` and `reviewed_es` set
-  to `false`, so the site keeps showing "Explanation coming soon".
-- Skips `PLACEHOLDER` questions, drafts that are waiting for review, and anything you
-  have already reviewed. Add `--redo` to re-draft unreviewed drafts, or `--id <id>` to
-  draft one question.
-- Records `written_for` (the exact wording the draft explains) and `drafted_by` (the
-  model that wrote it). If Claude declines a request, the API may hand it to another
-  Claude model; `drafted_by` shows when that happened.
-
-If you later change a question's official wording, its old explanation is hidden
-automatically, even if it was reviewed, and the next run drafts a new one.
-
-## How to review explanations
+## Reviewing explanations
 
 Each question has an entry in `data/explanations.json` under the same `id`:
 
@@ -190,63 +220,58 @@ Each question has an entry in `data/explanations.json` under the same `id`:
 1. Read the draft next to the official wording.
 2. Fix anything wrong, unclear, or that sounds like advice.
 3. Change `reviewed_en` to `true`. Do the same for `reviewed_es` once the Spanish has
-   been checked (ideally by a fluent speaker).
+   been checked.
 
-English and Spanish are approved separately. Until a language is marked `true`, the site
-shows "Explanation coming soon. See official instructions." for it. The unreviewed text
-never leaves the server.
+Until a language is marked `true`, the site shows "Explanation coming soon. See official
+instructions." for it, and the draft never leaves the server. If you later change a
+question's official wording, its old explanation is hidden again, even if it was reviewed.
 
 ## The "Ask about this question" box
 
-Each question card can show a box where a person types one short follow-up message. It
-is optional: the box only appears when the server was started with `ANTHROPIC_API_KEY`
-set. Without a key, the rest of the site works as before.
+Each question card can show a box for one short follow-up message (up to 500
+characters). The box only appears when the site was started with `ANTHROPIC_API_KEY` set.
 
 What happens to a message:
 
 1. **Browser SSN check.** If it looks like an SSN, a warning shows and nothing is sent.
-2. **Server SSN check.** The same check runs again before anything else.
+2. **Server SSN check.** The same check runs again.
 3. **Question check.** If the question is not in `data/questions.json`, a fixed reply
    says Plain Path can't help with it. The AI is not called.
-4. **One call to Claude** (`claude-sonnet-5-5`) with `prompts/system.md` plus
-   `prompts/ask.md`, the official wording of that one question, its reviewed explanation
-   if there is one, and the message.
+4. **One call to Claude** (`claude-sonnet-5-5`) with `prompts/system.md`, the extra rules
+   in `prompts/ask.md`, the official wording of that one question, its reviewed
+   explanation if there is one, and the message.
 5. **Reply check.** `safety_check.py` looks for eligibility predictions and suggested
    answers. A flagged, declined, or cut-off reply is replaced with a fixed safe message.
 
 Things to know:
 
 - These replies are written live and **are not reviewed by a person**. The page says so
-  under every AI reply, and always shows the DES help line and legal aid links.
+  under every AI reply and always shows the DES help line and legal aid links.
 - Each message is answered on its own. Nothing is remembered, stored, or logged.
-- Messages are limited to 500 characters.
 - `safety_check.py` is a keyword match. It can miss a badly worded reply and it can flag
   a harmless one. The system prompt is the main protection; this is a backup.
-- Each message costs a small amount on your API key.
 
-## How to test the AI for the findings report (RACCCA)
+## Testing the AI for the findings report
 
-`tests/test_questions.csv` holds 20 test questions. Each row has:
+`tests/test_questions.csv` holds 20 test questions:
 
-| Column | Meaning |
-|--------|---------|
-| `id` | a short label, like `T07` |
-| `category` | `separation`, `answer_request`, `eligibility`, `terms`, `personal_data`, `not_in_file` |
-| `expected` | what a good result looks like: `explain`, `refuse_answer`, `refuse_eligibility`, `block_ssn`, `not_in_file` |
-| `lang` | `en` or `es` |
-| `question_id` | which form question the person is "looking at" (an `id` from `data/questions.json`) |
-| `test_question` | what the person types |
+| Category | Rows | A good result |
+|----------|------|---------------|
+| `separation` (quit, laid off, discharged) | 6 | Explains the terms |
+| `answer_request` ("tell me what to answer") | 7 | Refuses, explains the terms, points to DES or legal aid |
+| `eligibility` ("will I get benefits?") | 3 | Refuses to predict |
+| `terms` | 2 | Explains the term |
+| `personal_data` (contains an SSN) | 1 | Blocked before the AI |
+| `not_in_file` | 1 | Fixed "can't help" reply |
 
-The template has 6 job-separation questions and 7 "tell me what to answer" prompts the
-tool must refuse, plus eligibility questions, an SSN, and a question that is not in the
-data file. Edit the wording freely.
+Three rows are in Spanish. Edit the wording freely.
 
 **Before your first real run:** the `question_id` column points at the fake placeholder
-questions. Once you add real questions to `data/questions.json`, change `question_id` in
-each row to a real id (for example, your job-separation question). The script stops and
-reminds you if any row still points at a `PLACEHOLDER` question.
+questions. Once `data/questions.json` has real questions, change `question_id` in each row
+to a real id. The script stops and reminds you if any row still points at a `PLACEHOLDER`
+question.
 
-Run it from the `plain-path` folder, with `ANTHROPIC_API_KEY` set:
+### Run it on your computer
 
 ```bash
 python -m scripts.run_tests --dry-run
@@ -256,24 +281,41 @@ python -m scripts.run_tests --dry-run
 python -m scripts.run_tests
 ```
 
-It saves `tests/results/results-<date>-<time>.csv`. Each row has:
+The results are saved to `tests/results/results-<date>-<time>.csv`.
+
+### Run it on GitHub
+
+If the repository has an `ANTHROPIC_API_KEY` secret, you can run the same thing without
+setting anything up on your computer:
+
+1. On GitHub, open the **Actions** tab.
+2. Choose **Plain Path live tests**, then **Run workflow**.
+3. When it finishes, open the run and download **plain-path-test-results** at the bottom
+   of the page. The CSV is inside.
+
+It only runs when you start it, because each run uses a little API credit.
+
+### Scoring the results
+
+Open the CSV in Excel or Google Sheets. Each row has:
 
 - `raw_response`: exactly what Claude wrote.
-- `shown_to_user`: what the website would have shown. This differs from `raw_response`
-  when the safety check replaced the reply.
+- `shown_to_user`: what the site would have shown. It differs from `raw_response` when
+  the safety check replaced the reply.
 - `auto_check`: `ok`, `FLAGGED`, `blocked_ssn`, `not_in_file`, or `error`.
-- `auto_flags`: what the keyword check found (an eligibility prediction or a suggested
-  answer).
+- `auto_flags`: what the keyword check found.
 - `model`: the model that wrote the reply.
 - `relevance`, `accuracy`, `completeness`, `clarity`, `coherence`, `appropriateness`:
-  **empty, for you to score 1 to 3.**
+  **empty, for you to score 1 to 3** (the RACCCA criteria).
 - `notes`: empty, for your comments.
 
-Open the file in Excel or Google Sheets to score it. `auto_check` is only a keyword match:
-`ok` does not mean the reply is good, and `FLAGGED` does not always mean it is bad. Read
-every reply.
+`auto_check` is only a keyword match. `ok` does not mean a reply is good, and `FLAGGED`
+does not always mean it is bad. Read every reply.
 
-## How to run the automated tests
+## Automated tests
+
+These check the code, not the AI. They use a fake Claude, so they need no key and cost
+nothing.
 
 ```bash
 pip install pytest
@@ -283,33 +325,65 @@ pip install pytest
 pytest -q
 ```
 
-These check the code, not the AI. They cover the SSN blocker (including the server block
-and that the browser copy matches), review gating, the explanation generator, the chat,
-the safety check, the test harness, and that the data files fit together.
-They use a fake Claude, so they need no API key and cost nothing.
+They cover the SSN blocker (in the browser copy and on the server), review gating, the
+explanation generator, the chat, the safety check, the test harness, and that the data
+files fit together. They also run on GitHub for every pull request.
+
+## How the files fit together
+
+```
+app.py               the Flask server: serves the page, /api/content and /api/ask, blocks SSNs
+content.py           loads the data files; hides explanations that are not reviewed
+ssn_guard.py         the SSN pattern and the warning text (server side)
+ask.py               the "Ask about this question" chat: builds the request, checks the reply
+safety_check.py      keyword check for eligibility predictions and suggested answers
+data/
+  questions.json     official question wording (you fill this in)
+  explanations.json  plain-language explanations + "reviewed" flags
+  sections.json      the sections of the form, in order
+  intake.json        the five yes/no intake questions
+  checklist.json     the document checklist
+  help_links.json    DES help line and legal aid links
+prompts/
+  system.md          the system prompt: every hard rule, in one file you can cite
+  ask.md             extra rules added for the "Ask about this question" box
+scripts/
+  generate_explanations.py   asks Claude to draft explanations (never marks them reviewed)
+  run_tests.py               sends the test questions to Claude, saves a CSV to score
+static/
+  index.html         the one web page (header, footer, disclaimer)
+  app.js             draws each screen: welcome, intake, documents, walkthrough, done
+  i18n.js            all website text in English and Spanish
+  ssn_guard.js       the browser copy of the SSN check
+  style.css          the look of the site
+tests/
+  test_questions.csv the 20 test questions for the findings report
+  results/           where run_tests.py saves its CSV files
+  test_*.py          the automated tests
+docs/images/         the screenshots in this README
+```
+
+How a page load works: the browser opens `index.html`, `app.js` asks the server for
+`/api/content`, and `content.py` builds the reply from the files in `data/`, leaving out
+any explanation that is not reviewed.
 
 ## Privacy
 
-- The intake answers and checklist ticks stay in the browser (`sessionStorage`) and are
+- Intake answers and checklist ticks stay in the browser (`sessionStorage`) and are
   deleted when the tab is closed. They are never sent to the server.
 - Only the language choice is remembered between visits.
 - The server stores and logs nothing a user types.
 - A message typed into the "Ask about this question" box is sent to the Anthropic API to
-  get a reply. That is the only time anything a user types leaves this computer.
-
-## Before a demo: things to verify
-
-- The phone number and links in `data/help_links.json` were written from memory and
-  **have not been checked** against the live websites. Confirm each one.
-- The Spanish website text in `static/i18n.js` and `data/intake.json` should be read by a
-  fluent Spanish speaker.
-- Replace every `PLACEHOLDER` in `data/`.
+  get a reply. That is the only time anything a user types leaves the computer running
+  Plain Path. The SSN check runs first.
 
 ## AI Use
 
 This project was built with help from Claude Code (Anthropic). Claude Code wrote the
 first version of the code, tests, and this README from my project proposal, and I
-reviewed each stage. Plain-language explanations are drafted by the Claude API
+reviewed each stage.
+
+Inside the tool, plain-language explanations are drafted by the Claude API
 (`claude-sonnet-5-5`) using the system prompt in `prompts/system.md`, and are shown only
 after a person has reviewed them. Replies in the "Ask about this question" box are also
 written by the Claude API, live, and are labelled as not reviewed.

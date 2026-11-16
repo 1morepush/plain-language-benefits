@@ -1,0 +1,54 @@
+name: Plain Path live tests
+
+# Runs the 20 Plain Path test questions against the real Claude API and saves the
+# results CSV for scoring. It costs a small amount of API credit, so it only runs
+# when someone starts it by hand: Actions tab -> "Plain Path live tests" -> Run workflow.
+#
+# Needs a repository secret named ANTHROPIC_API_KEY
+# (Settings -> Secrets and variables -> Actions).
+on:
+  workflow_dispatch:
+    inputs:
+      allow_placeholders:
+        description: "Run even if test rows still point at PLACEHOLDER form questions"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r plain-path/requirements.txt
+
+      - name: Send the test questions to Claude
+        working-directory: plain-path
+        env:
+          # The key comes from the repository secret. It is never written in the code,
+          # and GitHub hides it in the logs.
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          ALLOW_PLACEHOLDERS: ${{ inputs.allow_placeholders }}
+        run: |
+          if [ "$ALLOW_PLACEHOLDERS" = "true" ]; then
+            python -m scripts.run_tests --allow-placeholders
+          else
+            python -m scripts.run_tests
+          fi
+
+      - name: Save the results CSV
+        uses: actions/upload-artifact@v4
+        with:
+          name: plain-path-test-results
+          path: plain-path/tests/results/*.csv
+          if-no-files-found: error

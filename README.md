@@ -6,6 +6,12 @@
 > plain language — with a drag-and-drop app, an evaluation harness, automated tests + CI,
 > a staff workshop, and a handoff runbook.
 
+> **Also in this repository: [Plain Path](plain-path/README.md)**, a separate class
+> prototype (CRD 494, ASU) that explains the questions on the Arizona unemployment
+> insurance application in plain English and Spanish. It is a mobile-friendly Flask site
+> with its own README, tests, and data. Everything below this note is about the benefits
+> notice translator.
+
 Official benefits notices — SNAP, Medicaid, housing vouchers, unemployment — are often
 written at a college reading level and packed with jargon. People miss deadlines they
 didn't understand and lose food, health coverage, or housing they actually qualified for.

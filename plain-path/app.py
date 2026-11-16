@@ -1,7 +1,8 @@
 """
 app.py — the Plain Path web server (Flask).
 
-Run it with:   python app.py      then open http://127.0.0.1:5000
+Run it with:   python app.py            then open http://127.0.0.1:5000 on this computer
+          or:  python app.py --phone    to also open it from a phone on the same Wi-Fi
 
 What the server does:
   GET  /             the single web page (static/index.html)
@@ -14,7 +15,9 @@ Safety jobs done here:
   * The server never stores or logs what a user sends.
 """
 
+import argparse
 import os
+import socket
 
 import anthropic
 from flask import Flask, jsonify, request
@@ -117,6 +120,32 @@ def api_ask():
         return jsonify({"error": "unavailable", "message": ask.UNAVAILABLE[lang]}), 503
 
 
+def lan_address() -> str:
+    """This computer's address on the local network, for example 192.168.1.20."""
+    with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as probe:
+        try:
+            # No data is sent. This only asks which network card would be used.
+            probe.connect(("10.255.255.255", 1))
+            return probe.getsockname()[0]
+        except OSError:
+            return "127.0.0.1"
+
+
 if __name__ == "__main__":
-    # 127.0.0.1 = only this computer can reach the site. debug stays off on purpose.
-    app.run(host="127.0.0.1", port=5000, debug=False)
+    parser = argparse.ArgumentParser(description="Run the Plain Path website.")
+    parser.add_argument("--phone", action="store_true",
+                        help="let phones and other devices on the same Wi-Fi open the site")
+    parser.add_argument("--port", type=int, default=5000)
+    args = parser.parse_args()
+
+    if args.phone:
+        # 0.0.0.0 = any device on the same network can reach the site.
+        print(f"\nOn your phone (same Wi-Fi), open:  http://{lan_address()}:{args.port}")
+        print("Anyone on this Wi-Fi can open the site while it is running, so only use")
+        print("--phone on a network you trust. Press Ctrl+C to stop.\n")
+        host = "0.0.0.0"
+    else:
+        # 127.0.0.1 = only this computer can reach the site.
+        host = "127.0.0.1"
+    # debug stays off on purpose.
+    app.run(host=host, port=args.port, debug=False)
