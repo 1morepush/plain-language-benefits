@@ -12,7 +12,7 @@ in plain English and Spanish. **It is a reading aid only.**
 | Stage | What it covers | Status |
 |-------|----------------|--------|
 | 1 | Project setup, data files, walkthrough, intake, checklist, language toggle, SSN blocker | **Built** |
-| 2 | System prompt, explanation generator script, review gating | Not built yet (the gating itself is already in place) |
+| 2 | System prompt, explanation generator script, review gating | **Built** |
 | 3 | "Ask about this question" chat | Not built yet |
 | 4 | Test harness and RACCCA scoring CSV | Not built yet |
 
@@ -51,7 +51,7 @@ On macOS or Linux:
 source .venv/bin/activate
 ```
 
-Install Flask and start the site:
+Install the requirements and start the site:
 
 ```bash
 pip install -r requirements.txt
@@ -61,7 +61,8 @@ pip install -r requirements.txt
 python app.py
 ```
 
-Then open <http://127.0.0.1:5000> in a browser. No API key is needed for stage 1.
+Then open <http://127.0.0.1:5000> in a browser. The website itself needs no API key.
+The key is only needed to draft explanations (see below).
 
 ## What each file does
 
@@ -82,7 +83,11 @@ static/
   i18n.js            all website text in English and Spanish
   ssn_guard.js       the browser copy of the SSN check
   style.css          the look of the site
-tests/               automated tests (SSN blocker, review gating, data file checks)
+prompts/
+  system.md          the system prompt: every hard rule, in one file you can cite
+scripts/
+  generate_explanations.py   asks Claude to draft explanations (never marks them reviewed)
+tests/               automated tests (SSN blocker, review gating, generator, data files)
 ```
 
 ## How to add questions
@@ -109,6 +114,52 @@ To make a section or checklist item appear only for some people, add
 `"show_if": "<intake key>"` to it in `sections.json` or `checklist.json`. It then shows
 only when that intake question was answered Yes. The intake keys are in `intake.json`.
 
+## How to draft explanations with Claude
+
+The drafts are written ahead of time, not live for each visitor. That way you can read
+every one before anyone else sees it.
+
+1. Get an API key from the Anthropic Console and set it as an environment variable. The
+   key is never written in the code. On Windows (PowerShell):
+
+   ```bash
+   $env:ANTHROPIC_API_KEY = "paste-your-key-here"
+   ```
+
+   On macOS or Linux:
+
+   ```bash
+   export ANTHROPIC_API_KEY="paste-your-key-here"
+   ```
+
+2. From the `plain-path` folder, see what would be drafted, without calling Claude:
+
+   ```bash
+   python -m scripts.generate_explanations --dry-run
+   ```
+
+3. Draft them:
+
+   ```bash
+   python -m scripts.generate_explanations
+   ```
+
+What the script does:
+
+- Makes one call per question to `claude-sonnet-5-5`, using `prompts/system.md` as the
+  system prompt. It sends only the official question text.
+- Saves each draft to `data/explanations.json` with `reviewed_en` and `reviewed_es` set
+  to `false`, so the site keeps showing "Explanation coming soon".
+- Skips `PLACEHOLDER` questions, drafts that are waiting for review, and anything you
+  have already reviewed. Add `--redo` to re-draft unreviewed drafts, or `--id <id>` to
+  draft one question.
+- Records `written_for` (the exact wording the draft explains) and `drafted_by` (the
+  model that wrote it). If Claude declines a request, the API may hand it to another
+  Claude model; `drafted_by` shows when that happened.
+
+If you later change a question's official wording, its old explanation is hidden
+automatically, even if it was reviewed, and the next run drafts a new one.
+
 ## How to review explanations
 
 Each question has an entry in `data/explanations.json` under the same `id`:
@@ -122,7 +173,9 @@ Each question has an entry in `data/explanations.json` under the same `id`:
   "check_with_person_reason_en": "...",
   "check_with_person_reason_es": "...",
   "reviewed_en": false,
-  "reviewed_es": false
+  "reviewed_es": false,
+  "written_for": "The official wording this draft explains.",
+  "drafted_by": "claude-sonnet-5-5"
 }
 ```
 
@@ -146,7 +199,8 @@ pytest -q
 ```
 
 The tests cover the SSN blocker (including the server block and that the browser copy
-matches), review gating, and that the data files fit together.
+matches), review gating, the explanation generator, and that the data files fit together.
+They use a fake Claude, so they need no API key and cost nothing.
 
 ## Privacy
 
@@ -167,5 +221,6 @@ matches), review gating, and that the data files fit together.
 
 This project was built with help from Claude Code (Anthropic). Claude Code wrote the
 first version of the code, tests, and this README from my project proposal, and I
-reviewed each stage. From stage 2 on, plain-language explanations are drafted by the
-Claude API and are shown only after a person has reviewed them.
+reviewed each stage. Plain-language explanations are drafted by the Claude API
+(`claude-sonnet-5-5`) using the system prompt in `prompts/system.md`, and are shown only
+after a person has reviewed them.

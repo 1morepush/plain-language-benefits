@@ -1,2 +1,4 @@
-# Plain Path needs only Flask to run the site (stages 2-4 will add the Anthropic SDK).
+# Flask runs the website. The Anthropic SDK is only used by the scripts in scripts/
+# (the website itself never calls the AI in stages 1-2).
 flask>=3,<4
+anthropic>=0.125,<1

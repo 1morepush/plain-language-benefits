@@ -20,12 +20,17 @@ def load_json(name: str, data_dir: Path = DATA_DIR):
         return json.load(f)
 
 
-def gated_explanation(entry: dict | None, lang: str) -> dict | None:
-    """Return the explanation for one language, or None if it is not reviewed.
+def gated_explanation(entry: dict | None, lang: str, official_text: str | None = None):
+    """Return the explanation for one language, or None if it must stay hidden.
 
-    Only the exact value `true` counts. A missing flag, "yes", or 1 does not.
+    Hidden when:
+      * it is not reviewed. Only the exact value `true` counts, not "yes" or 1.
+      * the official wording has changed since the explanation was written. A review
+        of the old wording says nothing about the new wording.
     """
     if not entry or entry.get(f"reviewed_{lang}") is not True:
+        return None
+    if entry.get("written_for") not in (None, official_text):
         return None
     return {
         "text": entry.get(f"explanation_{lang}", ""),
@@ -54,7 +59,10 @@ def build_content(data_dir: Path = DATA_DIR) -> dict:
                 "official_text_es": q.get("official_text_es") or None,
                 "source": q.get("source", ""),
                 "high_risk": q.get("high_risk") is True,
-                "explanation": {lang: gated_explanation(entry, lang) for lang in LANGUAGES},
+                "explanation": {
+                    lang: gated_explanation(entry, lang, q["official_text_en"])
+                    for lang in LANGUAGES
+                },
             }
         )
 

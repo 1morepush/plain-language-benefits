@@ -67,3 +67,9 @@ def test_intake_asks_for_no_personal_data():
 def test_page_carries_the_disclaimer():
     page = app.test_client().get("/").get_data(as_text=True)
     assert "student prototype, not legal advice and not affiliated with Arizona DES" in page
+
+
+def test_reviewed_explanation_is_hidden_when_official_wording_changes():
+    entry = {"explanation_en": "about the old wording", "reviewed_en": True, "written_for": "Old?"}
+    assert gated_explanation(entry, "en", "Old?")["text"] == "about the old wording"
+    assert gated_explanation(entry, "en", "New wording?") is None
