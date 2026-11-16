@@ -9,11 +9,20 @@ says whether someone will get benefits, and never tells anyone what to answer.
 
 > Plain Path is a student prototype, not legal advice and not affiliated with Arizona DES.
 
-| Welcome | Intake | A question |
-|---------|--------|------------|
-| <img src="docs/images/welcome.png" alt="The Plain Path welcome screen on a phone, with an English and Español toggle and a list of what the tool does." width="230"> | <img src="docs/images/intake.png" alt="Five yes or no intake questions on a phone, such as whether you worked for more than one employer in the last 18 months." width="230"> | <img src="docs/images/question.png" alt="A question card showing the official wording, a plain-language explanation, a Check with a person box with help links, and an Ask about this question box." width="230"> |
+### On a computer
 
-*The screenshots show the fake placeholder content the project ships with.*
+| Welcome | A question, with "Check with a person" |
+|---------|------------------------------------------|
+| <img src="docs/images/desktop-welcome.png" alt="The Plain Path welcome screen in a desktop browser, with an English and Español toggle, a list of what the tool does, and a list of what it does not do." width="420"> | <img src="docs/images/desktop-question.png" alt="A question card in a desktop browser showing the official wording, an explanation in plain words, what you'll need, and a Check with a person box with the Arizona DES help line and two legal aid links." width="420"> |
+
+### On a phone
+
+| Welcome | Intake | A question | Ask about it |
+|---------|--------|------------|--------------|
+| <img src="docs/images/mobile-welcome.png" alt="The welcome screen on a phone." width="190"> | <img src="docs/images/mobile-intake.png" alt="Yes or no intake questions on a phone, such as whether you worked for more than one employer in the last 18 months." width="190"> | <img src="docs/images/mobile-question.png" alt="A question card on a phone with the official wording, the plain-language explanation, and the Check with a person box." width="190"> | <img src="docs/images/mobile-ask.png" alt="The Ask about this question box on a phone, with a typed question and a reply labelled as written by AI." width="190"> |
+
+*The screenshots show the fake placeholder content the project ships with, and a fake
+reply in the question box.*
 
 ## Contents
 
