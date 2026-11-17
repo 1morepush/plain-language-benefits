@@ -66,7 +66,7 @@ def test_intake_asks_for_no_personal_data():
 
 def test_page_carries_the_disclaimer():
     page = app.test_client().get("/").get_data(as_text=True)
-    assert "student prototype, not legal advice and not affiliated with Arizona DES" in page
+    assert "It is not legal advice and is not affiliated with Arizona DES." in page
 
 
 def test_reviewed_explanation_is_hidden_when_official_wording_changes():

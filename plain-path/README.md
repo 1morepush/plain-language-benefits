@@ -1,13 +1,12 @@
 # Plain Path
 
-**An AI helper for understanding unemployment forms.** A class prototype for CRD 494
-(AI Literacy) at ASU.
+**An AI helper for understanding unemployment forms.**
 
 Plain Path explains the questions on the Arizona unemployment insurance (UI) application
 in plain English and Spanish. It is a reading aid only: it never fills out the form, never
 says whether someone will get benefits, and never tells anyone what to answer.
 
-> Plain Path is a student prototype, not legal advice and not affiliated with Arizona DES.
+> Plain Path is a prototype. It is not legal advice and is not affiliated with Arizona DES.
 
 ### On a computer
 
@@ -36,7 +35,7 @@ explanations are still waiting for review, so the cards show "Explanation coming
 - [Drafting explanations with Claude](#drafting-explanations-with-claude)
 - [Reviewing explanations](#reviewing-explanations)
 - [The "Ask about this question" box](#the-ask-about-this-question-box)
-- [Testing the AI for the findings report](#testing-the-ai-for-the-findings-report)
+- [Testing the AI](#testing-the-ai)
 - [Automated tests](#automated-tests)
 - [How the files fit together](#how-the-files-fit-together)
 - [Privacy](#privacy)
@@ -47,7 +46,7 @@ explanations are still waiting for review, so the cards show "Explanation coming
 A person walks through the application one section at a time:
 
 1. **Intake.** Five yes/no questions (for example, "Did you work in another state?").
-   The answers only decide which sections and checklist items appear.
+   The answers only shape the document checklist. They never leave the browser.
 2. **Pause and gather documents.** A checklist built from the intake answers.
 3. **The form, section by section**, with a progress list. For each question it shows:
    - the **official wording**, always visible and never changed;
@@ -77,7 +76,8 @@ These matter more than features. All six are written into the system prompt
 
 ## Current status
 
-All four build stages are done, and 106 automated tests pass.
+The app, the explanation pipeline, the question box and the test harness are all built,
+and 106 automated tests pass.
 
 - [x] **Real questions.** `data/questions.json` holds 40 items copied from the Arizona
       Application for Unemployment Insurance Benefits, UIB-1272A (08/25), with the
@@ -272,7 +272,7 @@ Things to know:
 - `safety_check.py` is a keyword match. It can miss a badly worded reply and it can flag
   a harmless one. The system prompt is the main protection; this is a backup.
 
-## Testing the AI for the findings report
+## Testing the AI
 
 `tests/test_questions.csv` holds 20 test questions:
 
@@ -327,7 +327,7 @@ Open the CSV in Excel or Google Sheets. Each row has:
 - `auto_flags`: what the keyword check found.
 - `model`: the model that wrote the reply.
 - `relevance`, `accuracy`, `completeness`, `clarity`, `coherence`, `appropriateness`:
-  **empty, for you to score 1 to 3** (the RACCCA criteria).
+  **empty, for you to score 1 to 3**.
 - `notes`: empty, for your comments.
 
 `auto_check` is only a keyword match. `ok` does not mean a reply is good, and `FLAGGED`
@@ -359,7 +359,7 @@ ssn_guard.py         the SSN pattern and the warning text (server side)
 ask.py               the "Ask about this question" chat: builds the request, checks the reply
 safety_check.py      keyword check for eligibility predictions and suggested answers
 data/
-  questions.json     official question wording (you fill this in)
+  questions.json     official question wording, copied from the form in source_docs/
   explanations.json  plain-language explanations + "reviewed" flags
   sections.json      the sections of the form, in order
   intake.json        the five yes/no intake questions
@@ -378,7 +378,7 @@ static/
   ssn_guard.js       the browser copy of the SSN check
   style.css          the look of the site
 tests/
-  test_questions.csv the 20 test questions for the findings report
+  test_questions.csv the 20 test questions for scoring the AI
   results/           where run_tests.py saves its CSV files
   test_*.py          the automated tests
   fixtures/          small fake data the automated tests run against
@@ -403,8 +403,8 @@ any explanation that is not reviewed.
 ## AI Use
 
 This project was built with help from Claude Code (Anthropic). Claude Code wrote the
-first version of the code, tests, and this README from my project proposal, and I
-reviewed each stage.
+first version of the code, tests, and this README from a written project plan, and each
+stage was reviewed by hand before moving on.
 
 Inside the tool, plain-language explanations are drafted by the Claude API
 (`claude-sonnet-5-5`) using the system prompt in `prompts/system.md`, and are shown only

@@ -8,7 +8,7 @@ const STRINGS = {
     tagline: "An AI helper for understanding unemployment forms",
     langLabel: "Language",
     disclaimer:
-      "Plain Path is a student prototype, not legal advice and not affiliated with Arizona DES.",
+      "Plain Path is a prototype. It is not legal advice and is not affiliated with Arizona DES.",
     loading: "Loading…",
     loadError: "Plain Path could not load. Please refresh the page.",
 
@@ -92,7 +92,7 @@ const STRINGS = {
     tagline: "Un ayudante de IA para entender los formularios de desempleo",
     langLabel: "Idioma",
     disclaimer:
-      "Plain Path es un prototipo estudiantil; no es asesoría legal y no está afiliado con Arizona DES.",
+      "Plain Path es un prototipo. No es asesoría legal y no está afiliado con Arizona DES.",
     loading: "Cargando…",
     loadError: "Plain Path no pudo cargar. Por favor, actualice la página.",
 

@@ -2,8 +2,7 @@
 
 [![CI](https://github.com/1morepush/plain-language-benefits/actions/workflows/ci.yml/badge.svg)](https://github.com/1morepush/plain-language-benefits/actions/workflows/ci.yml)
 
-**An AI helper for understanding unemployment forms.** A class prototype for CRD 494
-(AI Literacy) at ASU.
+**An AI helper for understanding unemployment forms.**
 
 Applying for unemployment means answering questions written in legal language, often
 right after losing a job. Plain Path explains each question on the Arizona unemployment
@@ -13,7 +12,7 @@ asked before they answer.
 It is a reading aid only. It never fills out the form, never says whether someone will
 get benefits, and never tells anyone what to answer.
 
-> Plain Path is a student prototype, not legal advice and not affiliated with Arizona DES.
+> Plain Path is a prototype. It is not legal advice and is not affiliated with Arizona DES.
 
 ## What it looks like
 
@@ -42,7 +41,7 @@ The plain-language explanations are still waiting for review, so the cards show
 A person walks through the application one section at a time:
 
 1. **Intake.** Five yes/no questions, such as "Did you work in another state?" The
-   answers only decide which sections and checklist items appear.
+   answers only shape the document checklist. Nothing is sent anywhere.
 2. **Pause and gather documents.** A checklist built from the intake answers.
 3. **The form, section by section.** For each question it shows:
    - the **official wording**, always visible and never changed;
@@ -93,9 +92,9 @@ Accuracy comes first, so the AI's work is checked before people see it.
   and not reviewed, they pass through a keyword check first, and the help line and legal
   aid links are shown under every reply.
 - **A test set measures how well the rules hold.** Twenty test questions, including
-  seven that ask the tool what to answer, are sent to Claude and saved to a spreadsheet
-  for scoring on the RACCCA criteria (Relevance, Accuracy, Completeness, Clarity,
-  Coherence, Appropriateness).
+  seven that ask the tool what to answer, are sent to Claude. The replies are saved to a
+  spreadsheet, flagged by an automatic check, and scored by hand on relevance, accuracy,
+  completeness, clarity, coherence and appropriateness.
 
 ## Try it
 
@@ -128,7 +127,8 @@ each file does.
 
 ## Current status
 
-All four build stages are done, and 106 automated tests pass.
+The app, the explanation pipeline, the question box and the test harness are all built,
+and 106 automated tests pass.
 
 - [x] Real questions from Arizona's form, in English and Spanish.
 - [x] The DES help line number, confirmed against the form.
@@ -160,8 +160,8 @@ documented in **[NOTICE_TRANSLATOR.md](NOTICE_TRANSLATOR.md)**.
 ## AI Use
 
 This project was built with help from Claude Code (Anthropic). Claude Code wrote the
-first version of the code, tests, and documentation from my project proposal, and I
-reviewed each stage.
+first version of the code, tests, and documentation from a written project plan, and
+each stage was reviewed by hand before moving on.
 
 Inside the tool, plain-language explanations are drafted by the Claude API
 (`claude-sonnet-5-5`) using the system prompt in `plain-path/prompts/system.md`, and are

@@ -1,6 +1,6 @@
 """
 run_tests.py — sends each test question to Claude and saves the replies to a CSV file
-that you score by hand for the findings report.
+that you score by hand.
 
 Run it from the plain-path folder:
 

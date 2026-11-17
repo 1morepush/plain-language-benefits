@@ -331,7 +331,7 @@ examples/        a saved output for the offline `--demo`
 docs/            RUNBOOK (handoff) · EVALS · DESIGN · PORTFOLIO · GUI · images/
 workshop/        facilitator guide · slide outline · hands-on exercise
 run_gui.sh/.bat  one-click launchers for the drag-and-drop app
-plain-path/      a separate class prototype (Plain Path) — see plain-path/README.md
+plain-path/      a separate app (Plain Path) — see plain-path/README.md
 requirements*.txt core · -dev (tests/lint) · -gui (app only)
 .github/         CI workflow (ruff + pytest on every PR and push to main)
 ```
