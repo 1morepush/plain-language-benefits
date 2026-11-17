@@ -84,7 +84,7 @@ def ask_claude(client, question: dict, message: str, lang: str) -> dict:
     """Call Claude once and return its reply exactly as written, before any checking.
 
     Returns {"text": ..., "stop_reason": ..., "model": ...}. The test harness uses this
-    directly so the findings report can show what the model really said.
+    directly so its results show what the model really said.
     """
     response = client.beta.messages.create(
         model=MODEL,
