@@ -1,13 +1,27 @@
 [
   {
-    "id": "placeholder_a",
-    "title_en": "PLACEHOLDER Section A",
-    "title_es": "Sección A (PLACEHOLDER)"
+    "id": "part1",
+    "title_en": "Part 1: Personal Information",
+    "title_es": "Parte 1: Información Personal"
   },
   {
-    "id": "placeholder_b",
-    "title_en": "PLACEHOLDER Section B (only if you worked in another state)",
-    "title_es": "Sección B (PLACEHOLDER, solo si trabajó en otro estado)",
-    "show_if": "other_state"
+    "id": "part2",
+    "title_en": "Part 2: Employment Status Information",
+    "title_es": "Parte 2: Información de Empleo"
+  },
+  {
+    "id": "part3",
+    "title_en": "Part 3: Employment History Information",
+    "title_es": "Parte 3: Información de Historial de Empleo"
+  },
+  {
+    "id": "part4",
+    "title_en": "Part 4: Payment Information",
+    "title_es": "Parte 4: Información de Pago"
+  },
+  {
+    "id": "part5",
+    "title_en": "Part 5: Required Certifications and Signature",
+    "title_es": "Parte 5: Certificaciones y Firmas Requeridas"
   }
 ]

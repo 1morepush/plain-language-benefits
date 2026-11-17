@@ -1,0 +1,24 @@
+[
+  {
+    "id": "placeholder_1",
+    "section": "placeholder_a",
+    "official_text_en": "PLACEHOLDER: This is fake official question text number one. Replace it with the real wording.",
+    "official_text_es": "PLACEHOLDER: Este es el texto oficial falso de la pregunta número uno. Reemplácelo con el texto real.",
+    "source": "PLACEHOLDER (no real source yet)",
+    "high_risk": false
+  },
+  {
+    "id": "placeholder_2",
+    "section": "placeholder_a",
+    "official_text_en": "PLACEHOLDER: This is fake official question text number two. It is marked high risk.",
+    "source": "PLACEHOLDER (no real source yet)",
+    "high_risk": true
+  },
+  {
+    "id": "placeholder_3",
+    "section": "placeholder_b",
+    "official_text_en": "PLACEHOLDER: This is fake official question text number three. Its explanation is not reviewed yet.",
+    "source": "PLACEHOLDER (no real source yet)",
+    "high_risk": false
+  }
+]

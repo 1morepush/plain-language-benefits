@@ -2,13 +2,14 @@
   "official_instructions": {
     "name_en": "Official Arizona DES unemployment instructions",
     "name_es": "Instrucciones oficiales de desempleo de Arizona DES",
-    "url": "https://des.az.gov/services/employment/unemployment-individual"
+    "url": "https://des.az.gov/services/employment/unemployment-individual/apply-ui-benefits"
   },
   "agency": {
     "name_en": "Arizona DES Unemployment Insurance help line",
     "name_es": "Línea de ayuda del Seguro de Desempleo de Arizona DES",
-    "phone": "1-877-600-2722",
-    "url": "https://des.az.gov/services/employment/unemployment-individual"
+    "phone": "(877) 600-2722",
+    "url": "https://des.az.gov/services/employment/unemployment-individual/apply-ui-benefits",
+    "phone_source": "UIB-1272A FORFF (08/25), page 1 of 10: \"call the Unemployment Insurance Benefits team toll-free at (877) 600-2722\""
   },
   "legal_aid": [
     {

@@ -106,7 +106,8 @@ a:focus-visible, button:focus-visible, input:focus-visible {
   margin: 0 0 0.5rem; padding: 0.75rem 1rem;
   background: var(--accent-soft); border-left: 5px solid var(--accent);
 }
-.official p { margin: 0; }
+/* pre-line keeps the form's answer options on their own lines */
+.official p { margin: 0; white-space: pre-line; }
 .note { font-size: 0.9rem; color: var(--muted); }
 .coming-soon { font-style: italic; color: var(--muted); }
 .source { font-size: 0.85rem; color: var(--muted); margin: 1rem 0 0; }

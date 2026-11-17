@@ -14,9 +14,9 @@ DATA_DIR = Path(__file__).parent / "data"
 LANGUAGES = ("en", "es")
 
 
-def load_json(name: str, data_dir: Path = DATA_DIR):
+def load_json(name: str, data_dir: Path | None = None):
     """Read one JSON data file (always as UTF-8, so Spanish accents are safe)."""
-    with open(data_dir / name, encoding="utf-8") as f:
+    with open((data_dir or DATA_DIR) / name, encoding="utf-8") as f:
         return json.load(f)
 
 
@@ -39,7 +39,7 @@ def gated_explanation(entry: dict | None, lang: str, official_text: str | None =
     }
 
 
-def build_content(data_dir: Path = DATA_DIR) -> dict:
+def build_content(data_dir: Path | None = None) -> dict:
     """Bundle everything the page needs into one object.
 
     The files are re-read on every request. They are tiny, and it means an edit to
