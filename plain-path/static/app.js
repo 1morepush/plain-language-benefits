@@ -200,7 +200,7 @@ function walkthrough() {
   }));
 
   const questions = content.questions.filter((q) => q.section === section.id);
-  const cards = questions.map((q, i) => questionCard(q, i + 1));
+  const cards = questions.map((q, i) => questionCard(q, i + 1, questions.length));
 
   const move = (step) => { state.sectionIndex += step; render(true); };
 
@@ -222,7 +222,7 @@ function walkthrough() {
   ];
 }
 
-function questionCard(q, number) {
+function questionCard(q, number, total) {
   // Official wording: always shown, never changed. In Spanish, use the official
   // Spanish wording if we have it. Otherwise show the English and say so.
   const hasSpanish = state.lang === "es" && q.official_text_es;
@@ -233,7 +233,7 @@ function questionCard(q, number) {
   const explanation = q.explanation[state.lang];
 
   const parts = [
-    el("h2", {}, t("questionN", { n: number })),
+    el("h2", {}, t("questionN", { n: number, total })),
     el("p", { class: "label" }, t("officialLabel")),
     official,
     state.lang === "es" && !q.official_text_es && el("p", { class: "note" }, t("officialOnlyEnglish")),

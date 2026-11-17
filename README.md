@@ -33,8 +33,9 @@ get benefits, and never tells anyone what to answer.
 |---------|--------|------------|--------------|
 | <img src="plain-path/docs/images/mobile-welcome.png" alt="The welcome screen on a phone." width="190"> | <img src="plain-path/docs/images/mobile-intake.png" alt="Yes or no intake questions on a phone." width="190"> | <img src="plain-path/docs/images/mobile-question.png" alt="A question card on a phone with the official wording, the plain-language explanation, and the Check with a person box." width="190"> | <img src="plain-path/docs/images/mobile-ask.png" alt="The Ask about this question box on a phone, with a typed question and a reply labelled as written by AI." width="190"> |
 
-*These are real screenshots of the app. The text in them is the fake placeholder content
-the project ships with, and the reply in the question box is a fake one.*
+*These are real screenshots of the app, showing question 62 of Arizona's application.
+The plain-language explanations are still waiting for review, so the cards show
+"Explanation coming soon".*
 
 ## What it does
 
@@ -67,8 +68,19 @@ enforced in code.
 | Never decide or predict eligibility | System prompt, plus a keyword check on every chat reply. |
 | Never suggest, rank, or reword an answer | System prompt, plus the same keyword check. |
 | No personal data | SSN-shaped text is blocked in the browser and again on the server, before it can reach the AI. Nothing a user types is stored. |
-| Never make up form content | Official wording comes only from a data file the project owner fills in. A question that is not in the file gets a fixed "can't help with that" reply. |
+| Never make up form content | Official wording is copied from Arizona's own form (see below). A question that is not in the data file gets a fixed "can't help with that" reply. |
 | Disclaimer on every page | It is in the page footer. |
+
+## Where the questions come from
+
+The official wording is copied word for word from the **Arizona Application for
+Unemployment Insurance Benefits**, form UIB-1272A (revision 08/25), in English and
+Spanish. Both PDFs are in [`plain-path/source_docs/`](plain-path/source_docs/), and every
+question in the data file names the page and question number it came from.
+
+Plain Path currently covers 40 items from the form: the ones that use terms a person may
+need explained, such as the reason for separation, being "able" and "available" for work,
+and severance or pension payments. Fields like name and address are left out.
 
 ## How the AI is used
 
@@ -116,13 +128,16 @@ each file does.
 
 ## Current status
 
-All four build stages are done, and 104 automated tests pass. Still to do before a demo:
+All four build stages are done, and 106 automated tests pass.
 
-- [ ] Replace the placeholder content in `plain-path/data/` with real questions from
-      Arizona's materials.
-- [ ] Do a first live run. The code that calls Claude has only been tested with a fake
-      Claude so far.
-- [ ] Verify the phone number and links in `plain-path/data/help_links.json`. They were
+- [x] Real questions from Arizona's form, in English and Spanish.
+- [x] The DES help line number, confirmed against the form.
+- [ ] Draft the explanations with Claude and review them. Until then, every question
+      shows "Explanation coming soon". The code that calls Claude has only been tested
+      with a fake Claude so far.
+- [ ] Check the transcription of the official wording against the PDFs, and decide which
+      questions should carry the "Check with a person" box.
+- [ ] Verify the two legal aid links in `plain-path/data/help_links.json`. They were
       written from memory.
 - [ ] Have a fluent Spanish speaker read the Spanish text.
 

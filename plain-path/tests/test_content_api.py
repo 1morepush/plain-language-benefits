@@ -73,3 +73,43 @@ def test_reviewed_explanation_is_hidden_when_official_wording_changes():
     entry = {"explanation_en": "about the old wording", "reviewed_en": True, "written_for": "Old?"}
     assert gated_explanation(entry, "en", "Old?")["text"] == "about the old wording"
     assert gated_explanation(entry, "en", "New wording?") is None
+
+
+def test_real_data_files_fit_together():
+    """The same checks, run on the real form data in data/ instead of the test fixtures."""
+    from conftest import REAL_DATA
+
+    content = build_content(REAL_DATA)
+    section_ids = {s["id"] for s in content["sections"]}
+    intake_keys = {i["key"] for i in content["intake"]}
+
+    assert content["questions"], "data/questions.json is empty"
+    ids = [q["id"] for q in content["questions"]]
+    assert len(ids) == len(set(ids)), "two questions share an id"
+    for q in content["questions"]:
+        assert q["section"] in section_ids, f"{q['id']} points at a missing section"
+        assert q["official_text_en"].strip(), f"{q['id']} has no official English text"
+        assert q["source"].strip(), f"{q['id']} has no source"
+    for section in content["sections"]:
+        assert any(q["section"] == section["id"] for q in content["questions"]), section["id"]
+    for item in content["sections"] + content["checklist"]:
+        if "show_if" in item:
+            assert item["show_if"] in intake_keys
+        assert item.get("text_es", item.get("title_es")), "missing Spanish text"
+
+    # Nothing may be shown as reviewed unless it was written for the current wording.
+    explanations = load_json("explanations.json", REAL_DATA)
+    assert set(explanations) <= set(ids), "an explanation has no matching question"
+
+
+def test_every_test_question_points_at_a_real_question_or_is_meant_to_miss():
+    import csv
+
+    from conftest import REAL_DATA
+
+    ids = {q["id"] for q in load_json("questions.json", REAL_DATA)}
+    path = REAL_DATA.parent / "tests" / "test_questions.csv"
+    with open(path, encoding="utf-8-sig", newline="") as f:
+        for row in csv.DictReader(f):
+            if row["expected"] != "not_in_file":
+                assert row["question_id"] in ids, row["id"]

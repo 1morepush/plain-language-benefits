@@ -1,37 +1,61 @@
 [
   {
-    "id": "placeholder_everyone",
-    "text_en": "PLACEHOLDER: a document everyone needs",
-    "text_es": "PLACEHOLDER: un documento que todos necesitan"
+    "id": "photo_id",
+    "source": "UIB-1272A FORFF (08/25), page 1 of 10, \"What do I need to complete this application?\"",
+    "text_en": "A clear photograph of a valid government-issued photo identification of yours",
+    "text_es": "Una fotografía clara de una identificación gubernamental de usted"
   },
   {
-    "id": "placeholder_multiple_employers",
-    "text_en": "PLACEHOLDER: a document for people with more than one employer",
-    "text_es": "PLACEHOLDER: un documento para personas con más de un empleador",
-    "show_if": "multiple_employers"
+    "id": "ssn",
+    "source": "UIB-1272A FORFF (08/25), page 1 of 10, \"What do I need to complete this application?\"",
+    "text_en": "Your Social Security Number (for the real application only. Never type it into Plain Path)",
+    "text_es": "Su Número de Seguro Social (solo para la solicitud real. Nunca lo escriba en Plain Path)"
   },
   {
-    "id": "placeholder_other_state",
-    "text_en": "PLACEHOLDER: a document for people who worked in another state",
-    "text_es": "PLACEHOLDER: un documento para personas que trabajaron en otro estado",
-    "show_if": "other_state"
+    "id": "mailing_address",
+    "source": "UIB-1272A FORFF (08/25), page 1 of 10, \"What do I need to complete this application?\"",
+    "text_en": "Your mailing address",
+    "text_es": "Su dirección de correo postal"
   },
   {
-    "id": "placeholder_military_federal",
-    "text_en": "PLACEHOLDER: a document for military or federal workers",
-    "text_es": "PLACEHOLDER: un documento para trabajadores militares o federales",
-    "show_if": "military_federal"
+    "id": "employment_history",
+    "source": "UIB-1272A FORFF (08/25), page 1 of 10, \"What do I need to complete this application?\"",
+    "text_en": "Your employment history for the last 18 months. Use your paystub(s) to get the correct employer information",
+    "text_es": "Su historial de empleo de los últimos 18 meses. Use sus talones de pago para obtener la información correcta del empleador"
   },
   {
-    "id": "placeholder_severance_vacation",
-    "text_en": "PLACEHOLDER: a document about severance or vacation pay",
-    "text_es": "PLACEHOLDER: un documento sobre pago por despido o vacaciones",
-    "show_if": "severance_vacation"
+    "id": "each_employer",
+    "show_if": "multiple_employers",
+    "source": "UIB-1272A FORFF (08/25), page 5 of 10, Part 3 instructions",
+    "text_en": "A separate sheet of paper with your answers to questions 42-72 for each additional employer",
+    "text_es": "Una hoja de papel aparte con sus respuestas a las preguntas 42-72 para cada empleador adicional"
   },
   {
-    "id": "placeholder_pension_retirement",
-    "text_en": "PLACEHOLDER: a document about pension or retirement pay",
-    "text_es": "PLACEHOLDER: un documento sobre pensión o jubilación",
-    "show_if": "pension_retirement"
+    "id": "other_states",
+    "show_if": "other_state",
+    "source": "UIB-1272A FORFF (08/25), page 4 of 10, question 25",
+    "text_en": "The names of the state(s) besides Arizona where you worked in the last 18 months",
+    "text_es": "Los nombres de los estados, diferentes a Arizona, donde trabajó en los últimos 18 meses"
+  },
+  {
+    "id": "military_federal_forms",
+    "show_if": "military_federal",
+    "source": "UIB-1272A FORFF (08/25), page 1 of 10, \"What do I need to complete this application?\"",
+    "text_en": "A copy of your DD214 form (military), or a copy of your Standard Form 8 (SF8) or Standard Form 50 (SF50) (federal civilian service)",
+    "text_es": "Una copia de su formulario DD214 (fuerzas armadas), o una copia de su Formulario Estándar 8 (SF8) o Formulario Estándar 50 (SF50) (servicio civil federal)"
+  },
+  {
+    "id": "separation_payments",
+    "show_if": "severance_vacation",
+    "source": "UIB-1272A FORFF (08/25), page 6 of 10, question 70",
+    "text_en": "The gross amount of any severance pay, vacation pay, holiday pay, sick pay, or wages in lieu of notice from your employer",
+    "text_es": "La cantidad bruta de cualquier pago de indemnización, pago por vacaciones, pago de días feriados, pago por enfermedad o salarios en lugar de preaviso de su empleador"
+  },
+  {
+    "id": "pension_details",
+    "show_if": "pension_retirement",
+    "source": "UIB-1272A FORFF (08/25), page 7 of 10, question 71",
+    "text_en": "Your pension or retirement details: the pension type, gross amount, and effective date",
+    "text_es": "Los datos de su pensión o jubilación: el tipo de pensión, la cantidad bruta y la fecha de vigencia"
   }
 ]

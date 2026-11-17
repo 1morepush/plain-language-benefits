@@ -1,24 +1,322 @@
 [
   {
-    "id": "placeholder_1",
-    "section": "placeholder_a",
-    "official_text_en": "PLACEHOLDER: This is fake official question text number one. Replace it with the real wording.",
-    "official_text_es": "PLACEHOLDER: Este es el texto oficial falso de la pregunta número uno. Reemplácelo con el texto real.",
-    "source": "PLACEHOLDER (no real source yet)",
+    "id": "q08",
+    "section": "part1",
+    "official_text_en": "8. Have you registered with the Selective Service? (The Selective Service System is an independent agency that maintains information on U.S. citizens and residents potentially subject to military draft. Almost all male US citizens and male immigrants, who are 18 through 25 years of age, are required to register with Selective Service.)\n☐ Yes  ☐ No  ☐ Documented Exemption from Registration  ☐ Not Applicable",
+    "official_text_es": "8. ¿Se ha registrado con el Servicio Selectivo? (El Servicio Selectivo es una agencia independiente que mantiene información de ciudadanos norteamericanos y residentes potencialmente sujetos a selección militar. Casi todos los ciudadanos masculinos norteamericanos e inmigrantes masculinos, de 18 a 25 años de edad, se requiere que se registren con Servicios Selectivos.)\n☐ Sí  ☐ No  ☐ Exención documentada de registro  ☐ No corresponde",
+    "source": "Arizona Application for Unemployment Insurance Benefits, UIB-1272A FORFF (08/25), page 2 of 10, question 8. Spanish: UIB-1272A FORSFF (08/25), same question.",
     "high_risk": false
   },
   {
-    "id": "placeholder_2",
-    "section": "placeholder_a",
-    "official_text_en": "PLACEHOLDER: This is fake official question text number two. It is marked high risk.",
-    "source": "PLACEHOLDER (no real source yet)",
+    "id": "acp",
+    "section": "part1",
+    "official_text_en": "Address Confidentiality Program (ACP)\nThe Address Confidentiality Program protects the addresses of individuals who are victims of domestic violence. To be enrolled in the Address Confidentiality Program (ACP) an individual must have applied with the office of the Secretary of State and received an approval letter.\nAre you currently enrolled in the Address Confidentiality Program? ☐ Yes  ☐ No\nIf Yes, provide the following two dates shown on your ACP authorization card:\nACP Enrollment Date: ______  ACP Expiration Date: ______\nIf Yes, enter the address that is shown on your ACP authorization card for questions 9 and 10. Provide the complete address, including the Apt. number. Do not enter your residential address in question 9 below if you are an active participant in the ACP.",
+    "official_text_es": "Programa de Confidencialidad de Direcciones (ACP, por sus siglas en inglés)\nEl Programa de Confidencialidad de Dirección protege las direcciones de personas que son víctimas de violencia doméstica. Para registrarse en el Programa de Confidencialidad de Dirección (ACP) la persona tiene que haber aplicado con la Oficina del Secretario de Estado y haber recibido una carta de aprobación.\n¿Está actualmente inscrito en el Programa de Confidencialidad de Direcciones (ACP, por sus siglas en inglés)? ☐ Sí  ☐ No\nSi contestó que Sí, ingrese las siguientes fechas mostradas en su tarjeta aprobada de ACP (Programa de Confidencialidad de Dirección):\nFecha de inscripción de ACP: ______  Fecha de vencimiento de ACP: ______\nSi contestó que Sí, ingrese la dirección que aparece en su tarjeta de autorización de ACP. Para las preguntas 9 y 10, ingrese la dirección completa, incluyendo el número de apartamento. No ingrese su dirección de residencia en la pregunta 9 si es un participante activo del Programa de Confidencialidad de Dirección.",
+    "source": "Arizona Application for Unemployment Insurance Benefits, UIB-1272A FORFF (08/25), page 2 of 10, Address Confidentiality Program (ACP) box. Spanish: UIB-1272A FORSFF (08/25), same question.",
+    "high_risk": false
+  },
+  {
+    "id": "q13",
+    "section": "part1",
+    "official_text_en": "13. Select a method in which you prefer to receive your notifications:\n☐ Internal Message (CACTUS portal message center)\n☐ Email\n☐ Text Message (if available)  If checked, provide cell phone number: ______\nNotifications and reminders may be sent to you via text message, however, Unemployment Insurance (UI) documents including determinations will not be sent through text message.\n☐ Postal Mail (you do not need to consent below if you select this option)\nElectronic Communication Consent:\n☐ I consent to receive electronic communication including information or document requests and eligibility determinations.\n☐ I do not consent to receive electronic communication including information or document requests and eligibility determinations. If you do not consent, the Department will not be able to communicate with you electronically.\nI understand I can change my preferred notification method at any time through the Comprehensive Arizona Claims Tracking and Unemployment Insurance System (CACTUS) portal or by contacting the Unemployment Insurance Call Center at (877) 600-2722.",
+    "official_text_es": "13. Seleccione un método en el que prefiera recibir sus notificaciones:\n☐ Mensaje interno (Centro de mensajes del sistema CACTUS)\n☐ Correo electrónico\n☐ Mensaje de texto (Si está disponible)  Si elige esta opción, ingrese su teléfono celular: ______\nNo todos los documentos pueden enviarse por mensaje de texto. Si selecciona esta opción, por favor, consulte su Centro de Mensajes con frecuencia, ya que toda la correspondencia se envía allí.\n☐ Correo Postal (No es necesario su consentimiento para una comunicación electrónica, si elige esta opción)\nConsentimiento de Comunicación Electrónica:\n☐ Doy mi consentimiento para recibir comunicaciones electrónicas, incluyendo solicitudes de información o documentos, determinaciones de elegibilidad y toda documentación de apelación, incluso Avisos de Audiencia y Decisiones.\n☐ No doy consentimiento de recibir comunicación electrónica incluyendo petición de información o documentos ni determinaciones de elegibilidad. Sin su consentimiento, el Departamento no podrá comunicarse con usted electrónicamente.\nEntiendo que puedo retirar mi consentimiento cambiando mi método de notificación preferido en cualquier momento a través de este portal o comunicándome con el Centro de Llamadas del Seguro de Desempleo (UI) al (877) 600-2722.",
+    "source": "Arizona Application for Unemployment Insurance Benefits, UIB-1272A FORFF (08/25), page 3 of 10, question 13. Spanish: UIB-1272A FORSFF (08/25), same question.",
+    "high_risk": false
+  },
+  {
+    "id": "q14",
+    "section": "part1",
+    "official_text_en": "14. Citizenship\n☐ U.S. Citizen or U.S. Territory\n☐ U.S. Permanent Resident\n☐ Alien/Refugee lawfully admitted to the U.S.\nIf you are not a Citizen of the U.S. or U.S. Territory, you must provide a copy of the front and back of your Alien Registration Card with this application.",
+    "official_text_es": "14. Ciudadanía\n☐ Ciudadano de los Estados Unidos/Naturalizado\n☐ Residente permanente\n☐ Extranjero admitido legalmente/Refugiado\nSi no es ciudadano Norteamericano, deberá proporcionar, con su aplicación, una copia de su tarjeta de migración por ambos lados.",
+    "source": "Arizona Application for Unemployment Insurance Benefits, UIB-1272A FORFF (08/25), page 3 of 10, question 14. Spanish: UIB-1272A FORSFF (08/25), same question.",
     "high_risk": true
   },
   {
-    "id": "placeholder_3",
-    "section": "placeholder_b",
-    "official_text_en": "PLACEHOLDER: This is fake official question text number three. Its explanation is not reviewed yet.",
-    "source": "PLACEHOLDER (no real source yet)",
+    "id": "q15",
+    "section": "part1",
+    "official_text_en": "15. Do you wish to disclose a disability? If Yes, answer questions 15a. and 15b.\n☐ Yes, I have a disability I wish to disclose\n15a. Are you receiving Supplemental Security Income (SSI)? ☐ Yes  ☐ No\n15b. Are you receiving Social Security Disability Insurance (SSDI)? ☐ Yes  ☐ No\n☐ No, I do not have a disability\n☐ I do not wish to answer",
+    "official_text_es": "15. ¿Desea revelar una discapacidad? Si contestó Sí, responda a las preguntas 15a y 15b.\n☐ Sí, tengo una discapacidad que deseo revelar.\n15a. ¿Está usted recibiendo Seguridad de Ingreso Suplementario (SSI)? ☐ Sí  ☐ No\n15b. ¿Está usted recibiendo Seguro de Discapacidad del Seguro Social (SSDI)? ☐ Sí  ☐ No\n☐ No, yo no tengo una discapacidad.\n☐ No deseo responder.",
+    "source": "Arizona Application for Unemployment Insurance Benefits, UIB-1272A FORFF (08/25), page 3 of 10, question 15. Spanish: UIB-1272A FORSFF (08/25), same question.",
     "high_risk": false
+  },
+  {
+    "id": "q24",
+    "section": "part2",
+    "official_text_en": "24. Did you work during the last 18 months? ☐ Yes  ☐ No",
+    "official_text_es": "24. ¿Ha trabajado dentro de los últimos 18 meses? ☐ Sí  ☐ No",
+    "source": "Arizona Application for Unemployment Insurance Benefits, UIB-1272A FORFF (08/25), page 4 of 10, question 24. Spanish: UIB-1272A FORSFF (08/25), same question.",
+    "high_risk": false
+  },
+  {
+    "id": "q25",
+    "section": "part2",
+    "official_text_en": "25. Have you worked in two or more states during the last 18 months? ☐ Yes  ☐ No\nIf Yes, in what state(s) have you worked in besides Arizona in the last 18 months?",
+    "official_text_es": "25. ¿Ha trabajado en dos o más estados dentro de los últimos 18 meses? ☐ Sí  ☐ No\nSi contestó que sí, ¿en cuáles estados, diferentes a Arizona, ha trabajado en los últimos 18 meses?",
+    "source": "Arizona Application for Unemployment Insurance Benefits, UIB-1272A FORFF (08/25), page 4 of 10, question 25. Spanish: UIB-1272A FORSFF (08/25), same question.",
+    "high_risk": false
+  },
+  {
+    "id": "q26",
+    "section": "part2",
+    "official_text_en": "26. Have you filed for unemployment insurance benefits within the last 12 months? ☐ Yes  ☐ No\nIf Yes, in what state(s) have you filed for unemployment insurance benefits in the last 12 months?",
+    "official_text_es": "26. ¿Ha solicitado beneficios del seguro por desempleo dentro de los últimos 12 meses? ☐ Sí  ☐ No\nSi contestó que sí, ¿en qué estado(s) ha solicitado beneficios del seguro por desempleo en los últimos 12 meses?",
+    "source": "Arizona Application for Unemployment Insurance Benefits, UIB-1272A FORFF (08/25), page 4 of 10, question 26. Spanish: UIB-1272A FORSFF (08/25), same question.",
+    "high_risk": false
+  },
+  {
+    "id": "q27",
+    "section": "part2",
+    "official_text_en": "27. Have you worked for, or earned wages from, the United States federal government (not military) during the last 18 months? ☐ Yes  ☐ No\nIf Yes, answer questions 27a, 27b, and 27c.\n27a. In Arizona? ☐ Yes  ☐ No\n27b. In another state? ☐ Yes  ☐ No\n27c. Was your last official duty station outside of the US? ☐ Yes  ☐ No\nIf Yes, Are you a resident of Arizona? ☐ Yes  ☐ No\nIf Yes, Are you filing from Arizona? ☐ Yes  ☐ No",
+    "official_text_es": "27. ¿Ha trabajado para, o ganado salarios de, el gobierno federal de los Estados Unidos (no militar) dentro de los últimos 18 meses? ☐ Sí  ☐ No\nSi contestó Sí, responda a las preguntas 27a, 27b, y 27c.\n27a. ¿En Arizona? ☐ Sí  ☐ No\n27b. ¿En otro Estado? ☐ Sí  ☐ No\n27c. ¿Fue su última estación de servicio oficial fuera de los EE.UU.? ☐ Sí  ☐ No\nSi contestó que sí, ¿es residente de Arizona? ☐ Sí  ☐ No\nSi contestó que sí, ¿está solicitando ayuda desde Arizona? ☐ Sí  ☐ No",
+    "source": "Arizona Application for Unemployment Insurance Benefits, UIB-1272A FORFF (08/25), page 4 of 10, question 27. Spanish: UIB-1272A FORSFF (08/25), same question.",
+    "high_risk": false
+  },
+  {
+    "id": "q28",
+    "section": "part2",
+    "official_text_en": "28. Were any of your wages earned in the military during the last 18 months? ☐ Yes  ☐ No\nIf Yes, answer question 28a.\n28a. Are you physically located in Arizona? ☐ Yes  ☐ No",
+    "official_text_es": "28. ¿Algunos de sus salarios fueron ganados en las fuerzas armadas dentro de los últimos 18 meses? ☐ Sí  ☐ No\nSi contestó Sí, responda a la pregunta 28a.\n28a. ¿Se encuentra físicamente en Arizona? ☐ Sí  ☐ No",
+    "source": "Arizona Application for Unemployment Insurance Benefits, UIB-1272A FORFF (08/25), page 4 of 10, question 28. Spanish: UIB-1272A FORSFF (08/25), same question.",
+    "high_risk": false
+  },
+  {
+    "id": "q29",
+    "section": "part2",
+    "official_text_en": "29. Current employment status (only choose one):\n☐ Working Full-Time  ☐ Working Part-Time  ☐ Not Working  ☐ Never Worked  ☐ Other",
+    "official_text_es": "29. Estatus de empleo actual (elija sólo uno):\n☐ Trabajando tiempo completo  ☐ Trabajando tiempo parcial  ☐ No estoy trabajando  ☐ Nunca trabaje  ☐ Otro",
+    "source": "Arizona Application for Unemployment Insurance Benefits, UIB-1272A FORFF (08/25), page 4 of 10, question 29. Spanish: UIB-1272A FORSFF (08/25), same question.",
+    "high_risk": false
+  },
+  {
+    "id": "q30",
+    "section": "part2",
+    "official_text_en": "30. Are you physically and mentally able to work? ☐ Yes  ☐ No\nIf No, check all the reasons that apply:\n☐ Illness or Injury  ☐ Physical Limitations  ☐ Mental Limitations  ☐ Disability  ☐ Pregnancy",
+    "official_text_es": "30. ¿Está usted físicamente y mentalmente capacitado(a) para trabajar? ☐ Sí  ☐ No\nSi contestó No, marque todas las razones que correspondan:\n☐ Enfermedad o lesión  ☐ Limitaciones físicas  ☐ Limitaciones mentales  ☐ Discapacidad  ☐ Embarazo",
+    "source": "Arizona Application for Unemployment Insurance Benefits, UIB-1272A FORFF (08/25), page 4 of 10, question 30. Spanish: UIB-1272A FORSFF (08/25), same question.",
+    "high_risk": true
+  },
+  {
+    "id": "q31",
+    "section": "part2",
+    "official_text_en": "31. Are you available for work? (You are available for work if you do not have any restrictions that would prevent you from looking for full-time work) ☐ Yes  ☐ No\nIf No, check all the reasons that apply:\n☐ Lack of Transportation  ☐ Lack of Childcare  ☐ Illness of Family Member\n☐ Caring for Family Member  ☐ Domestic Responsibility  ☐ Incarceration\n☐ Leave of Absence  ☐ Out of the Area  ☐ Military Obligations\n☐ Jury Duty or Other Public Service\n☐ Other Reasons Explain: ______",
+    "official_text_es": "31. ¿Está disponible para trabajar? (Si está disponible para trabajar si no tiene ninguna restricción que le impida buscar trabajo de tiempo completo) ☐ Sí  ☐ No\nSi contestó No, marque todas las razones que correspondan:\n☐ Falta de transporte  ☐ Falta de cuidado de niños  ☐ Enfermedad de miembro de la familia\n☐ Cuidando a miembro de la familia  ☐ Responsabilidad doméstica  ☐ Encarcelado(a)\n☐ Permiso de ausencia  ☐ Fuera del área  ☐ Obligaciones militares\n☐ Servicios de Jurado u otro servicio público\n☐ Otros motivos explique: ______",
+    "source": "Arizona Application for Unemployment Insurance Benefits, UIB-1272A FORFF (08/25), page 4 of 10, question 31. Spanish: UIB-1272A FORSFF (08/25), same question.",
+    "high_risk": true
+  },
+  {
+    "id": "q32",
+    "section": "part2",
+    "official_text_en": "32. Are you self-employed, or the owner, or the operator of a business or farm? ☐ Yes  ☐ No",
+    "official_text_es": "32. ¿Trabaja por cuenta propia, o es el propietario u operador de un negocio o granja? ☐ Sí  ☐ No",
+    "source": "Arizona Application for Unemployment Insurance Benefits, UIB-1272A FORFF (08/25), page 4 of 10, question 32. Spanish: UIB-1272A FORSFF (08/25), same question.",
+    "high_risk": true
+  },
+  {
+    "id": "q33",
+    "section": "part2",
+    "official_text_en": "33. Are you an elected official? ☐ Yes  ☐ No",
+    "official_text_es": "33. ¿Es usted un funcionario electo? ☐ Sí  ☐ No",
+    "source": "Arizona Application for Unemployment Insurance Benefits, UIB-1272A FORFF (08/25), page 4 of 10, question 33. Spanish: UIB-1272A FORSFF (08/25), same question.",
+    "high_risk": false
+  },
+  {
+    "id": "q34",
+    "section": "part2",
+    "official_text_en": "34. Since you have become unemployed, are you working on a commission basis? ☐ Yes  ☐ No",
+    "official_text_es": "34. Desde que quedó desempleado, ¿trabaja por comisión? ☐ Sí  ☐ No",
+    "source": "Arizona Application for Unemployment Insurance Benefits, UIB-1272A FORFF (08/25), page 4 of 10, question 34. Spanish: UIB-1272A FORSFF (08/25), same question.",
+    "high_risk": true
+  },
+  {
+    "id": "q35",
+    "section": "part2",
+    "official_text_en": "35. Are you attending school or training? ☐ Yes  ☐ No",
+    "official_text_es": "35. ¿Asiste a la escuela o a algún curso de entrenamiento? ☐ Sí  ☐ No",
+    "source": "Arizona Application for Unemployment Insurance Benefits, UIB-1272A FORFF (08/25), page 5 of 10, question 35. Spanish: UIB-1272A FORSFF (08/25), same question.",
+    "high_risk": true
+  },
+  {
+    "id": "q36",
+    "section": "part2",
+    "official_text_en": "36. Have you refused a job offer since becoming unemployed? ☐ Yes  ☐ No",
+    "official_text_es": "36. ¿Ha rechazado una oferta de trabajo desde que quedó desempleado? ☐ Sí  ☐ No",
+    "source": "Arizona Application for Unemployment Insurance Benefits, UIB-1272A FORFF (08/25), page 5 of 10, question 36. Spanish: UIB-1272A FORSFF (08/25), same question.",
+    "high_risk": true
+  },
+  {
+    "id": "q37",
+    "section": "part2",
+    "official_text_en": "37. Have you refused a referral to work since becoming unemployed? ☐ Yes  ☐ No",
+    "official_text_es": "37. ¿Ha rechazado una recomendación para trabajar desde que quedó desempleado? ☐ Sí  ☐ No",
+    "source": "Arizona Application for Unemployment Insurance Benefits, UIB-1272A FORFF (08/25), page 5 of 10, question 37. Spanish: UIB-1272A FORSFF (08/25), same question.",
+    "high_risk": true
+  },
+  {
+    "id": "q38",
+    "section": "part2",
+    "official_text_en": "38. Did you become unemployed or partially unemployed as a direct result of a foreign trade competition covered by a Certified Trade Petition? (If not sure, answer no.) ☐ Yes  ☐ No",
+    "official_text_es": "38. ¿Quedó desempleado o parcialmente desempleado como resultado directo de una competencia de comercio exterior cubierta por una Petición Comercial Certificada? (Si no está seguro, responda No.) ☐ Sí  ☐ No",
+    "source": "Arizona Application for Unemployment Insurance Benefits, UIB-1272A FORFF (08/25), page 5 of 10, question 38. Spanish: UIB-1272A FORSFF (08/25), same question.",
+    "high_risk": false
+  },
+  {
+    "id": "q39",
+    "section": "part2",
+    "official_text_en": "39. Have you been employed by a public or private school during the past 18 months? ☐ Yes  ☐ No",
+    "official_text_es": "39. ¿Ha trabajado en una escuela pública o privada durante los últimos 18 meses? ☐ Sí  ☐ No",
+    "source": "Arizona Application for Unemployment Insurance Benefits, UIB-1272A FORFF (08/25), page 5 of 10, question 39. Spanish: UIB-1272A FORSFF (08/25), same question.",
+    "high_risk": false
+  },
+  {
+    "id": "q40",
+    "section": "part2",
+    "official_text_en": "40. In the last 18 months, have you worked as a professional athlete? ☐ Yes  ☐ No",
+    "official_text_es": "40. ¿En los últimos 18 meses ha trabajado como deportista profesional? ☐ Sí  ☐ No",
+    "source": "Arizona Application for Unemployment Insurance Benefits, UIB-1272A FORFF (08/25), page 5 of 10, question 40. Spanish: UIB-1272A FORSFF (08/25), same question.",
+    "high_risk": false
+  },
+  {
+    "id": "q41",
+    "section": "part2",
+    "official_text_en": "41. Are you a member of a labor union which finds/obtains work for its members? ☐ Yes  ☐ No\nIf Yes, answer questions 41a, 41b, and 41c.\n41a. Local union name and number: ______\n41b. Do you use the Union Hiring Hall as your sole method for job seeking? ☐ Yes  ☐ No\n41c. Are you a paid-up member of a Union obtaining work through a union hiring hall? ☐ Yes  ☐ No",
+    "official_text_es": "41. ¿Es miembro de un sindicato laboral que encuentra/obtiene trabajo para sus miembros? ☐ Sí  ☐ No\nSi contestó Sí, responda a las preguntas 41a, 41b, y 41c.\n41a. Nombre y número del sindicato: ______\n41b. ¿Usted utiliza la Oficina de Contratación Sindical como su único método para buscar trabajo? ☐ Sí  ☐ No\n41c. ¿Es usted un miembro al día de un Sindicato de Oficios que obtiene trabajo a través de una oficina de contratación sindical? ☐ Sí  ☐ No",
+    "source": "Arizona Application for Unemployment Insurance Benefits, UIB-1272A FORFF (08/25), page 5 of 10, question 41. Spanish: UIB-1272A FORSFF (08/25), same question.",
+    "high_risk": false
+  },
+  {
+    "id": "part3_intro",
+    "section": "part3",
+    "official_text_en": "You must provide a history of all the employers you have worked for over the last 18 months (regardless of state, type of work, or length of job). If you have more than one employer you must include them on a separate sheet of paper, return that paper with the application, and include your answers to questions 42-72 for each of your employers. Your application cannot be completed until this information is entered. Refer to your paystub(s) to provide the correct employer information.",
+    "official_text_es": "Debe proporcionar un historial de todos los empleadores para los que ha trabajado durante los últimos 18 meses (independientemente del estado, el tipo de trabajo o la duración del trabajo).Si tiene más de un empleador, debe incluirlos en una hoja de papel aparte, devolver esa hoja con la solicitud e incluir sus respuestas a las preguntas 42-72 con cada uno de sus empleadores. Su solicitud no podrá completarse hasta que se ingrese esta información. Consulte sus talones de pago para proporcionar la información correcta del empleador.",
+    "source": "Arizona Application for Unemployment Insurance Benefits, UIB-1272A FORFF (08/25), page 5 of 10, Part 3 instructions. Spanish: UIB-1272A FORSFF (08/25), same question.",
+    "high_risk": false
+  },
+  {
+    "id": "q49",
+    "section": "part3",
+    "official_text_en": "49. Is this your last employer? ☐ Yes  ☐ No",
+    "official_text_es": "49. ¿Es este su último empleador? ☐ Sí  ☐ No",
+    "source": "Arizona Application for Unemployment Insurance Benefits, UIB-1272A FORFF (08/25), page 5 of 10, question 49. Spanish: UIB-1272A FORSFF (08/25), same question.",
+    "high_risk": false
+  },
+  {
+    "id": "q50",
+    "section": "part3",
+    "official_text_en": "50. Is this employer considered a temporary agency? (A temporary agency specializes in finding positions for individuals looking for work on a temporary basis.) ☐ Yes  ☐ No",
+    "official_text_es": "50. ¿Este empleador se considera una agencia de trabajo temporero? (Una agencia de trabajo temporero se especializa en encontrar puestos para personas que buscan trabajo de manera temporera.) ☐ Sí  ☐ No",
+    "source": "Arizona Application for Unemployment Insurance Benefits, UIB-1272A FORFF (08/25), page 5 of 10, question 50. Spanish: UIB-1272A FORSFF (08/25), same question.",
+    "high_risk": false
+  },
+  {
+    "id": "q53",
+    "section": "part3",
+    "official_text_en": "53. Type of Employment:\n☐ Regular  ☐ Temporary  ☐ Seasonal\n☐ Contract  ☐ Internship  ☐ Apprenticeship\n☐ On the Job Training  ☐ Gig Job",
+    "official_text_es": "53. Tipo de empleo:\n☐ Regular  ☐ Temporario  ☐ Estacional\n☐ Contracto  ☐ Pasantía  ☐ De Aprendiz\n☐ Capacitación en el trabajo  ☐ Trabajo por cuenta ajena",
+    "source": "Arizona Application for Unemployment Insurance Benefits, UIB-1272A FORFF (08/25), page 5 of 10, question 53. Spanish: UIB-1272A FORSFF (08/25), same question.",
+    "high_risk": false
+  },
+  {
+    "id": "q62",
+    "section": "part3",
+    "official_text_en": "62. Reason for Separation:\n☐ I was terminated/fired because: ______\n☐ I resigned/quit my job because: ______\n☐ I was laid off due to a lack of work or a reduction in force\n☐ I am on a leave of absence\n☐ I am suspended from work\n☐ My employer and a union(s) are involved in a labor dispute/strike\n☐ I am still working full-time. If you are still employed, you will be required to enter the last day that you physically worked for your current employer.",
+    "official_text_es": "62. Motivo de separación:\n☐ Me despidieron porque: ______\n☐ Renuncié/dejé mi trabajo porque: ______\n☐ Me despidieron por falta de trabajo o reducción de personal\n☐ Estoy de baja\n☐ Estoy suspendido del trabajo\n☐ Mi empleador y un sindicato(s) están involucrados en una disputa/huelga laboral\n☐ Todavía estoy trabajando de tiempo completo. Si todavía está empleado, se le solicitará que ingrese el último día que trabajó físicamente para su empleador actual.",
+    "source": "Arizona Application for Unemployment Insurance Benefits, UIB-1272A FORFF (08/25), page 6 of 10, question 62. Spanish: UIB-1272A FORSFF (08/25), same question.",
+    "high_risk": true
+  },
+  {
+    "id": "q63",
+    "section": "part3",
+    "official_text_en": "63. Last day you physically worked (MM/DD/YYYY): ______",
+    "official_text_es": "63. Ultimo dia que fisicamente trabajo (MM/DD/YYYY): ______",
+    "source": "Arizona Application for Unemployment Insurance Benefits, UIB-1272A FORFF (08/25), page 6 of 10, question 63. Spanish: UIB-1272A FORSFF (08/25), same question.",
+    "high_risk": false
+  },
+  {
+    "id": "q64",
+    "section": "part3",
+    "official_text_en": "64. Does the employer intend to recall you within 6 weeks? ☐ Yes  ☐ No\nIf Yes, answer questions 64a. and 64b.\n64a. What is your anticipated recall date: ______\n64b. Do you have a recall notice in writing from your employer? ☐ Yes  ☐ No",
+    "official_text_es": "64. ¿El empleador tiene la intención de reincorporarse a usted dentro de 6 semanas? ☐ Sí  ☐ No\nSi contestó Sí, responda a las preguntas 64a. y 64b.\n64a. Fecha anticipada de regreso al trabajo: ______\n64b. ¿Tiene un aviso de recontratación por escrito de su empleador? ☐ Sí  ☐ No",
+    "source": "Arizona Application for Unemployment Insurance Benefits, UIB-1272A FORFF (08/25), page 6 of 10, question 64. Spanish: UIB-1272A FORSFF (08/25), same question.",
+    "high_risk": false
+  },
+  {
+    "id": "q67",
+    "section": "part3",
+    "official_text_en": "67. Are you a corporate officer or a relative of a corporate officer? ☐ Yes  ☐ No",
+    "official_text_es": "67. ¿Es un funcionario corporativo o un pariente de un funcionario corporativo? ☐ Sí  ☐ No",
+    "source": "Arizona Application for Unemployment Insurance Benefits, UIB-1272A FORFF (08/25), page 6 of 10, question 67. Spanish: UIB-1272A FORSFF (08/25), same question.",
+    "high_risk": false
+  },
+  {
+    "id": "q68",
+    "section": "part3",
+    "official_text_en": "68. Was your job eliminated because the work was transferred out of the country? ☐ Yes  ☐ No",
+    "official_text_es": "68. ¿Se eliminó su trabajo porque el trabajo fue transferido fuera del país? ☐ Sí  ☐ No",
+    "source": "Arizona Application for Unemployment Insurance Benefits, UIB-1272A FORFF (08/25), page 6 of 10, question 68. Spanish: UIB-1272A FORSFF (08/25), same question.",
+    "high_risk": false
+  },
+  {
+    "id": "q70",
+    "section": "part3",
+    "official_text_en": "70. Indicate if you have received or will receive any of the following payments from this employer:\nSeverance Pay | Vacation Pay/Personal Leave Pay/PTO? | Holiday Pay | Sick Pay | Wages in Lieu of Notice\nGross Amount: ______",
+    "official_text_es": "70. Indique si ha recibido o recibirá alguno de los siguientes pagos de este empleador:\nPago de indemnización | Pago por vacaciones/Pago por ausencia personal/PTO? | Pago de días feriados | Pago por enfermedad | Salarios en lugar de preaviso\nCantidad Bruta: ______",
+    "source": "Arizona Application for Unemployment Insurance Benefits, UIB-1272A FORFF (08/25), page 6 of 10, question 70. Spanish: UIB-1272A FORSFF (08/25), same question.",
+    "high_risk": true
+  },
+  {
+    "id": "q71",
+    "section": "part3",
+    "official_text_en": "71. Indicate if you have received, or will receive pension or retirement payments from this employer. (This does not include pension benefits received from Social Security or Social Security Disability.)\n71a. Pension/Retirement Benefits: ☐ Yes  ☐ No\nIf Yes to 71a, answer the following questions.\nPension Type: ______\nGross Amount: ______\nEffective Date: ______\nDid you contribute to the pension? ☐ Yes  ☐ No\n71b. 401K/403B/Personal IRA/KEOGH: ☐ Yes  ☐ No\nIf Yes to 71b, answer the following questions.\nGross Amount: ______  Per: ______",
+    "official_text_es": "71. Indique si ha recibido o recibirá pagos de pensión o jubilación de este empleador. (Esto no incluye los beneficios de pensión recibidos del Seguro Social o del Seguro Social por Discapacidad.)\n71a. Beneficios de pensión / jubilación: ☐ Sí  ☐ No\nSi contestó que Sí a la pregunta 71a, responda a las siguientes preguntas.\nTipo de Pensión: ______\nCantidad bruta: ______\nFecha de Vigencia: ______\n¿Contribuyó a la pensión? ☐ Sí  ☐ No\n71b. 401K/403B/Personal IRA/KEOGH: ☐ Sí  ☐ No\nSi contestó que Sí a la pregunta 71b, responda a las siguientes preguntas.\nCantidad bruta: ______  Por: ______",
+    "source": "Arizona Application for Unemployment Insurance Benefits, UIB-1272A FORFF (08/25), page 7 of 10, question 71. Spanish: UIB-1272A FORSFF (08/25), same question.",
+    "high_risk": true
+  },
+  {
+    "id": "q72",
+    "section": "part3",
+    "official_text_en": "72. Military service connected disability compensation? (Answer No if paid by VA) ☐ Yes  ☐ No",
+    "official_text_es": "72. ¿Compensación de discapacidad conectada al servicio militar? (Responda No si lo paga el VA) ☐ Sí  ☐ No",
+    "source": "Arizona Application for Unemployment Insurance Benefits, UIB-1272A FORFF (08/25), page 7 of 10, question 72. Spanish: UIB-1272A FORSFF (08/25), same question.",
+    "high_risk": false
+  },
+  {
+    "id": "q73",
+    "section": "part3",
+    "official_text_en": "73. Have you received or will you receive Workers' Compensation from this employer? ☐ Yes  ☐ No",
+    "official_text_es": "73. ¿Recibió pagos por Compensación para Trabajadores de este empleador? ☐ Sí  ☐ No",
+    "source": "Arizona Application for Unemployment Insurance Benefits, UIB-1272A FORFF (08/25), page 7 of 10, question 73. Spanish: UIB-1272A FORSFF (08/25), same question.",
+    "high_risk": true
+  },
+  {
+    "id": "q74",
+    "section": "part4",
+    "official_text_en": "74. Debit Card: The default payment method for receiving your UI benefits is a state-issued prepaid debit card, which the Department's banking institution will mail to you. This card is valid for five years and provides you quick and easy access to your benefits. You will not receive a new card each time you file for benefits. If you have a valid prepaid debit card from the State of Arizona for child support, you will not be issued a prepaid debit card for UI benefits. Your UI benefits will be deposited into this debit card account.\nI certify that:\n☐ I authorize the Arizona Department of Economic Security, Unemployment Insurance (UI) Program to make automatic deposits of the full amount of any payments of my weekly UI benefits to an Arizona Electronic Payment Card (EPC).\n☐ I Confirm that debit card is my preferred payment method.\n☐ I have read the Unemployment Compensation Pre-Acquisition Disclosure Information.\nDirect Deposit: An alternative method of payment to the debit card is direct deposit. Direct deposit is the electronic transfer of your weekly unemployment benefit payment into your bank account. When you sign up for direct deposit, you are giving the Department permission to credit your bank account. To sign up for direct deposit, you can log into the CACTUS portal, click “Unemployment Services” and choose “Update Banking Information” to enter your bank account information.",
+    "official_text_es": "74. Tarjeta de Débito: El método de pago predeterminado para recibir sus beneficios de desempleo es una tarjeta de débito prepagada emitida por el estado, que la institución bancaria del Departamento le enviará por correo. Esta tarjeta tiene una validez de cinco años y le permite acceder a sus beneficios de forma rápida y sencilla. No recibirá una tarjeta nueva cada vez que solicite beneficios. Si tiene una tarjeta de débito prepagada válida del Estado de Arizona para la manutención infantil, no se le emitirá una tarjeta de débito prepagada para los beneficios del Seguro de Desempleo (UI). Sus beneficios del UI se depositarán en esta cuenta de tarjeta de débito.\nYo certifico que:\n☐ Autorizo al Departamento de Seguridad Económica de Arizona, Programa de Seguro de Desempleo (UI, por sus siglas en inglés) a realizar depósitos automáticos del importe total de cualquier pago de mis beneficios semanales de seguro de desempleo a una Tarjeta de Pago Electrónico de Arizona (EPC, por sus siglas en inglés).\n☐ Confirmó que la tarjeta de débito es mi método de pago preferido.\n☐ He leído la Información de Divulgación Previa a la Adquisición de Compensación por Desempleo.\nDepósito Directo: Un método de pago alternativo a la tarjeta electrónica es el depósito directo. Depósito directo es la transferencia electrónica de tu pago de beneficio semanal a tu cuenta bancaria. Cuando elije Depósito Directo, le está dando al Departamento permiso para acreditar su cuenta bancaria. Para inscribirte para el Depósito Directo, conectate al sistema CACTUS, oprime “Seguro por Desempleo” y selecciona “Actualizar Información Bancaria” para ingresar tu cuenta bancaria.",
+    "source": "Arizona Application for Unemployment Insurance Benefits, UIB-1272A FORFF (08/25), page 7 of 10, question 74. Spanish: UIB-1272A FORSFF (08/25), same question.",
+    "high_risk": false
+  },
+  {
+    "id": "q75",
+    "section": "part4",
+    "official_text_en": "75. Unemployment Insurance benefits are taxable. State law provides that you can have an amount equal to 10% of your maximum weekly benefit amount withheld from your Unemployment Insurance benefits for federal income tax and 10% of the federal deduction amount withheld for state income tax. You can have both federal and state income taxes withheld, or federal tax withheld, but you cannot have only the state tax withheld. The tax will be deducted from the benefit amount remaining after any earnings, pension, overpayment offset, or child support amounts are deducted.\nSelect one of the following options:\n☐ Do not withhold taxes\n☐ Withhold federal taxes\n☐ Withhold federal and state taxes",
+    "official_text_es": "75. Los Beneficios de Seguro por Desempleo son deducibles de impuestos. Las prestaciones de Seguro por Desempleo están sujetas a impuestos. La ley estatal establece que se le puede retener un monto equivalente al 10% de su prestación semanal máxima de sus prestaciones del Seguro por Desempleo para el impuesto federal sobre la renta y el 10% del monto de la deducción federal para el impuesto estatal sobre la renta. Se le puede retener tanto los impuestos federales como los estatales sobre la renta, o el impuesto federal pero no sólo el estatal. El impuesto se deducirá del monto restante de la prestación después de cualquier ganancia.\nSeleccione una de las siguientes opciones:\n☐ No retener impuestos\n☐ Retener impuestos federales\n☐ Retener impuestos federales y estatales",
+    "source": "Arizona Application for Unemployment Insurance Benefits, UIB-1272A FORFF (08/25), page 7 of 10, question 75. Spanish: UIB-1272A FORSFF (08/25), same question.",
+    "high_risk": false
+  },
+  {
+    "id": "q76",
+    "section": "part4",
+    "official_text_en": "76. Electronic Tax Form Consent: The 1099-G is a tax form the Department uses to report the benefits you received in a tax year to you and to the Internal Revenue Service (IRS). You can consent to receive your 1099-G tax form electronically instead of by mail. This choice is optional. If you do not provide consent for your 1099-G to be sent electronically, the Department will mail your 1099-G to the mailing address on your claim after the end of the tax year. If you do consent to receive the 1099-G electronically, your consent will apply to all the Unemployment Insurance Benefits you received during the year. To receive the electronic 1099-G using the CACTUS portal, you must be able to access your account online and have the ability to download, view, and print PDF documents. You can change how you receive your 1099-G at any time through the CACTUS portal or by contacting the Unemployment Insurance Call Center at (877) 600-2722.\nSelect one of the following options:\n☐ I consent to receive the 1099-G electronically for all tax years until I withdraw my consent.\n☐ I do not consent to receive the 1099-G electronically and wish to receive the 1099-G by mail.",
+    "official_text_es": "76. Consentimiento para el Formulario de Impuestos Electrónico: El 1099-G es un formulario de impuestos que el Departamento usa para informarle a usted y a las autoridades fiscales correspondientes los beneficios que recibió en un año fiscal. Puede dar su consentimiento para recibir su formulario de impuestos 1099-G electrónicamente en lugar de por correo. Esta elección es opcional. Si no da su consentimiento para que su 1099-G se envíe electrónicamente, el Departamento enviará su 1099-G por correo a la dirección postal que figura en su cuenta al final del año fiscal. Si acepta recibir el 1099-G electrónicamente, su consentimiento se aplicará a todos los Beneficios del Seguro de Desempleo que recibió durante el año. Cuando se haya creado un 1099-G para usted, se enviará un aviso a la dirección de correo electrónico indicada en su cuenta. El aviso le informará que su formulario de impuestos está listo para ver, guardar e imprimir en el portal en línea. Para recibir el 1099-G electrónico a través de este portal, debe poder acceder a su cuenta en línea y tener la capacidad de descargar, ver e imprimir documentos PDF. Puede retirar su consentimiento y cambiar la forma en que recibe su 1099-G en cualquier momento a través de este portal o comunicándose con el Centro de Llamadas del Seguro de Desempleo (UI) al (877) 600-2722.\nSeleccione una de las siguientes opciones:\n☐ Doy mi consentimiento para recibir el 1099G electrónicamente para todos los años fiscales hasta que retire mi consentimiento.\n☐ No doy mi consentimiento para recibir el 1099G electrónicamente y deseo recibir el 1099G por correo.",
+    "source": "Arizona Application for Unemployment Insurance Benefits, UIB-1272A FORFF (08/25), page 8 of 10, question 76. Spanish: UIB-1272A FORSFF (08/25), same question.",
+    "high_risk": false
+  },
+  {
+    "id": "certify",
+    "section": "part5",
+    "official_text_en": "By submitting this application, I certify that:\n1. All information submitted is true and complete, and\n2. I am responsible to read and understand “A Guide to Arizona UI Benefits” and any other official written material provided to me regarding the Unemployment Insurance (UI) benefits program, and\n3. I acknowledge that any false statements in this application are punishable under Arizona Revised Statutes 23-785 and 23-778 and that a person who knowingly makes a false statement or knowingly withholds information to obtain UI benefits commits a criminal offense and may be subject to a fine, imprisonment, restitution, and loss of future benefits. It is a felony to misrepresent or fail to disclose facts or to make false statements in order to obtain or increase benefits.\n☐ I certify that I want to file this claim.",
+    "official_text_es": "Al enviar esta solicitud, certifico que:\n1. Toda la información presentada es verdadera y completa, y\n2. Soy responsable de leer y comprender “Una Guía para los Beneficios del Seguro de Desempleo de Arizona” y cualquier otro material escrito oficial que se me proporcione con respecto al programa de Beneficios del Seguro de Desempleo (UI, por sus siglas en inglés), y\n3. Reconozco que cualquier declaración falsa en esta solicitud es punible bajo los Estatutos Revisados de Arizona 23-785 y 23-778 y que una persona que a sabiendas hace una declaración falsa o retiene información a sabiendas para obtener beneficios de UI comete un delito penal y puede estar sujeto a una multa, prisión, restitución y pérdida de beneficios futuros. Es un delito grave tergiversar o no revelar hechos o hacer declaraciones falsas para obtener o aumentar beneficios.\n☐ Certifico que quiero hacer este reclamo.",
+    "source": "Arizona Application for Unemployment Insurance Benefits, UIB-1272A FORFF (08/25), page 8 of 10, Part 5 certification. Spanish: UIB-1272A FORSFF (08/25), same question.",
+    "high_risk": true
   }
 ]

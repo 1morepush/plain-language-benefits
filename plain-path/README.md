@@ -21,8 +21,8 @@ says whether someone will get benefits, and never tells anyone what to answer.
 |---------|--------|------------|--------------|
 | <img src="docs/images/mobile-welcome.png" alt="The welcome screen on a phone." width="190"> | <img src="docs/images/mobile-intake.png" alt="Yes or no intake questions on a phone, such as whether you worked for more than one employer in the last 18 months." width="190"> | <img src="docs/images/mobile-question.png" alt="A question card on a phone with the official wording, the plain-language explanation, and the Check with a person box." width="190"> | <img src="docs/images/mobile-ask.png" alt="The Ask about this question box on a phone, with a typed question and a reply labelled as written by AI." width="190"> |
 
-*The screenshots show the fake placeholder content the project ships with, and a fake
-reply in the question box.*
+*The screenshots show question 62 of Arizona's application. The plain-language
+explanations are still waiting for review, so the cards show "Explanation coming soon".*
 
 ## Contents
 
@@ -72,19 +72,26 @@ These matter more than features. All six are written into the system prompt
 | Never decide or predict eligibility | System prompt, plus a keyword check on every chat reply (`safety_check.py`). |
 | Never suggest, rank, or reword an answer | System prompt, plus the same keyword check. |
 | No personal data | SSN-shaped text is blocked in the browser and again on the server, before it can reach the AI. Nothing a user types is stored. |
-| Never make up form content | Official wording comes only from `data/questions.json`. A question that is not in the file gets a fixed "can't help with that" reply and the AI is not called. |
+| Never make up form content | Official wording in `data/questions.json` is copied from Arizona's form UIB-1272A (08/25), kept in `source_docs/`. A question that is not in the file gets a fixed "can't help with that" reply and the AI is not called. |
 | Disclaimer on every page | It is in the page footer, so it is on every screen. |
 
 ## Current status
 
-All four build stages are done, and 104 automated tests pass. Before this is ready to show:
+All four build stages are done, and 106 automated tests pass.
 
-- [ ] **Replace the placeholder content.** Everything in `data/` is fake and labelled
-      `PLACEHOLDER`.
-- [ ] **Do a first live run.** The code that calls Claude has only been tested with a
-      fake Claude so far.
-- [ ] **Verify the help contacts.** The phone number and links in `data/help_links.json`
-      were written from memory and have not been checked against the live websites.
+- [x] **Real questions.** `data/questions.json` holds 40 items copied from the Arizona
+      Application for Unemployment Insurance Benefits, UIB-1272A (08/25), with the
+      official Spanish wording from the Spanish edition of the same form.
+- [x] **Help line number.** (877) 600-2722 is printed on page 1 of the form.
+- [ ] **Draft and review the explanations.** `data/explanations.json` is empty, so every
+      question shows "Explanation coming soon". The code that calls Claude has only been
+      tested with a fake Claude so far.
+- [ ] **Proofread the transcription.** The wording was typed in from the PDFs by reading
+      them, not by automatic text extraction. Compare it with `source_docs/`.
+- [ ] **Review the high-risk flags.** 13 questions are marked `high_risk`. That was a
+      first guess, not a decision by a legal expert.
+- [ ] **Verify the two legal aid links** in `data/help_links.json`. They were written from
+      memory.
 - [ ] **Have a fluent Spanish speaker read the Spanish** in `static/i18n.js` and
       `data/intake.json`.
 
@@ -156,6 +163,11 @@ box, and to run the AI tests. It is read from an environment variable named
 Keys come from the Claude Console (console.anthropic.com), under API keys.
 
 ## Adding questions
+
+The current questions come from the two PDFs in `source_docs/`. The form has 76 numbered
+questions; the data file covers the ones with terms worth explaining and leaves out
+fields like name, address, and job title. In the official text, `☐` marks a checkbox on
+the form and `______` marks a blank to fill in.
 
 Add one entry per form question to `data/questions.json`:
 
@@ -275,10 +287,10 @@ Things to know:
 
 Three rows are in Spanish. Edit the wording freely.
 
-**Before your first real run:** the `question_id` column points at the fake placeholder
-questions. Once `data/questions.json` has real questions, change `question_id` in each row
-to a real id. The script stops and reminds you if any row still points at a `PLACEHOLDER`
-question.
+The `question_id` column says which form question the person is "looking at". Most rows
+point at `q62` (Reason for Separation) and two at `q70` (severance and other payments).
+Change them if you want to test other questions. The script stops with a reminder if a
+row points at a `PLACEHOLDER` question.
 
 ### Run it on your computer
 
@@ -369,6 +381,8 @@ tests/
   test_questions.csv the 20 test questions for the findings report
   results/           where run_tests.py saves its CSV files
   test_*.py          the automated tests
+  fixtures/          small fake data the automated tests run against
+source_docs/         the official Arizona forms the questions were copied from (PDF)
 docs/images/         the screenshots in this README
 ```
 

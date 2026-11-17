@@ -1,0 +1,25 @@
+{
+  "official_instructions": {
+    "name_en": "Official Arizona DES unemployment instructions",
+    "name_es": "Instrucciones oficiales de desempleo de Arizona DES",
+    "url": "https://des.az.gov/services/employment/unemployment-individual"
+  },
+  "agency": {
+    "name_en": "Arizona DES Unemployment Insurance help line",
+    "name_es": "Línea de ayuda del Seguro de Desempleo de Arizona DES",
+    "phone": "1-877-600-2722",
+    "url": "https://des.az.gov/services/employment/unemployment-individual"
+  },
+  "legal_aid": [
+    {
+      "name_en": "Community Legal Services",
+      "name_es": "Community Legal Services (ayuda legal)",
+      "url": "https://clsaz.org"
+    },
+    {
+      "name_en": "AZLawHelp.org",
+      "name_es": "AZLawHelp.org (ayuda legal)",
+      "url": "https://www.azlawhelp.org"
+    }
+  ]
+}

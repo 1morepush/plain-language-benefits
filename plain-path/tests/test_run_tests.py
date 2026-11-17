@@ -1,6 +1,7 @@
 """Tests for the test harness (scripts/run_tests.py). A fake Claude is used: no key, no cost."""
 
 import csv
+from pathlib import Path
 from types import SimpleNamespace
 
 import anthropic
@@ -32,9 +33,13 @@ class FakeClaude:
         )
 
 
+# A copy of the test questions that points at the fake questions in tests/fixtures/data.
+FIXTURE_TESTS = Path(__file__).parent / "fixtures" / "test_questions.csv"
+
+
 def run(tmp_path, claude, args=("--allow-placeholders",)):
     out = tmp_path / "results.csv"
-    code = run_tests.main(list(args), client=claude, out_file=out)
+    code = run_tests.main(list(args), client=claude, out_file=out, test_file=FIXTURE_TESTS)
     rows = []
     if out.exists():
         with open(out, encoding="utf-8-sig", newline="") as f:

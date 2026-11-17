@@ -1,0 +1,27 @@
+[
+  {
+    "key": "multiple_employers",
+    "text_en": "Did you work for more than one employer in the last 18 months?",
+    "text_es": "¿Trabajó para más de un empleador en los últimos 18 meses?"
+  },
+  {
+    "key": "other_state",
+    "text_en": "Did you work in a state other than Arizona in the last 18 months?",
+    "text_es": "¿Trabajó en un estado que no sea Arizona en los últimos 18 meses?"
+  },
+  {
+    "key": "military_federal",
+    "text_en": "Did you serve in the military or work for the federal government in the last 18 months?",
+    "text_es": "¿Sirvió en las fuerzas armadas o trabajó para el gobierno federal en los últimos 18 meses?"
+  },
+  {
+    "key": "severance_vacation",
+    "text_en": "Did you get severance pay or vacation pay when your job ended?",
+    "text_es": "¿Recibió pago por despido (indemnización) o pago de vacaciones cuando terminó su trabajo?"
+  },
+  {
+    "key": "pension_retirement",
+    "text_en": "Do you get pension or retirement pay?",
+    "text_es": "¿Recibe una pensión o pago de jubilación?"
+  }
+]
